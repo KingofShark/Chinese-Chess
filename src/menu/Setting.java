@@ -4,7 +4,7 @@ import chesspiece.Piece;
 import chesspiece.StaticPieces;
 import file.IOFile;
 import image.NewImage;
-import main.ChessBoard;
+import game.ChessBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -111,6 +111,8 @@ public class Setting implements Piece {
             if (StaticPieces.getChessBoardPanel().getPause())
                 return;
             ImageIcon imageIcon;
+            if(StaticPieces.getTurn() == -1)
+                return;
             if (!status)
                 imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/stop.png");
             else
