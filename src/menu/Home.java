@@ -4,7 +4,7 @@ import chesspiece.Piece;
 import chesspiece.StaticPieces;
 import file.IOFile;
 import image.NewImage;
-import main.Event;
+import game.Event;
 
 import javax.swing.*;
 import java.awt.*;

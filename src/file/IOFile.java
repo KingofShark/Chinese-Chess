@@ -2,7 +2,7 @@ package file;
 
 import chesspiece.ChessPiece;
 import chesspiece.StaticPieces;
-import main.Check;
+import game.Check;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

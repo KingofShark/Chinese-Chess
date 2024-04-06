@@ -1,8 +1,8 @@
 package chesspiece;
 
-import main.Check;
-import main.ChessBoard;
-import main.CountDown;
+import game.Check;
+import game.ChessBoard;
+import game.CountDown;
 import menu.CloseButton;
 import menu.Setting;
 import sound.SoundEffect;

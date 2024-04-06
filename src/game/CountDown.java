@@ -1,4 +1,4 @@
-package main;
+package game;
 
 import chesspiece.StaticPieces;
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package main;
+package game;
 
 import chesspiece.*;
 import image.NewImage;
@@ -50,6 +50,8 @@ public class ChessBoard extends JPanel implements Piece {
         StaticPieces.getCloseButton().setClose(this);
         StaticPieces.getCloseButton().setHide(this);
         button.addActionListener(e -> {
+            if(StaticPieces.getTurn() == -1)
+                return;
             if (StaticPieces.getFirst() == 2) {
                 JOptionPane.showMessageDialog(null, (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước");
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/start.png");

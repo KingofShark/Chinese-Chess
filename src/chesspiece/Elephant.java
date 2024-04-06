@@ -1,6 +1,6 @@
 package chesspiece;
 
-import main.Check;
+import game.Check;
 import javax.swing.*;
 import java.util.Vector;
 
