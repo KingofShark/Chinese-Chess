@@ -6,7 +6,7 @@ public class Check implements Piece {
     private static int[][] check;
 
     public Check() {
-        check = new int[10][11];
+        check = new int[9][10];
         // Đen
         check[0][0] = BLACK_LEFT_ROOK + 1;
         check[1][0] = BLACK_LEFT_KNIGHT + 1;
@@ -29,8 +29,8 @@ public class Check implements Piece {
         check[8][9] = RED_RIGHT_ROOK + 1;
         // Pháo
         check[1][2] = BLACK_LEFT_CANNON + 1;
-        check[7][2] = RED_LEFT_CANNON + 1;
-        check[1][7] = BLACK_RIGHT_CANNON + 1;
+        check[7][2] = BLACK_RIGHT_CANNON + 1;
+        check[1][7] = RED_LEFT_CANNON + 1;
         check[7][7] = RED_RIGHT_CANNON + 1;
         // Tốt
         check[0][3] = BLACK_PAWN_0 + 1;

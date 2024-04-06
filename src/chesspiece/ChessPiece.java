@@ -1,13 +1,12 @@
 package chesspiece;
 
 import image.NewImage;
-import main.Check;
 
 import javax.swing.*;
 import java.util.Objects;
 import java.util.Vector;
 
-public class ChessPiece extends JButton implements Piece {
+public abstract class ChessPiece extends JButton implements Piece, MovingMethod {
     protected int TYPE;
     protected int _COLOR_, POSITION, locateX, locateY;
     protected ImageIcon _image_;
@@ -27,6 +26,10 @@ public class ChessPiece extends JButton implements Piece {
         setBorderPainted(false);
         this.POSITION = position;
         this._COLOR_ = color;
+    }
+
+    public int getCOLOR() {
+        return this._COLOR_;
     }
 
     public int getLocateX() {
@@ -63,14 +66,6 @@ public class ChessPiece extends JButton implements Piece {
         setIcon(this._image_);
     }
 
-    public int get_X() {
-        return (getX() - CELL_SIZE / 2) / CELL_SIZE;
-    }
-
-    public int get_Y() {
-        return (getY() - CELL_SIZE / 2) / CELL_SIZE;
-    }
-
     public int getTYPE() {
         return TYPE;
     }
@@ -79,15 +74,12 @@ public class ChessPiece extends JButton implements Piece {
         return _name_;
     }
 
-    public Vector<Integer> choosePiecePosition(Check check, Vector<JButton> buttonH, Vector<JButton> buttonV, Vector<ChessPiece> pieces) {
-        return new Vector<>();
-    }
-
-    public Vector<Integer> choosePiecePosition(Check check, JButton top, JButton right, JButton bottom, JButton left, Vector<ChessPiece> pieces) {
-        return new Vector<>();
-    }
-
-    public void updateLocate(String temp) {
+    public void setLocate(int x, int y) {
+        this.locateX = x;
+        this.locateY = y;
+        int X = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int Y = (locateY + 1)* Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        this.setBounds(X, Y, SIZE_PIECE, SIZE_PIECE);
     }
 
     public void updateLocate(ChessPiece chessPiece) {
@@ -96,12 +88,42 @@ public class ChessPiece extends JButton implements Piece {
         System.out.println(_name_ + " update x: " + locateX + ", y: " + locateY);
     }
 
-    public void updateLocate(String temp, JButton button) {
+    @Override
+    public void updateLocate(JButton button) {
+
     }
 
+    @Override
     public void updateLocate_(String temp) {
+
     }
 
+    @Override
     public void updateLocate(int typeClick) {
+
+    }
+
+    @Override
+    public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
+        return new Vector<>();
+    }
+
+    @Override
+    public Vector<Integer> choosePiecePosition(JButton top, JButton right, JButton bottom, JButton left) {
+        return new Vector<>();
+    }
+
+    @Override
+    public void updateLocate(String temp) {
+
+    }
+    @Override
+    public Boolean checkMate() {
+        return false;
+    }
+
+    @Override
+    public void resetDefauft() {
+        this.setVisible(true);
     }
 }

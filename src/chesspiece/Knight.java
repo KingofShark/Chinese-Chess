@@ -14,17 +14,25 @@ public class Knight extends ChessPiece {
             TYPE = (POSITION == Piece.RIGHT) ? BLACK_RIGHT_KNIGHT : BLACK_LEFT_KNIGHT;
         else if (POSITION == Piece.RIGHT)
             TYPE = RED_RIGHT_KNIGHT;
-        locateX = (POSITION == Piece.RIGHT) ? 7 : 1;
-        locateY = (_COLOR_ == BLACK) ? 0 : 9;
-        int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
-        int y = (locateY + 1)* Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
-        setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
-        setImage();
+        this.resetDefauft();
+        this.setImage();
     }
 
     @Override
-    public Vector<Integer> choosePiecePosition(Check check, Vector<JButton> buttonH, Vector<JButton> buttonV, Vector<ChessPiece> pieces) {
+    public void resetDefauft() {
+        super.resetDefauft();
+        locateX = (POSITION == Piece.RIGHT) ? 7 : 1;
+        locateY = (_COLOR_ == BLACK) ? 0 : 9;
+        int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int y = (locateY + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
+    }
+
+    @Override
+    public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
         Vector<Integer> choose = new Vector<>();
+        Check check = StaticPieces.getCheck();
+        Vector<ChessPiece> pieces = StaticPieces.getPieces();
         if (locateY > 0 && locateX - 1 > 0 && check.checkLocal(locateX - 1, locateY) && check.checkLocal(locateX - 2, locateY - 1)) {
             buttonH.firstElement().setLocation((locateX - 1) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
             buttonH.firstElement().setVisible(true);//tl21
@@ -90,6 +98,27 @@ public class Knight extends ChessPiece {
             pieces.elementAt(check.getPiece(locateX + 1, locateY + 2)).changeImage();
         }
         return choose;
+    }
+
+    @Override
+    public Boolean checkMate() {
+        Check check = StaticPieces.getCheck();
+        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        if (locateY < 8 && locateX < 8 && (check.getPiece(locateX + 1, locateY + 2) == 0 || check.getPiece(locateX + 1, locateY + 2) == 1) && pieces.elementAt(check.getPiece(locateX + 1, locateY + 2))._COLOR_ != this._COLOR_)
+            return true;
+        if (locateY < 8 && locateX > 0 && (check.getPiece(locateX - 1, locateY + 2) == 0 || check.getPiece(locateX - 1, locateY + 2) == 1) && pieces.elementAt(check.getPiece(locateX - 1, locateY + 2))._COLOR_ != this._COLOR_)
+            return true;
+        if (locateY < 8 && locateX + 1 < 8 && (check.getPiece(locateX + 2, locateY + 1) == 0 || check.getPiece(locateX + 2, locateY + 1) == 1)  && pieces.elementAt(check.getPiece(locateX + 2, locateY + 1))._COLOR_ != this._COLOR_)
+            return true;
+        if (locateY < 8 && locateX - 1 > 0 && (check.getPiece(locateX - 2, locateY + 1) == 0 || check.getPiece(locateX - 2, locateY + 1) == 1)  && pieces.elementAt(check.getPiece(locateX - 2, locateY + 1))._COLOR_ != this._COLOR_)
+            return true;
+        if (locateY - 1 > 0 && locateX < 8 && (check.getPiece(locateX + 1, locateY - 2) == 0 || check.getPiece(locateX + 1, locateY - 2) == 1)  && pieces.elementAt(check.getPiece(locateX + 1, locateY - 2))._COLOR_ != this._COLOR_)
+            return true;
+        if (locateY - 1 > 0 && locateX > 0 && (check.getPiece(locateX - 1, locateY - 2) == 0 || check.getPiece(locateX - 1, locateY - 2) == 1) && pieces.elementAt(check.getPiece(locateX - 1, locateY - 2))._COLOR_ != this._COLOR_)
+            return true;
+        if (locateY > 0 && locateX + 1 < 8 && (check.getPiece(locateX + 2, locateY - 1) == 0 || check.getPiece(locateX + 2, locateY - 1) == 1)  && pieces.elementAt(check.getPiece(locateX + 2, locateY - 1))._COLOR_ != this._COLOR_)
+            return true;
+        return locateY > 0 && locateX - 1 > 0 && (check.getPiece(locateX - 2, locateY - 1) == 0 || check.getPiece(locateX - 2, locateY - 1) == 1) && pieces.elementAt(check.getPiece(locateX - 2, locateY - 1))._COLOR_ != this._COLOR_;
     }
 
     @Override

@@ -10,18 +10,25 @@ public class General extends ChessPiece {
     public General(int color) {
         super(color);
         _name_ = "General";
+        TYPE = (_COLOR_ == BLACK) ? BLACK_GENERAL : RED_GENERAL;
+        this.resetDefauft();
+        this.setImage();
+    }
+
+    @Override
+    public void resetDefauft() {
+        super.resetDefauft();
         locateX = 4;
         locateY = (_COLOR_ == BLACK) ? 0 : 9;
         int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         int y = (locateY + 1)* Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
-        TYPE = (_COLOR_ == BLACK) ? BLACK_GENERAL : RED_GENERAL;
-        setImage();
         setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
-
     }
 
     @Override
-    public Vector<Integer> choosePiecePosition(Check check, JButton top, JButton right, JButton bottom, JButton left, Vector<ChessPiece> pieces) {
+    public Vector<Integer> choosePiecePosition(JButton top, JButton right, JButton bottom, JButton left) {
+        Check check = StaticPieces.getCheck();
+        Vector<ChessPiece> pieces = StaticPieces.getPieces();
         int _top = (_COLOR_ == BLACK) ? 0 : 7;
         int _down = (_COLOR_ == BLACK) ? 2 : 9;
         Vector<Integer> choose = new Vector<>();
@@ -59,6 +66,21 @@ public class General extends ChessPiece {
             pieces.elementAt(check.getPiece(locateX + 1, locateY)).changeImage();
         }
         return choose;
+    }
+    @Override
+    public Boolean checkMate(){
+        Check check = StaticPieces.getCheck();
+        for(int i = locateY + 1; i < 10; i++){
+            if(!check.checkLocal(locateX, i)){
+                return check.getPiece(locateX, i) == 0;
+            }
+        }
+        for(int i = locateY - 1; i >= 0; i--){
+            if(!check.checkLocal(locateX, i)){
+                return check.getPiece(locateX, i) == 1;
+            }
+        }
+        return false;
     }
 
     @Override
