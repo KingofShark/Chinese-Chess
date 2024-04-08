@@ -1,8 +1,6 @@
 package menu;
 
-import chesspiece.StaticPieces;
 import image.NewImage;
-
 import javax.swing.*;
 
 public class CloseButton {
@@ -13,19 +11,18 @@ public class CloseButton {
         this.close = new JButton();
     }
     public void setClose(JPanel panel){
-        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/close.png");
+        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/closebutton/close.png");
         imageIcon = new NewImage().resizeImage(imageIcon, 25, 25);
         this.close.setIcon(imageIcon);
         this.close.setContentAreaFilled(false);
         this.close.setFocusPainted(false);
         this.close.setBorderPainted(false);
         this.close.setSize(26, 25);
-        System.out.println("W: " + panel.getWidth() + ", H: " + panel.getHeight());
         this.close.setLocation(panel.getWidth() - 30, 5);
         panel.add(this.close);
     }
     public void setHide(JPanel panel){
-        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/hide.png");
+        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/closebutton/hide.png");
         imageIcon = new NewImage().resizeImage(imageIcon, 25, 25);
         this.hide.setIcon(imageIcon);
         this.hide.setContentAreaFilled(false);

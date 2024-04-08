@@ -7,9 +7,11 @@ import image.NewImage;
 import game.ChessBoard;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.Vector;
+
+import static java.awt.Color.WHITE;
+import static java.awt.Color.white;
 
 public class Setting implements Piece {
     private final JButton setting, volume, quit, backHome, exit;
@@ -21,8 +23,16 @@ public class Setting implements Piece {
         Vector<Integer> newVolume = IOFile.getVolume();
         this.slider_1 = new JSlider(0, 100, newVolume.elementAt(0));
         this.slider_2 = new JSlider(0, 100, newVolume.elementAt(1));
-        this.label_1 = new JLabel(" " + newVolume.elementAt(0) + " Nhạc nền");
-        this.label_2 = new JLabel(" " + newVolume.elementAt(1) + " Hiệu ứng");
+        this.label_1 = new JLabel(" Nhạc nền: " + newVolume.elementAt(0));
+        this.label_2 = new JLabel(" Hiệu ứng: " + newVolume.elementAt(1));
+        this.slider_1.setOpaque(false);
+        this.slider_2.setOpaque(false);
+        this.slider_1.setFocusable(false);
+        this.slider_2.setFocusable(false);
+        this.slider_1.setUI(new StaticPieces.CustomSliderUI(this.slider_1));
+        this.slider_2.setUI(new StaticPieces.CustomSliderUI(this.slider_2));
+        this.label_1.setForeground(WHITE);
+        this.label_2.setForeground(white);
         this.status = false;
         this.setting = new JButton();
         this.volume = new JButton();
@@ -131,39 +141,23 @@ public class Setting implements Piece {
 
             this.slider_1.setBounds(10 * CELL_SIZE, 2 * CELL_SIZE, 200, 50);
             this.label_1.setBounds(10 * CELL_SIZE + 200, 2 * CELL_SIZE, 100, 50);
-            this.slider_1.setBackground(new Color(152, 93, 58));
-            this.slider_1.setForeground(new Color(152, 93, 58));
             this.slider_1.setVisible(true);
             this.label_1.setVisible(true);
 
             this.slider_2.setBounds(10 * CELL_SIZE, 3 * CELL_SIZE, 200, 50);
             this.label_2.setBounds(10 * CELL_SIZE + 200, 3 * CELL_SIZE, 100, 50);
-            this.slider_2.setBackground(new Color(152, 93, 58));
-            this.slider_2.setForeground(new Color(152, 93, 58));
             this.slider_2.setVisible(true);
             this.label_2.setVisible(true);
+
             this.slider_1.addChangeListener(e1 -> {
-                int temp = this.slider_1.getValue();
-                String text_1;
-                if (temp < 10)
-                    text_1 = "  " + temp + " Nhạc nền";
-                else if (10 < temp && temp < 100)
-                    text_1 = " " + temp + " Nhạc nền";
-                else text_1 = temp + " Nhạc nền";
-                this.label_1.setText(text_1);
-                StaticPieces.getSoundEffect().setVolumeSoundTrack(temp);
+                this.label_1.setText(" Nhạc nền: " + this.slider_1.getValue());
+                StaticPieces.getSoundEffect().setVolumeSoundTrack(this.slider_1.getValue());
             });
 
             this.slider_2.addChangeListener(e1 -> {
-                int temp = this.slider_2.getValue();
-                String text_1;
-                if (temp < 10)
-                    text_1 = "  " + temp + " Khác";
-                else if (10 < temp && temp < 100)
-                    text_1 = " " + temp + " Khác";
-                else text_1 = temp + " Khác";
-                this.label_2.setText(text_1);
-                StaticPieces.getSoundEffect().setVolumeSoundEffect(temp);
+                this.label_2.setText(" Hiệu ứng: " + this.slider_2.getValue());
+                StaticPieces.getSoundEffect().setVolumeSoundTrack(this.slider_2.getValue());
+                StaticPieces.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
             });
         });
     }

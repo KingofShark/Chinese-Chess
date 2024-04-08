@@ -64,12 +64,9 @@ public class Event implements Piece {
                 this.status = true;
                 this.hideButton();
                 this.choose = _piece_.choosePiecePosition(this.buttonH, this.buttonV);
-                if (this.choose.isEmpty()) {
+                if (this.choose.isEmpty())
                     this.choose = _piece_.choosePiecePosition(this.top, this.right, this.bottom, this.left);
-                    System.out.println("Chon");
-                }else System.out.println("Chon");
                 if (this.typeClick == _piece_.getTYPE()) {
-                    System.out.println("reset");
                     this.hideButton();
                     this.typeClick = -1;
                     this.status = false;
@@ -104,21 +101,25 @@ public class Event implements Piece {
                 temp.updateLocate_("tr");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
-                this.typeClick = -1;
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     clock_1.stop();
                     clock_2.resume();
+                    StaticPieces.changeImage("wait", 2);
                 } else {
                     clock_2.stop();
                     clock_1.resume();
+                    StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn ((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                 if (!temp.checkMate())
                     StaticPieces.getSoundEffect().playSoundMove();
-                else
+                else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
+                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                }
+                this.typeClick = -1;
             }
         });
     }
@@ -141,21 +142,25 @@ public class Event implements Piece {
                 temp.updateLocate_("dr");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
-                this.typeClick = -1;
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     clock_1.stop();
                     clock_2.resume();
+                    StaticPieces.changeImage("wait", 2);
                 } else {
                     clock_2.stop();
                     clock_1.resume();
+                    StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                 if (!temp.checkMate())
                     StaticPieces.getSoundEffect().playSoundMove();
-                else
+                else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
+                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                }
+                this.typeClick = -1;
             }
         });
     }
@@ -178,21 +183,25 @@ public class Event implements Piece {
                 temp.updateLocate_("dl");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
-                this.typeClick = -1;
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     clock_1.stop();
                     clock_2.resume();
+                    StaticPieces.changeImage("wait", 2);
                 } else {
                     clock_2.stop();
                     clock_1.resume();
+                    StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                 if (!temp.checkMate())
                     StaticPieces.getSoundEffect().playSoundMove();
-                else
+                else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
+                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                }
+                this.typeClick = -1;
             }
         });
     }
@@ -215,21 +224,25 @@ public class Event implements Piece {
                 temp.updateLocate_("tl");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
-                this.typeClick = -1;
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     clock_1.stop();
                     clock_2.resume();
+                    StaticPieces.changeImage("wait", 2);
                 } else {
                     clock_2.stop();
                     clock_1.resume();
+                    StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                 if (!temp.checkMate())
                     StaticPieces.getSoundEffect().playSoundMove();
-                else
+                else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
+                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                }
+                this.typeClick = -1;
             }
         });
     }
@@ -253,21 +266,25 @@ public class Event implements Piece {
                     temp.updateLocate(this.buttonH.indexOf(button));
                     check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                     this.hideButton();
-                    this.typeClick = -1;
                     if (this.checkMate(temp))
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                         clock_1.stop();
                         clock_2.resume();
+                        StaticPieces.changeImage("wait", 2);
                     } else {
                         clock_2.stop();
                         clock_1.resume();
+                        StaticPieces.changeImage("wait", 1);
                     }
                     StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                     if (!temp.checkMate())
                         StaticPieces.getSoundEffect().playSoundMove();
-                    else
+                    else {
                         StaticPieces.getSoundEffect().playSoundCheckMate();
+                        StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                    }
+                    this.typeClick = -1;
                 }
             });
         }
@@ -291,21 +308,25 @@ public class Event implements Piece {
                     temp.updateLocate(button);
                     check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                     this.hideButton();
-                    this.typeClick = -1;
                     if (this.checkMate(temp))
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                         clock_1.stop();
                         clock_2.resume();
+                        StaticPieces.changeImage("wait", 2);
                     } else {
                         clock_2.stop();
                         clock_1.resume();
+                        StaticPieces.changeImage("wait", 1);
                     }
                     StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                     if (!temp.checkMate())
                         StaticPieces.getSoundEffect().playSoundMove();
-                    else
+                    else {
                         StaticPieces.getSoundEffect().playSoundCheckMate();
+                        StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                    }
+                    this.typeClick = -1;
                 }
             });
         }
@@ -328,15 +349,18 @@ public class Event implements Piece {
         if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
             clock_1.stop();
             clock_2.resume();
+            StaticPieces.changeImage("wait", 2);
         } else {
             clock_2.stop();
             clock_1.resume();
+            StaticPieces.changeImage("wait", 1);
         }
         ChessPiece general_red = pieces.firstElement();
         if (general_red.checkMate()) {
             StaticPieces.setTurn(-1);
             clock_1.stop();
             clock_2.stop();
+            StaticPieces.changeImage("", 0);
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == Piece.BLACK) ? "Đen thắng" : "Đỏ thắng");
             return;
         }
@@ -344,14 +368,18 @@ public class Event implements Piece {
             StaticPieces.setTurn(-1);
             clock_1.stop();
             clock_2.stop();
+            StaticPieces.changeImage("", 0);
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == 0) ? "Đen thắng" : "Đỏ thắng");
             return;
         }
-        this.typeClick = -1;
         StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
         if (temp.checkMate())
             StaticPieces.getSoundEffect().playSoundCheckMate();
-        else StaticPieces.getSoundEffect().playSoundMove();
+        else {
+            StaticPieces.getSoundEffect().playSoundMove();
+            StaticPieces.changeImage("checkmate", this.typeClick % 2);
+        }
+        this.typeClick = -1;
     }
 
     public void setMoveEventListeners() {
