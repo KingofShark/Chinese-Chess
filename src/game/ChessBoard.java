@@ -12,6 +12,17 @@ public class ChessBoard extends JPanel implements Piece {
     private final JLabel timer_2;
     private final JLabel timer_1;
     public ChessBoard() {
+        ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/effect/ss.png");
+        imageIcon = new NewImage().resizeImage(imageIcon, 200, 106);
+        StaticPieces.getNotice_1().setSize(200, 106);
+        StaticPieces.getNotice_2().setSize(200, 106);
+        StaticPieces.getNotice_1().setIcon(imageIcon);
+        StaticPieces.getNotice_1().setLocation(11 * CELL_SIZE - CELL_SIZE/2, 3 * CELL_SIZE - CELL_SIZE/2);
+        StaticPieces.getNotice_2().setIcon(imageIcon);
+        StaticPieces.getNotice_2().setLocation(11 * CELL_SIZE - CELL_SIZE/2, 7 * CELL_SIZE);
+        this.add(StaticPieces.getNotice_2());
+        this.add(StaticPieces.getNotice_1());
+
         this.timer_2 = new JLabel();
         this.timer_1 = new JLabel();
         this.timer_2.setLocation(CELL_SIZE * 11, CELL_SIZE * 6 + CELL_SIZE / 4);
@@ -52,6 +63,7 @@ public class ChessBoard extends JPanel implements Piece {
         button.addActionListener(e -> {
             if(StaticPieces.getTurn() == -1)
                 return;
+
             if (StaticPieces.getFirst() == 2) {
                 JOptionPane.showMessageDialog(null, (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước");
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/start.png");
@@ -59,17 +71,20 @@ public class ChessBoard extends JPanel implements Piece {
                 button.setIcon(imageIcon);
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getClock_1().resume();
+                    StaticPieces.changeImage("wait", 1);
                 } else {
                     StaticPieces.getClock_2().resume();
+                    StaticPieces.changeImage("wait", 2);
                 }
             }
             StaticPieces.setFirst(StaticPieces.getTurn() % 2);
-            System.out.println(pause);
             if (pause) {
                 if (StaticPieces.getFirst() == Piece.BLACK) {
                     StaticPieces.getClock_1().resume();
+                    StaticPieces.changeImage("wait", 1);
                 } else {
                     StaticPieces.getClock_2().resume();
+                    StaticPieces.changeImage("wait", 1);
                 }
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/stop.png");
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
@@ -78,6 +93,7 @@ public class ChessBoard extends JPanel implements Piece {
             } else {
                 StaticPieces.getClock_1().stop();
                 StaticPieces.getClock_2().stop();
+                StaticPieces.changeImage("", 0);
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/start.png");
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
                 button.setIcon(imageIcon);
