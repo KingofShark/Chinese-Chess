@@ -3,6 +3,7 @@ package chesspiece;
 import game.Check;
 import game.ChessBoard;
 import game.CountDown;
+import game.Event;
 import image.NewImage;
 import menu.CloseButton;
 import menu.Setting;
@@ -29,6 +30,7 @@ public class StaticPieces {
     private static final SoundEffect soundEffect = new SoundEffect();
     private static Setting setting = new Setting();
     private static Vector<ChessPiece> pieces = new Vector<>();
+    private static Event event = new Event();
     public static CloseButton getCloseButton() {return StaticPieces.closeButton;}
     public static Check getCheck() {
         return StaticPieces.check;
@@ -76,10 +78,12 @@ public class StaticPieces {
         return pieces;
     }
     public static SoundEffect getSoundEffect() {
-        return soundEffect;
+        return StaticPieces.soundEffect;
     }
+    public static Event getEvent(){return StaticPieces.event;}
+    public static void setEvent(){StaticPieces.event = new Event();}
     public static Setting getSetting() {
-        return setting;
+        return StaticPieces.setting;
     }
     public static void setNewSetting() {StaticPieces.setting = new Setting();}
     public static CountDown getClock_1() {
@@ -114,8 +118,13 @@ public class StaticPieces {
     public static JLabel getNotice_1(){return StaticPieces.notice_1;}
     public static JLabel getNotice_2(){return StaticPieces.notice_2;}
     public static void setNew(JButton start){
+        StaticPieces.changeImage("ss",1);
+        StaticPieces.changeImage("ss",2);
+        StaticPieces.getNotice_2().setVisible(true);
+        StaticPieces.getNotice_1().setVisible(true);
         StaticPieces.setCheck();
         StaticPieces.setFirst(2);
+        StaticPieces.setEvent();
         StaticPieces.setTurn(new Random().nextInt(101));
         StaticPieces.getClock_1().setTime(StaticPieces.minute, StaticPieces.second);
         StaticPieces.getClock_2().setTime(StaticPieces.minute, StaticPieces.second);
