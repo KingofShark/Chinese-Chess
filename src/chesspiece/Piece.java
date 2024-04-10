@@ -11,8 +11,8 @@ package chesspiece;
 public interface Piece {
     // size
     int CELL_SIZE = 70;
-    int SIZE_PIECE = 65, RADIUS = 15;
-    int _width_ = 15 * CELL_SIZE, _height_ = 12 * CELL_SIZE;
+    int SIZE_PIECE = 69, RADIUS = 15;
+    int _width_ = 15 * CELL_SIZE, _height_ = 11 * CELL_SIZE;
     int LEFT = 0, RIGHT = 1;
     int BLACK = 1, RED = 0;
     int RED_GENERAL = 0;
