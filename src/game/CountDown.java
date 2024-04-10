@@ -30,7 +30,7 @@ public class CountDown {
         this.second = second; this.pause = true;
     }
 
-    public void updateTime(JLabel label){
+    private void updateTime(JLabel label){
         if(!pause && !fullTime&& !StaticPieces.getSetting().getStatus()){
             if (this.minute == 0 && this.second == 0) {
                 this.fullTime = true;
@@ -51,6 +51,7 @@ public class CountDown {
     public Boolean getFullTime() { return fullTime;}
     public void stop(){ this.pause = true;}
     public void resume(){ this.pause = false;}
+    public Boolean getPause(){return this.pause;}
     public int getMinute() {return minute;}
     public int getSecond() {return second;}
 }
