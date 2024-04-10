@@ -7,11 +7,9 @@ import image.NewImage;
 import game.ChessBoard;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.Vector;
-
-import static java.awt.Color.WHITE;
-import static java.awt.Color.white;
 
 public class Setting implements Piece {
     private final JButton setting, volume, quit, backHome, exit;
@@ -31,8 +29,8 @@ public class Setting implements Piece {
         this.slider_2.setFocusable(false);
         this.slider_1.setUI(new StaticPieces.CustomSliderUI(this.slider_1));
         this.slider_2.setUI(new StaticPieces.CustomSliderUI(this.slider_2));
-        this.label_1.setForeground(WHITE);
-        this.label_2.setForeground(white);
+        this.label_1.setForeground(Color.BLACK);
+        this.label_2.setForeground(Color.BLACK);
         this.status = false;
         this.setting = new JButton();
         this.volume = new JButton();
@@ -66,7 +64,7 @@ public class Setting implements Piece {
     }
 
 
-    public void setSetting() {
+    private void setSetting() {
         this.setting.setSize(50, 50);
         this.setting.setLocation(Piece.CELL_SIZE * 13 + Piece.CELL_SIZE / 2, CELL_SIZE - Piece.CELL_SIZE / 2);
         ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/option/setting.png");
@@ -78,7 +76,7 @@ public class Setting implements Piece {
         StaticPieces.getChessBoardPanel().add(this.setting);
     }
 
-    public void setExit() {
+    private void setExit() {
         this.exit.setSize(50, 50);
         this.exit.setLocation(Piece.CELL_SIZE * 10, CELL_SIZE - Piece.CELL_SIZE / 2);
         ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/option/exit.png");
@@ -91,7 +89,7 @@ public class Setting implements Piece {
         StaticPieces.getChessBoardPanel().add(this.exit);
     }
 
-    public void setOption(JButton button) {
+    private void setOption(JButton button) {
         button.setSize(100, 36);
         if (button.getName().equals("volume"))
             button.setLocation(Piece.CELL_SIZE * 11, 2 * CELL_SIZE - Piece.CELL_SIZE);
@@ -107,8 +105,18 @@ public class Setting implements Piece {
         StaticPieces.getChessBoardPanel().add(button);
     }
 
-    public void clickSetting(JButton button) {
+    private void clickSetting(JButton button) {
         this.setting.addActionListener(e -> {
+            if (StaticPieces.getTurn() % 2 == Piece.BLACK && StaticPieces.getFirst() != 2)
+                StaticPieces.changeImage("wait", 1);
+            else
+                StaticPieces.changeImage("wait", 2);
+            if(!this.status || StaticPieces.getChessBoardPanel().getPause()) {
+                StaticPieces.changeImage("ss", 1);
+                StaticPieces.changeImage("ss", 2);
+                StaticPieces.getNotice_1().setVisible(false);
+                StaticPieces.getNotice_2().setVisible(false);
+            }
             this.slider_1.setVisible(false);
             this.label_1.setVisible(false);
             this.slider_2.setVisible(false);
@@ -132,7 +140,7 @@ public class Setting implements Piece {
         });
     }
 
-    public void clickVolume() {
+    private void clickVolume() {
         this.volume.addActionListener(e -> {
             this.exit.setVisible(true);
             this.quit.setVisible(false);
@@ -156,14 +164,13 @@ public class Setting implements Piece {
 
             this.slider_2.addChangeListener(e1 -> {
                 this.label_2.setText(" Hiệu ứng: " + this.slider_2.getValue());
-                StaticPieces.getSoundEffect().setVolumeSoundTrack(this.slider_2.getValue());
                 StaticPieces.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
             });
         });
     }
 
 
-    public void clickBack(Home home) {
+    private void clickBack(Home home) {
         this.backHome.addActionListener(e -> {
             if (StaticPieces.getFirst() != 2)
                 file.IOFile.saveGame();
@@ -190,7 +197,7 @@ public class Setting implements Piece {
         });
     }
 
-    public void clickQuit(Home home) {
+    private void clickQuit(Home home) {
         this.quit.addActionListener(e -> {
             if (StaticPieces.getFirst() != 2)
                 file.IOFile.saveGame();
@@ -198,7 +205,7 @@ public class Setting implements Piece {
         });
     }
 
-    public void clickExit() {
+    private void clickExit() {
         this.exit.addActionListener(e -> {
             this.slider_1.setVisible(false);
             this.label_1.setVisible(false);
@@ -211,7 +218,7 @@ public class Setting implements Piece {
         });
     }
 
-    public void setEventListeners(Home home, JButton button) {
+    private void setEventListeners(Home home, JButton button) {
         this.clickQuit(home);
         this.clickVolume();
         this.clickSetting(button);

@@ -3,6 +3,7 @@ package game;
 import chesspiece.ChessPiece;
 import chesspiece.Piece;
 import chesspiece.StaticPieces;
+import file.IOFile;
 import image.NewImage;
 
 import javax.swing.*;
@@ -44,7 +45,7 @@ public class Event implements Piece {
         this.setEventListensers();
     }
 
-    public void setChooseEventListeners() {
+    private void setChooseEventListeners() {
         Vector<ChessPiece> pieces = StaticPieces.getPieces();
         for (ChessPiece _piece_ : pieces) {
             _piece_.addActionListener(e -> {
@@ -77,13 +78,13 @@ public class Event implements Piece {
         }
     }
 
-    public void resetImageChess(Vector<Integer> choose) {
+    private void resetImageChess(Vector<Integer> choose) {
         for (Integer temp : choose) {
             StaticPieces.getPieces().elementAt(temp).setImage();
         }
     }
 
-    public void setMoveTop() {
+    private void setMoveTop() {
         this.top.addActionListener(e -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
@@ -93,6 +94,7 @@ public class Event implements Piece {
                 return;
             if (this.status) {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
+                IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
                 temp.setLocation(this.top.getX() + Piece.RADIUS - cell / 2, this.top.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
@@ -117,14 +119,15 @@ public class Event implements Piece {
                     StaticPieces.getSoundEffect().playSoundMove();
                 else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
-                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                    StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                 }
+                System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
                 this.typeClick = -1;
             }
         });
     }
 
-    public void setMoveRight() {
+    private void setMoveRight() {
         this.right.addActionListener(e -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
@@ -134,6 +137,7 @@ public class Event implements Piece {
                 return;
             if (this.status) {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
+                IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
                 temp.setLocation(this.right.getX() + Piece.RADIUS - cell / 2, this.right.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
@@ -158,14 +162,15 @@ public class Event implements Piece {
                     StaticPieces.getSoundEffect().playSoundMove();
                 else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
-                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                    StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                 }
+                System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
                 this.typeClick = -1;
             }
         });
     }
 
-    public void setMoveBottom() {
+    private void setMoveBottom() {
         this.bottom.addActionListener(e -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
@@ -175,6 +180,7 @@ public class Event implements Piece {
                 return;
             if (this.status) {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
+                IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
                 temp.setLocation(this.bottom.getX() + Piece.RADIUS - cell / 2, this.bottom.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
@@ -199,14 +205,15 @@ public class Event implements Piece {
                     StaticPieces.getSoundEffect().playSoundMove();
                 else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
-                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                    StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                 }
+
                 this.typeClick = -1;
             }
         });
     }
 
-    public void setMoveLeft() {
+    private void setMoveLeft() {
         this.left.addActionListener(e -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
@@ -216,6 +223,7 @@ public class Event implements Piece {
                 return;
             if (this.status) {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
+                IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
                 temp.setLocation(this.left.getX() + Piece.RADIUS - cell / 2, this.left.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
@@ -240,14 +248,14 @@ public class Event implements Piece {
                     StaticPieces.getSoundEffect().playSoundMove();
                 else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
-                    StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                    StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                 }
                 this.typeClick = -1;
             }
         });
     }
 
-    public void setMoveHAnother() {
+    private void setMoveHAnother() {
         for (JButton button : this.buttonH) {
             button.addActionListener(e -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
@@ -258,6 +266,7 @@ public class Event implements Piece {
                     return;
                 if (this.status) {
                     ChessPiece temp = pieces.elementAt(this.typeClick);
+                    IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                     int cell = temp.getSIZE();
                     temp.setLocation(button.getX() + Piece.RADIUS - cell / 2, button.getY() + Piece.RADIUS - cell / 2);
                     this.status = !this.status;
@@ -282,15 +291,16 @@ public class Event implements Piece {
                         StaticPieces.getSoundEffect().playSoundMove();
                     else {
                         StaticPieces.getSoundEffect().playSoundCheckMate();
-                        StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                        StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                     }
+                    System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
                     this.typeClick = -1;
                 }
             });
         }
     }
 
-    public void setMoveVAnother() {
+    private void setMoveVAnother() {
         for (JButton button : this.buttonV) {
             button.addActionListener(e -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
@@ -301,6 +311,7 @@ public class Event implements Piece {
                     return;
                 if (this.status) {
                     ChessPiece temp = pieces.elementAt(this.typeClick);
+                    IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                     int cell = temp.getSIZE();
                     temp.setLocation(button.getX() + Piece.RADIUS - cell / 2, button.getY() + Piece.RADIUS - cell / 2);
                     this.status = !this.status;
@@ -324,20 +335,22 @@ public class Event implements Piece {
                         StaticPieces.getSoundEffect().playSoundMove();
                     else {
                         StaticPieces.getSoundEffect().playSoundCheckMate();
-                        StaticPieces.changeImage("checkmate", this.typeClick % 2);
+                        StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                     }
+                    System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
                     this.typeClick = -1;
                 }
             });
         }
     }
 
-    public void setKillEnemies(ChessPiece chessPiece) {
+    private void setKillEnemies(ChessPiece chessPiece) {
         CountDown clock_1 = StaticPieces.getClock_1();
         CountDown clock_2 = StaticPieces.getClock_2();
         Check check = StaticPieces.getCheck();
         Vector<ChessPiece> pieces = StaticPieces.getPieces();
         ChessPiece temp = pieces.elementAt(this.typeClick);
+        IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), chessPiece.getTYPE(), StaticPieces.getTurn());
         System.out.println(temp.getName() + " killed " + chessPiece.getName());
         temp.setLocation((chessPiece.getLocateX() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2, (chessPiece.getLocateY() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2);
         this.status = !this.status;
@@ -373,16 +386,17 @@ public class Event implements Piece {
             return;
         }
         StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
-        if (temp.checkMate())
+        if (temp.checkMate()) {
             StaticPieces.getSoundEffect().playSoundCheckMate();
-        else {
-            StaticPieces.getSoundEffect().playSoundMove();
-            StaticPieces.changeImage("checkmate", this.typeClick % 2);
+            StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
         }
+        else
+            StaticPieces.getSoundEffect().playSoundMove();
+        System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
         this.typeClick = -1;
     }
 
-    public void setMoveEventListeners() {
+    private void setMoveEventListeners() {
         this.setMoveTop();
         this.setMoveRight();
         this.setMoveBottom();
@@ -391,14 +405,14 @@ public class Event implements Piece {
         this.setMoveHAnother();
     }
 
-    public void setEventListensers() {
+    private void setEventListensers() {
         if (StaticPieces.getTurn() == -1)
             return;
         this.setChooseEventListeners();
         this.setMoveEventListeners();
     }
 
-    public void setButton(JButton button) {
+    private void setButton(JButton button) {
         ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/R.png");
         imageIcon = new NewImage().resizeImage(imageIcon, Piece.RADIUS * 2, Piece.RADIUS * 2);
         button.setBorderPainted(false);
@@ -421,7 +435,7 @@ public class Event implements Piece {
         this.resetImageChess(this.choose);
     }
 
-    public Boolean checkMate(ChessPiece temp) {
+    private Boolean checkMate(ChessPiece temp) {
         CountDown clock_1 = StaticPieces.getClock_1();
         CountDown clock_2 = StaticPieces.getClock_2();
         ChessPiece general_red = StaticPieces.getPieces().firstElement();

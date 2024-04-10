@@ -3,7 +3,6 @@ package menu;
 import chesspiece.Piece;
 import chesspiece.StaticPieces;
 import file.IOFile;
-import game.Event;
 import image.NewImage;
 
 import javax.swing.*;
@@ -37,7 +36,8 @@ public class Home extends JFrame {
         long start = System.currentTimeMillis();
         StaticPieces.getSoundEffect().playBackgroundMusic();
         StaticPieces.setup();
-        StaticPieces.setMinute(15);
+        StaticPieces.setMinute(IOFile.getTime().firstElement());
+        StaticPieces.setSecond(IOFile.getTime().lastElement());
         StaticPieces.setSecond(0);
         ImageIcon logo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/image/logo.jpg")).getPath());
         Image temp = logo.getImage();
@@ -122,7 +122,7 @@ public class Home extends JFrame {
         System.out.println("Time start: " + (end - start));
     }
 
-    public void setOption(JButton button) {
+    private void setOption(JButton button) {
         ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/src/image/menu/" + button.getName() + ".png");
         imageIcon = new NewImage().resizeImage(imageIcon, 100, 36);
         button.setIcon(imageIcon);
@@ -143,6 +143,7 @@ public class Home extends JFrame {
                 button.setBounds(200, 400, 100, 36);
             if (button.getName().equals("quit"))
                 button.setBounds(200, 450, 100, 36);
+            this.oldGame.setVisible(false);
         }
         button.setBorderPainted(false);
     }
@@ -154,13 +155,12 @@ public class Home extends JFrame {
         this.setOption(this.quit);
     }
 
-    public void setNewGame() {
+    private void setNewGame() {
         this.newGame.addActionListener(e -> {
             long startt = System.currentTimeMillis();
             this.menu.setVisible(false);
             this.setSize(Piece._width_, Piece._height_);
             this.setLocationRelativeTo(null);
-            new Event();
             JButton start = new JButton();
             StaticPieces.setNew(start);
             StaticPieces.getSetting().setChessBoard(this, start);
@@ -169,15 +169,15 @@ public class Home extends JFrame {
         });
     }
 
-    public void setOldGame() {
+    private void setOldGame() {
         this.oldGame.addActionListener(e -> {
             this.menu.setVisible(false);
             this.setSize(Piece._width_, Piece._height_);
             this.setLocationRelativeTo(null);
             IOFile.readGame();
             JButton start = new JButton();
-            new Event();
             StaticPieces.setNewSetting();
+            StaticPieces.setEvent();
             StaticPieces.getSetting().setChessBoard(this, start);
             StaticPieces.getChessBoardPanel().setButton(start);
             StaticPieces.getChessBoardPanel().play(start);
@@ -185,11 +185,11 @@ public class Home extends JFrame {
         });
     }
 
-    public void setQuit() {
+    private void setQuit() {
         this.quit.addActionListener(e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
     }
 
-    public void setClickSetting() {
+    private void setClickSetting() {
         this.setting.addActionListener(e -> {
             this.level++;
             this.newGame.setVisible(false);
@@ -204,7 +204,7 @@ public class Home extends JFrame {
         });
     }
 
-    public void setSettingHome() {
+    private void setSettingHome() {
         this.level++;
         this.volume.setSize(100, 36);
         this.volume.setLocation(200, 350);
@@ -269,7 +269,7 @@ public class Home extends JFrame {
         this.menu.add(this.fifteen);
     }
 
-    public void setClickBack() {
+    private void setClickBack() {
         this.backHome.addActionListener(e -> {
             switch (this.level) {
                 case 1:
@@ -303,7 +303,7 @@ public class Home extends JFrame {
         });
     }
 
-    public void setVolume() {
+    private void setVolume() {
         this.volume.addActionListener(e -> {
             this.level++;
             Vector<Integer> newVolume = IOFile.getVolume();
@@ -336,13 +336,12 @@ public class Home extends JFrame {
 
             this.slider_2.addChangeListener(e1 -> {
                 this.label_2.setText(" Hiệu ứng: " + this.slider_2.getValue());
-                StaticPieces.getSoundEffect().setVolumeSoundTrack(this.slider_2.getValue());
                 StaticPieces.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
             });
         });
     }
 
-    public void setTime(){
+    private void setTime(){
         this.time.addActionListener(e -> {
             this.level++;
             this.quit.setVisible(false);
@@ -355,11 +354,13 @@ public class Home extends JFrame {
             this.fifteen.setVisible(true);
         });
     }
-    public void chooseFif(){
+    private void chooseFif(){
         this.fifteen.addActionListener(e -> {
             StaticPieces.setMinute(15);
             StaticPieces.setSecond(0);
 
+            IOFile.saveTime(15, 0);
+
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
             this.volume.setVisible(true);
@@ -370,11 +371,13 @@ public class Home extends JFrame {
             this.level--;
         });
     }
-    public void chooseTwel(){
+    private void chooseTwel(){
         this.twelve.addActionListener(e -> {
             StaticPieces.setMinute(12);
             StaticPieces.setSecond(0);
 
+            IOFile.saveTime(12, 0);
+
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
             this.volume.setVisible(true);
@@ -385,11 +388,13 @@ public class Home extends JFrame {
             this.level--;
         });
     }
-    public void chooseTen(){
+    private void chooseTen(){
         this.ten.addActionListener(e -> {
             StaticPieces.setMinute(10);
             StaticPieces.setSecond(0);
 
+            IOFile.saveTime(10, 0);
+
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
             this.volume.setVisible(true);
@@ -401,7 +406,7 @@ public class Home extends JFrame {
         });
     }
 
-    public void setEvent() {
+    private void setEvent() {
         this.setNewGame();
         this.setQuit();
         this.setOldGame();
@@ -416,11 +421,11 @@ public class Home extends JFrame {
         this.chooseTen();
     }
 
-    public void closeFrame() {
+    private void closeFrame() {
         StaticPieces.getCloseButton().getClose().addActionListener(e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
     }
 
-    public void hideFrame() {
+    private void hideFrame() {
         StaticPieces.getCloseButton().getHide().addActionListener(e -> this.setState(JFrame.ICONIFIED));
     }
 
