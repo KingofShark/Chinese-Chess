@@ -2,6 +2,7 @@ package sound;
 
 import file.IOFile;
 import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Vector;
@@ -23,7 +24,7 @@ public class SoundEffect {
 
     public void playSoundMove() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("move.wav")));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File((System.getProperty("user.dir") + "/resource/sound/move.wav")));
             Clip soundEffectMove = AudioSystem.getClip();
             soundEffectMove.open(audioInputStream);
             FloatControl volumeMove = (FloatControl) soundEffectMove.getControl(FloatControl.Type.MASTER_GAIN);
@@ -36,7 +37,7 @@ public class SoundEffect {
 
     public void playSoundCheckMate() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("chieu.wav")));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/resource/sound/chieu.wav"));
             Clip soundEffectMove = AudioSystem.getClip();
             soundEffectMove.open(audioInputStream);
             FloatControl volumeMove = (FloatControl) soundEffectMove.getControl(FloatControl.Type.MASTER_GAIN);
@@ -49,7 +50,7 @@ public class SoundEffect {
 
     public void playBackgroundMusic() {
         try {
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("bgsound.wav")));
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/resource/sound/bgsound.wav"));
             Clip soundTrack = AudioSystem.getClip();
             soundTrack.open(inputStream);
             this.volumeControlBG = (FloatControl) soundTrack.getControl(FloatControl.Type.MASTER_GAIN);
