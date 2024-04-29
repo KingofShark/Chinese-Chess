@@ -1,25 +1,25 @@
 package file;
 
-import chesspiece.ChessPiece;
-import chesspiece.StaticPieces;
-import game.Check;
+import model.ChessPiece;
+import controller.StaticPieces;
+import model.Check;
 
 import java.io.*;
 import java.util.Vector;
 
 public class IOFile {
 
-    public static boolean checkFile(String path) {
+    public static boolean isEmpty(String path) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
-            return bufferedReader.readLine() != null;
+            return bufferedReader.readLine() == null;
         } catch (Exception e) {
             System.out.println("Read file error: " + e.getMessage());
-            return false;
+            return true;
         }
     }
 
     public static void readGame() {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/src/file/old.txt"))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/old.txt"))) {
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             for (int i = 0; i < 10; i++) {
@@ -59,7 +59,8 @@ public class IOFile {
     }
 
     public static void saveGame() {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/file/old.txt"))) {
+        IOFile.deleteLastMove();
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/old.txt"))) {
             if(StaticPieces.getTurn() == -1){
                 bufferedWriter.close();
                 return;
@@ -88,7 +89,7 @@ public class IOFile {
     public static void saveVolume(int newVolume1, int newVolume2) {
         int minute = IOFile.getTime().firstElement();
         int second = IOFile.getTime().lastElement();
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/file/setting.txt"))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
             bufferedWriter.write(newVolume1 + " " + newVolume2 + "\n" + minute + " " + second);
         } catch (Exception e) {
             System.out.println("Cannot open file: " + e.getMessage());
@@ -97,7 +98,7 @@ public class IOFile {
 
     public static Vector<Integer> getVolume() {
         Vector<Integer> newVolume = new Vector<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/src/file/setting.txt"))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
             String line = bufferedReader.readLine();
             if (line == null) {
                 newVolume.add(100);
@@ -113,15 +114,20 @@ public class IOFile {
     }
     public static Vector<Integer> getTime() {
         Vector<Integer> newTime = new Vector<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/src/file/setting.txt"))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
             String line = bufferedReader.readLine();
             if (line == null) {
                 newTime.add(15);
                 newTime.add(0);
             } else {
                 line = bufferedReader.readLine();
-                newTime.add(Integer.parseInt(line.split(" ")[0]));
-                newTime.add(Integer.parseInt(line.split(" ")[1]));
+                if(line != null) {
+                    newTime.add(Integer.parseInt(line.split(" ")[0]));
+                    newTime.add(Integer.parseInt(line.split(" ")[1]));
+                }else{
+                    newTime.add(15);
+                    newTime.add(0);
+                }
             }
         } catch (Exception e) {
             System.out.println("Read file error: " + e.getMessage());
@@ -131,7 +137,7 @@ public class IOFile {
     public static void saveTime(int minute, int second){
         int vol1 = IOFile.getVolume().firstElement();
         int vol2 = IOFile.getVolume().lastElement();
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/file/setting.txt"))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
             bufferedWriter.write(vol1 + " " + vol2 + "\n" + minute + " " + second);
         } catch (Exception e) {
             System.out.println("Cannot open file: " + e.getMessage());
@@ -139,7 +145,7 @@ public class IOFile {
     }
     public static Vector<Integer> loadLastMove(){
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/src/file/lastmove.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/lastmove.txt"));
             String line = bufferedReader.readLine();
             String[] temp = line.split(" ");
             Vector<Integer> last = new Vector<>();
@@ -148,7 +154,8 @@ public class IOFile {
             last.add(Integer.parseInt(temp[2]));
             last.add(Integer.parseInt(temp[3]));
             last.add(Integer.parseInt(temp[4]));
-            FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/src/file/lastmove.txt", false);
+            bufferedReader.close();
+            FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/resource/file/lastmove.txt", false);
             fileWriter.write("");
             fileWriter.close();
             return last;
@@ -158,8 +165,17 @@ public class IOFile {
     }
     public static void saveLastMove(int move, int x, int y, int kill, int turn){
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/file/lastmove.txt"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/lastmove.txt"));
             bufferedWriter.write(move + " " + x + " " + y + " " + kill + " " + turn);
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void deleteLastMove(){
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/lastmove.txt"));
+            bufferedWriter.write("");
             bufferedWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
