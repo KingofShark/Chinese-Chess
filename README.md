@@ -37,5 +37,7 @@
 - Players take turns to move their pieces according to the rules of Chinese Chess.
 - The objective is to checkmate the opponent's general (king).
 
-### Conclusion
-This project is perfect for two-player competitive matches, combining traditional gameplay with modern technology to create a fun and challenging experience. Test your strategy and skills in **Chinese Chess** today!
+### License
+This project is licensed under the [MIT License](LICENSE).  
+You are free to use, modify, and distribute this software under the terms of the license.
+
