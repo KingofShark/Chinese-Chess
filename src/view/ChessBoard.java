@@ -1,10 +1,12 @@
 package view;
 
+import controller.Ai;
 import model.ChessPiece;
 import constant.Piece;
 import controller.StaticPieces;
 import file.IOFile;
 import image.NewImage;
+import model.Move;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,8 +93,16 @@ public class ChessBoard extends JPanel implements Piece {
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
                 button.setIcon(imageIcon);
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
+                    Move move = Ai.findBestMove(StaticPieces.getCheck(), 2, Piece.BLACK);
+                    System.out.println(move.toX + " " + move.toY + " \nfrom " + move.fromX + " " + move.fromY);
+
                     StaticPieces.getClock_1().resume();
                     StaticPieces.changeImage("wait", 2);
+
+                    int ch = StaticPieces.getCheck().getPiece(move.fromX, move.fromY);
+                    ChessPiece piece = StaticPieces.getPieces().elementAt(ch);
+                    int cell = piece.getSIZE();
+                    piece.setLocation(move.toX + Piece.RADIUS - cell / 2, move.toY + Piece.RADIUS - cell / 2);
                 } else {
                     StaticPieces.getClock_2().resume();
                     StaticPieces.changeImage("wait", 1);

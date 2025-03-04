@@ -49,7 +49,7 @@ public class Event implements Piece {
     private void setChooseEventListeners() {
         Vector<ChessPiece> pieces = StaticPieces.getPieces();
         for (ChessPiece _piece_ : pieces) {
-            _piece_.addActionListener(e -> {
+            _piece_.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
                 if (StaticPieces.getChessBoardPanel().getPause() || clock_1.getFullTime() ||
@@ -87,7 +87,7 @@ public class Event implements Piece {
     }
 
     private void setMoveTop() {
-        this.top.addActionListener(e -> {
+        this.top.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -130,7 +130,7 @@ public class Event implements Piece {
     }
 
     private void setMoveRight() {
-        this.right.addActionListener(e -> {
+        this.right.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -172,7 +172,7 @@ public class Event implements Piece {
     }
 
     private void setMoveBottom() {
-        this.bottom.addActionListener(e -> {
+        this.bottom.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -215,7 +215,7 @@ public class Event implements Piece {
     }
 
     private void setMoveLeft() {
-        this.left.addActionListener(e -> {
+        this.left.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -258,7 +258,7 @@ public class Event implements Piece {
 
     private void setMoveHAnother() {
         for (JButton button : this.buttonH) {
-            button.addActionListener(e -> {
+            button.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
                 Check check = StaticPieces.getCheck();
@@ -303,7 +303,7 @@ public class Event implements Piece {
 
     private void setMoveVAnother() {
         for (JButton button : this.buttonV) {
-            button.addActionListener(e -> {
+            button.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
                 Check check = StaticPieces.getCheck();

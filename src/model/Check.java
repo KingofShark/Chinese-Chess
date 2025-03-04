@@ -2,7 +2,7 @@ package model;
 
 import constant.Piece;
 
-public class Check implements Piece {
+public class Check implements Piece, Cloneable {
     private static int[][] check;
 
     public Check() {
@@ -56,4 +56,21 @@ public class Check implements Piece {
     public void setPiece(int x, int y, int type) {
         check[x][y] = type + 1;
     }
+
+    @Override
+    public Check clone() {
+        try {
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return (Check) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    public void makeMove(int fromX, int fromY, int toX, int toY) {
+        int piece = getPiece(fromX, fromY); // Lấy quân cờ từ vị trí ban đầu
+        setPiece(toX, toY, piece); // Đặt quân cờ vào vị trí mới
+        setPiece(fromX, fromY, -1); // Xóa quân cờ khỏi vị trí cũ (đánh dấu ô trống)
+    }
+
 }

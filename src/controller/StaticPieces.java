@@ -123,7 +123,8 @@ public class StaticPieces {
         StaticPieces.getNotice_1().setVisible(true);
         StaticPieces.setCheck();
         StaticPieces.setFirst(2);
-        StaticPieces.setTurn(new Random().nextInt(101));
+        //new Random().nextInt(101)
+        StaticPieces.setTurn(101);
         StaticPieces.getClock_1().setTime(StaticPieces.minute, StaticPieces.second);
         StaticPieces.getClock_2().setTime(StaticPieces.minute, StaticPieces.second);
         for (ChessPiece _piece_ : StaticPieces.getPieces()) {
