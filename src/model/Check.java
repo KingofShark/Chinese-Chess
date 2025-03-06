@@ -3,10 +3,14 @@ package model;
 import constant.Piece;
 
 public class Check implements Piece, Cloneable {
-    private static int[][] check;
+    private int[][] check;
 
     public Check() {
         check = new int[9][10];
+        initializeBoard();
+    }
+
+    private void initializeBoard() {
         // Đen
         check[0][0] = BLACK_LEFT_ROOK + 1;
         check[1][0] = BLACK_LEFT_KNIGHT + 1;
@@ -60,17 +64,20 @@ public class Check implements Piece, Cloneable {
     @Override
     public Check clone() {
         try {
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            return (Check) super.clone();
+            Check copy = (Check) super.clone();
+            copy.check = new int[9][10];
+            for (int i = 0; i < 9; i++) {
+                System.arraycopy(this.check[i], 0, copy.check[i], 0, 10);
+            }
+            return copy;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
     }
 
     public void makeMove(int fromX, int fromY, int toX, int toY) {
-        int piece = getPiece(fromX, fromY); // Lấy quân cờ từ vị trí ban đầu
-        setPiece(toX, toY, piece); // Đặt quân cờ vào vị trí mới
-        setPiece(fromX, fromY, -1); // Xóa quân cờ khỏi vị trí cũ (đánh dấu ô trống)
+        int piece = getPiece(fromX, fromY);
+        setPiece(toX, toY, piece);
+        setPiece(fromX, fromY, -1);
     }
-
 }
