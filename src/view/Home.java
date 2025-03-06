@@ -30,11 +30,14 @@ public class Home extends JFrame {
     private int level;
 
     public Home() {
-        StaticPieces.getSoundEffect().playBackgroundMusic();
-        StaticPieces.setup();
-        StaticPieces.setMinute(IOFile.getTime().firstElement());
-        StaticPieces.setSecond(IOFile.getTime().lastElement());
-        StaticPieces.setSecond(0);
+        new Thread(() -> {
+            StaticPieces.getSoundEffect().playBackgroundMusic();
+            StaticPieces.setup();
+            StaticPieces.setMinute(IOFile.getTime().firstElement());
+            StaticPieces.setSecond(IOFile.getTime().lastElement());
+            StaticPieces.setSecond(0);
+        }).start();
+
         ImageIcon logo = new ImageIcon(System.getProperty("user.dir") + "/resource/image/logo.jpg");
         Image temp = logo.getImage();
         temp = temp.getScaledInstance(210, 280, Image.SCALE_SMOOTH);
@@ -164,28 +167,32 @@ public class Home extends JFrame {
 
     private void setNewGame() {
         this.newGame.addActionListener(e -> {
-            this.menu.setVisible(false);
-            this.setSize(Piece._width_, Piece._height_);
-            this.setLocationRelativeTo(null);
-            JButton start = new JButton();
-            StaticPieces.setNew(start);
-            StaticPieces.getSetting().setChessBoard(this, start);
+            new Thread(() -> {
+                this.menu.setVisible(false);
+                this.setSize(Piece._width_, Piece._height_);
+                this.setLocationRelativeTo(null);
+                JButton start = new JButton();
+                StaticPieces.setNew(start);
+                StaticPieces.getSetting().setChessBoard(this, start);
+            }).start();
         });
     }
 
     private void setOldGame() {
         this.oldGame.addActionListener(e -> {
-            this.menu.setVisible(false);
-            this.setSize(Piece._width_, Piece._height_);
-            this.setLocationRelativeTo(null);
-            IOFile.readGame();
-            JButton start = new JButton();
-            StaticPieces.setNewSetting();
-            StaticPieces.getSetting().setChessBoard(this, start);
-            StaticPieces.getChessBoardPanel().setButton(start);
-            StaticPieces.getChessBoardPanel().play(start);
-            StaticPieces.setEvent();
-            StaticPieces.getChessBoardPanel().setVisible(true);
+            new Thread(() -> {
+                this.menu.setVisible(false);
+                this.setSize(Piece._width_, Piece._height_);
+                this.setLocationRelativeTo(null);
+                IOFile.readGame();
+                JButton start = new JButton();
+                StaticPieces.setNewSetting();
+                StaticPieces.getSetting().setChessBoard(this, start);
+                StaticPieces.getChessBoardPanel().setButton(start);
+                StaticPieces.getChessBoardPanel().play(start);
+                StaticPieces.setEvent();
+                StaticPieces.getChessBoardPanel().setVisible(true);
+            }).start();
         });
     }
 
