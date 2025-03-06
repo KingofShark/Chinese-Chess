@@ -178,28 +178,30 @@ public class Setting implements Piece {
 
     private void clickBack(Home home) {
         this.backHome.addActionListener(e -> {
-            if (StaticPieces.getFirst() != 2)
-                file.IOFile.saveGame();
-            home.setButton();
-            StaticPieces.getChessBoardPanel().removePieces();
-            StaticPieces.getChessBoardPanel().setVisible(false);
-            StaticPieces.getClock_1().stop();
-            StaticPieces.getClock_2().stop();
-            this.slider_1.setVisible(false);
-            this.label_1.setVisible(false);
-            this.slider_2.setVisible(false);
-            this.label_2.setVisible(false);
-            this.volume.setVisible(!this.status);
-            this.backHome.setVisible(!this.status);
-            this.quit.setVisible(!this.status);
-            this.exit.setVisible(false);
-            this.status = !this.status;
+            new Thread(() -> {
+                if (StaticPieces.getFirst() != 2)
+                    file.IOFile.saveGame();
+                home.setButton();
+                StaticPieces.getChessBoardPanel().removePieces();
+                StaticPieces.getChessBoardPanel().setVisible(false);
+                StaticPieces.getClock_1().stop();
+                StaticPieces.getClock_2().stop();
+                this.slider_1.setVisible(false);
+                this.label_1.setVisible(false);
+                this.slider_2.setVisible(false);
+                this.label_2.setVisible(false);
+                this.volume.setVisible(!this.status);
+                this.backHome.setVisible(!this.status);
+                this.quit.setVisible(!this.status);
+                this.exit.setVisible(false);
+                this.status = !this.status;
 
-            StaticPieces.getCloseButton().setClose(home.getMenu());
-            StaticPieces.getCloseButton().setHide(home.getMenu());
-            home.getMenu().setVisible(true);
-            home.setSize(500, 700);
-            home.setLocationRelativeTo(null);
+                StaticPieces.getCloseButton().setClose(home.getMenu());
+                StaticPieces.getCloseButton().setHide(home.getMenu());
+                home.getMenu().setVisible(true);
+                home.setSize(500, 700);
+                home.setLocationRelativeTo(null);
+            }).start();
         });
     }
 

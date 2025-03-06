@@ -2,11 +2,15 @@ package model;
 
 import constant.Piece;
 
-public class Check implements Piece {
-    private static int[][] check;
+public class Check implements Piece, Cloneable {
+    private int[][] check;
 
     public Check() {
         check = new int[9][10];
+        initializeBoard();
+    }
+
+    private void initializeBoard() {
         // Đen
         check[0][0] = BLACK_LEFT_ROOK + 1;
         check[1][0] = BLACK_LEFT_KNIGHT + 1;
@@ -55,5 +59,25 @@ public class Check implements Piece {
 
     public void setPiece(int x, int y, int type) {
         check[x][y] = type + 1;
+    }
+
+    @Override
+    public Check clone() {
+        try {
+            Check copy = (Check) super.clone();
+            copy.check = new int[9][10];
+            for (int i = 0; i < 9; i++) {
+                System.arraycopy(this.check[i], 0, copy.check[i], 0, 10);
+            }
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    public void makeMove(int fromX, int fromY, int toX, int toY) {
+        int piece = getPiece(fromX, fromY);
+        setPiece(toX, toY, piece);
+        setPiece(fromX, fromY, -1);
     }
 }

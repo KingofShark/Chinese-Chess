@@ -1,10 +1,12 @@
 package view;
 
+import controller.Ai;
 import model.ChessPiece;
 import constant.Piece;
 import controller.StaticPieces;
 import file.IOFile;
 import image.NewImage;
+import model.Move;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,6 +93,7 @@ public class ChessBoard extends JPanel implements Piece {
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
                 button.setIcon(imageIcon);
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
+                    StaticPieces.getEvent().setMachine();
                     StaticPieces.getClock_1().resume();
                     StaticPieces.changeImage("wait", 2);
                 } else {

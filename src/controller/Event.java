@@ -5,12 +5,20 @@ import file.IOFile;
 import image.NewImage;
 import model.Check;
 import model.ChessPiece;
+import model.Move;
 import view.CountDown;
 
 import javax.swing.*;
 import java.util.Vector;
 
 public class Event implements Piece {
+    /**
+     * typeClick: Kiểu quân cờ được chọn
+     * status: Trạng thái chọn quân cờ
+     * top, left, bottom, right: Các nút di chuyển
+     * buttonH, buttonV: Các nút di chuyển khác
+     * choose: Các vị trí có thể di chuyển
+     */
     private int typeClick;
     private Vector<Integer> choose;
     private final JButton top, left, bottom, right;
@@ -46,14 +54,17 @@ public class Event implements Piece {
         this.setEventListensers();
     }
 
+    /**
+     * setChooseEventListeners: Thiết lập sự kiện chọn quân cờ
+     */
     private void setChooseEventListeners() {
         Vector<ChessPiece> pieces = StaticPieces.getPieces();
         for (ChessPiece _piece_ : pieces) {
-            _piece_.addActionListener(e -> {
+            _piece_.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
                 if (StaticPieces.getChessBoardPanel().getPause() || clock_1.getFullTime() ||
-                    clock_2.getFullTime() || StaticPieces.getSetting().getStatus() || StaticPieces.getTurn() == -1)
+                        clock_2.getFullTime() || StaticPieces.getSetting().getStatus() || StaticPieces.getTurn() == -1)
                     return;
                 if (StaticPieces.getTurn() % 2 == 1 - _piece_.getCOLOR()) {
                     for (Integer temp : this.choose) {
@@ -80,14 +91,18 @@ public class Event implements Piece {
         }
     }
 
+
     private void resetImageChess(Vector<Integer> choose) {
         for (Integer temp : choose) {
             StaticPieces.getPieces().elementAt(temp).setImage();
         }
     }
 
+    /**
+     * setMoveTop: Thiết lập sự kiện di chuyển lên
+     */
     private void setMoveTop() {
-        this.top.addActionListener(e -> {
+        this.top.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -116,21 +131,25 @@ public class Event implements Piece {
                     clock_1.resume();
                     StaticPieces.changeImage("wait", 1);
                 }
-                StaticPieces.setTurn ((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
+                StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
                 if (!temp.checkMate()) {
                     StaticPieces.getSoundEffect().playSoundMove();
 
-                }else {
+                } else {
                     StaticPieces.getSoundEffect().playSoundCheckMate();
                     StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
                 }
                 this.typeClick = -1;
             }
+            setMachine();
         });
     }
 
+    /**
+     * setMoveRight: Thiết lập sự kiện di chuyển sang phải
+     */
     private void setMoveRight() {
-        this.right.addActionListener(e -> {
+        this.right.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -168,11 +187,12 @@ public class Event implements Piece {
                 }
                 this.typeClick = -1;
             }
+            setMachine();
         });
     }
 
     private void setMoveBottom() {
-        this.bottom.addActionListener(e -> {
+        this.bottom.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -211,11 +231,12 @@ public class Event implements Piece {
 
                 this.typeClick = -1;
             }
+            setMachine();
         });
     }
 
     private void setMoveLeft() {
-        this.left.addActionListener(e -> {
+        this.left.addActionListener(_ -> {
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -253,12 +274,13 @@ public class Event implements Piece {
                 }
                 this.typeClick = -1;
             }
+            setMachine();
         });
     }
 
     private void setMoveHAnother() {
         for (JButton button : this.buttonH) {
-            button.addActionListener(e -> {
+            button.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
                 Check check = StaticPieces.getCheck();
@@ -297,13 +319,14 @@ public class Event implements Piece {
                     System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
                     this.typeClick = -1;
                 }
+                setMachine();
             });
         }
     }
 
     private void setMoveVAnother() {
         for (JButton button : this.buttonV) {
-            button.addActionListener(e -> {
+            button.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
                 Check check = StaticPieces.getCheck();
@@ -341,6 +364,7 @@ public class Event implements Piece {
                     System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
                     this.typeClick = -1;
                 }
+                setMachine();
             });
         }
     }
@@ -386,17 +410,20 @@ public class Event implements Piece {
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == 0) ? "Đen thắng" : "Đỏ thắng");
             return;
         }
-        StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
         if (temp.checkMate()) {
             StaticPieces.getSoundEffect().playSoundCheckMate();
-            StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
-        }
-        else
+            StaticPieces.changeImage("checkmate", 2 - ((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1) % 2);
+        } else
             StaticPieces.getSoundEffect().playSoundMove();
+        StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
+        setMachine();
         System.out.println(2 - StaticPieces.getTurn() % 2 + " " + this.typeClick);
         this.typeClick = -1;
     }
 
+    /**
+     * setMoveEventListeners: Thiết lập sự kiện di chuyển quân cờ
+     */
     private void setMoveEventListeners() {
         this.setMoveTop();
         this.setMoveRight();
@@ -406,6 +433,9 @@ public class Event implements Piece {
         this.setMoveHAnother();
     }
 
+    /**
+     * setEventListensers: Thiết lập sự kiện
+     */
     private void setEventListensers() {
         if (StaticPieces.getTurn() == -1)
             return;
@@ -413,6 +443,11 @@ public class Event implements Piece {
         this.setMoveEventListeners();
     }
 
+    /**
+     * setButton: Thiết lập nút di chuyển
+     *
+     * @param button: Nút di chuyển
+     */
     private void setButton(JButton button) {
         ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/R.png");
         imageIcon = new NewImage().resizeImage(imageIcon, Piece.RADIUS * 2, Piece.RADIUS * 2);
@@ -424,6 +459,10 @@ public class Event implements Piece {
         StaticPieces.getChessBoardPanel().add(button);
     }
 
+
+    /**
+     * hideButton: Ẩn các nút di chuyển
+     */
     public void hideButton() {
         this.top.setVisible(false);
         this.right.setVisible(false);
@@ -436,6 +475,12 @@ public class Event implements Piece {
         this.resetImageChess(this.choose);
     }
 
+    /**
+     * checkMate: Kiểm tra chiếu bí
+     *
+     * @param temp: Quân cờ
+     * @return: True nếu chiếu bí, ngược lại False
+     */
     private Boolean checkMate(ChessPiece temp) {
         CountDown clock_1 = StaticPieces.getClock_1();
         CountDown clock_2 = StaticPieces.getClock_2();
@@ -448,5 +493,55 @@ public class Event implements Piece {
             return true;
         }
         return false;
+    }
+
+    // máy đi
+    public void setMachine() {
+        new Thread(() -> {
+            System.out.println("máy đi");
+            if (StaticPieces.getTurn() % 2 == Piece.RED)
+                return;
+            CountDown clock_1 = StaticPieces.getClock_1();
+            CountDown clock_2 = StaticPieces.getClock_2();
+            Check check = StaticPieces.getCheck();
+            Vector<ChessPiece> pieces = StaticPieces.getPieces();
+            if (StaticPieces.getSetting().getStatus())
+                return;
+            Move move = Ai.findBestMove(check, 5, Piece.BLACK);
+            typeClick = check.getPiece(move.fromX, move.fromY);
+
+
+            if (!check.isEmpty(move.toX, move.toY) && pieces.elementAt(check.getPiece(move.toX, move.toY)).getCOLOR() == Piece.RED) {
+                ChessPiece temp = pieces.elementAt(check.getPiece(move.toX, move.toY));
+                this.setKillEnemies(temp);
+                return;
+            }
+            ChessPiece temp = pieces.elementAt(this.typeClick);
+            IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
+            check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
+            temp.setLocate(move.toX, move.toY);
+            check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
+            this.hideButton();
+            if (this.checkMate(temp))
+                return;
+            if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
+                clock_1.stop();
+                clock_2.resume();
+                StaticPieces.changeImage("wait", 2);
+            } else {
+                clock_2.stop();
+                clock_1.resume();
+                StaticPieces.changeImage("wait", 1);
+            }
+            StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
+            if (!temp.checkMate())
+                StaticPieces.getSoundEffect().playSoundMove();
+            else {
+                StaticPieces.getSoundEffect().playSoundCheckMate();
+                StaticPieces.changeImage("checkmate", 2 - StaticPieces.getTurn() % 2);
+            }
+            this.typeClick = -1;
+        }).start();
+
     }
 }
