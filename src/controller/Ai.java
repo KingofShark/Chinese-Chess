@@ -19,16 +19,56 @@ public class Ai {
             10000, // Tướng
             200, 200, // Sĩ
             200, 200, // Sĩ
-            500, 500, // Tượng
-            500, 500, // Tượng
+            450, 450, // Tượng
+            450, 450, // Tượng
             600, 600, // Mã
             600, 600, // Mã
-            900, 900, // Xe
-            900, 900, // Xe
-            700, 700, // Pháo
-            700, 700, // Pháo
-            100, 100, 100, 100, 100, // Tốt đỏ
-            100, 100, 100, 100, 100  // Tốt đen
+            1000, 1000, // Xe
+            1000, 1000, // Xe
+            800, 800, // Pháo
+            800, 800, // Pháo
+            150, 150, 150, 150, 150, // Tốt đỏ
+            150, 150, 150, 150, 150  // Tốt đen
+    };
+
+    private static final int[][] ROOK = {
+            {-10, -5, -5, -5, -5, -5, -5, -5, -10},
+            {-5, -5, -5, -5, -5, -5, -5, -5, -5},
+            {-5, -5, -5, -5, -5, -5, -5, -5, -5},
+            {-5, -5, -5, -5, -5, -5, -5, -5, -5},
+            {-5, -5, -5, -5, -5, -5, -5, -5, -5},
+            {0, 0, 0, 5, 5, 5, 0, 0, 0},
+            {0, 0, 0, 5, 5, 5, 0, 0, 0},
+            {0, 0, 0, 5, 5, 5, 0, 0, 0},
+            {10, 10, 10, 10, 9, 10, 10, 10, 10},
+            {20, 20, 20, 15, 20, 15, 20, 20, 20},
+    };
+
+
+    private static final int[][] Cannon = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 10, 20, 30, 40, 30, 20, 10, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
+    private static final int[][] Knight = {
+            {2, 4, 6, 8, 8, 8, 6, 4, 2},
+            {4, 6, 8, 10, 10, 10, 8, 6, 4},
+            {6, 8, 10, 12, 12, 12, 10, 8, 6},
+            {8, 10, 12, 14, 14, 14, 12, 10, 8},
+            {8, 10, 12, 14, 16, 14, 12, 10, 8},
+            {8, 10, 12, 14, 16, 14, 12, 10, 8},
+            {8, 10, 12, 14, 14, 14, 12, 10, 8},
+            {6, 8, 10, 12, 12, 12, 10, 8, 6},
+            {4, 6, 8, 10, 10, 10, 8, 6, 4},
+            {2, 4, 6, 8, 8, 8, 6, 4, 2}
     };
 
     /**
@@ -45,13 +85,36 @@ public class Ai {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
                     score += (StaticPieces.getPieces().elementAt(piece).getCOLOR() == Piece.BLACK ? 1 : -1) * pieceValues[piece];
+                    ChessPiece chessPiece = StaticPieces.getPieces().elementAt(piece);
+                    if (chessPiece.getTYPE() == Piece.BLACK_LEFT_ROOK || chessPiece.getTYPE() == Piece.BLACK_RIGHT_ROOK ||
+                            chessPiece.getTYPE() == Piece.RED_LEFT_ROOK || chessPiece.getTYPE() == Piece.RED_RIGHT_ROOK) {
+                        {
+                            score += (StaticPieces.getPieces().elementAt(piece).getCOLOR() == Piece.BLACK ? 1 : -1)
+                                    * ROOK[chessPiece.getLocateY()][chessPiece.getLocateX()];
+                        }
+                    }
+
+                    if (chessPiece.getTYPE() == Piece.BLACK_LEFT_CANNON || chessPiece.getTYPE() == Piece.BLACK_RIGHT_CANNON ||
+                            chessPiece.getTYPE() == Piece.RED_LEFT_CANNON || chessPiece.getTYPE() == Piece.RED_RIGHT_CANNON) {
+                        {
+                            score += (StaticPieces.getPieces().elementAt(piece).getCOLOR() == Piece.BLACK ? 1 : -1)
+                                    * Cannon[chessPiece.getLocateY()][chessPiece.getLocateX()];
+                        }
+                    }
+
+                    if (chessPiece.getTYPE() == Piece.BLACK_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.BLACK_RIGHT_KNIGHT ||
+                            chessPiece.getTYPE() == Piece.RED_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.RED_RIGHT_KNIGHT) {
+                        {
+                            score += (StaticPieces.getPieces().elementAt(piece).getCOLOR() == Piece.BLACK ? 1 : -1)
+                                    * Knight[chessPiece.getLocateY()][chessPiece.getLocateX()];
+                        }
+                    }
                 }
             }
         }
+        score = checkMate(board, player) ? score + 2000 : score;
 
-        score = checkMate(board, player) ? score + 200000 : score;
-
-        score = checkMateForEnemy(board, player) ? score - 300000 : score;
+        score = checkMateForEnemy(board, player) ? score - 3500 : score;
 
 
         score += checkAcrossTheRiver(board, player);
@@ -67,64 +130,21 @@ public class Ai {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
                     ChessPiece chessPiece = StaticPieces.getPieces().elementAt(piece);
-                        if (chessPiece.getTYPE() == Piece.RED_PAWN_0 || chessPiece.getTYPE() == Piece.RED_PAWN_1 ||
-                                chessPiece.getTYPE() == Piece.RED_PAWN_2 || chessPiece.getTYPE() == Piece.RED_PAWN_3
-                                || chessPiece.getTYPE() == Piece.RED_PAWN_4) {
-                            if (y >= 5) {
-                                score -= 50;
-                            }
-                        } else {
-                            if (chessPiece.getTYPE() == Piece.BLACK_PAWN_0 || chessPiece.getTYPE() == Piece.BLACK_PAWN_1
-                                    || chessPiece.getTYPE() == Piece.BLACK_PAWN_2 || chessPiece.getTYPE() == Piece.BLACK_PAWN_3
-                                    || chessPiece.getTYPE() == Piece.BLACK_PAWN_4) {
-                                if (y <= 4) {
-                                    score += 50;
-                                }
+                    if (chessPiece.getTYPE() == Piece.RED_PAWN_0 || chessPiece.getTYPE() == Piece.RED_PAWN_1 ||
+                            chessPiece.getTYPE() == Piece.RED_PAWN_2 || chessPiece.getTYPE() == Piece.RED_PAWN_3
+                            || chessPiece.getTYPE() == Piece.RED_PAWN_4) {
+                        if (y >= 5) {
+                            score -= 50;
+                        }
+                    } else {
+                        if (chessPiece.getTYPE() == Piece.BLACK_PAWN_0 || chessPiece.getTYPE() == Piece.BLACK_PAWN_1
+                                || chessPiece.getTYPE() == Piece.BLACK_PAWN_2 || chessPiece.getTYPE() == Piece.BLACK_PAWN_3
+                                || chessPiece.getTYPE() == Piece.BLACK_PAWN_4) {
+                            if (y <= 4) {
+                                score += 50;
                             }
                         }
-
-//                        if (chessPiece.getTYPE() == Piece.RED_LEFT_ROOK || chessPiece.getTYPE() == Piece.RED_RIGHT_ROOK ||
-//                                chessPiece.getTYPE() == Piece.BLACK_LEFT_ROOK || chessPiece.getTYPE() == Piece.BLACK_RIGHT_ROOK) {
-//                            if (y >= 5) {
-//                                score += 50;
-//                            }
-//                        } else {
-//                            if (chessPiece.getTYPE() == Piece.RED_LEFT_ROOK || chessPiece.getTYPE() == Piece.RED_RIGHT_ROOK ||
-//                                    chessPiece.getTYPE() == Piece.BLACK_LEFT_ROOK || chessPiece.getTYPE() == Piece.BLACK_RIGHT_ROOK) {
-//                                if (y <= 4) {
-//                                    score += 50;
-//                                }
-//                            }
-//                        }
-//
-//                        if (chessPiece.getTYPE() == Piece.RED_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.RED_RIGHT_KNIGHT ||
-//                                chessPiece.getTYPE() == Piece.BLACK_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.BLACK_RIGHT_KNIGHT) {
-//                            if (y >= 5) {
-//                                score += 50;
-//                            }
-//                        } else {
-//                            if (chessPiece.getTYPE() == Piece.RED_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.RED_RIGHT_KNIGHT ||
-//                                    chessPiece.getTYPE() == Piece.BLACK_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.BLACK_RIGHT_KNIGHT) {
-//                                if (y <= 4) {
-//                                    score += 50;
-//                                }
-//                            }
-//                        }
-//
-//                        if (chessPiece.getTYPE() == Piece.RED_LEFT_CANNON || chessPiece.getTYPE() == Piece.RED_RIGHT_CANNON ||
-//                                chessPiece.getTYPE() == Piece.BLACK_LEFT_CANNON || chessPiece.getTYPE() == Piece.BLACK_RIGHT_CANNON) {
-//                            if (y >= 5) {
-//                                score += 50;
-//                            }
-//                        } else {
-//                            if (chessPiece.getTYPE() == Piece.RED_LEFT_CANNON || chessPiece.getTYPE() == Piece.RED_RIGHT_CANNON ||
-//                                    chessPiece.getTYPE() == Piece.BLACK_LEFT_CANNON || chessPiece.getTYPE() == Piece.BLACK_RIGHT_CANNON) {
-//                                if (y <= 4) {
-//                                    score += 50;
-//                                }
-//                            }
-//                        }
-
+                    }
                 }
             }
         }
@@ -210,7 +230,7 @@ public class Ai {
 
                 // Thực hiện nước đi
                 board.setPiece(move.toX, move.toY, board.getPiece(move.fromX, move.fromY));
-                board.setPiece(move.fromX, move.fromY, 0);
+                board.setPiece(move.fromX, move.fromY, -1);
 
                 int eval = minimax(board, depth - 1, alpha, beta, Piece.RED);
                 maxEval = Math.max(maxEval, eval);
@@ -229,7 +249,7 @@ public class Ai {
                 int capturedPiece = board.getPiece(move.toX, move.toY);
 
                 board.setPiece(move.toX, move.toY, board.getPiece(move.fromX, move.fromY));
-                board.setPiece(move.fromX, move.fromY, 0);
+                board.setPiece(move.fromX, move.fromY, -1);
 
                 int eval = minimax(board, depth - 1, alpha, beta, Piece.BLACK);
                 minEval = Math.min(minEval, eval);
@@ -342,7 +362,7 @@ public class Ai {
      * @param y     Tọa độ y
      * @param board Bàn cờ
      */
-    private static List<Move> addAdvisorMoves(int x, int y, Check board ) {
+    private static List<Move> addAdvisorMoves(int x, int y, Check board) {
         List<Move> moves = new ArrayList<>();
         int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Chéo 4 hướng
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
