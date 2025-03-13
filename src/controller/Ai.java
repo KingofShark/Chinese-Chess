@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Ai {
 
+
     /**
      * Giá trị của từng quân cờ
      */
@@ -43,11 +44,119 @@ public class Ai {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
-                    score += (StaticPieces.getPieces().elementAt(piece).getCOLOR() == player ? 1 : -1) * pieceValues[piece];
+                    score += (StaticPieces.getPieces().elementAt(piece).getCOLOR() == Piece.BLACK ? 1 : -1) * pieceValues[piece];
+                }
+            }
+        }
+
+        score = checkMate(board, player) ? score + 200000 : score;
+
+        score = checkMateForEnemy(board, player) ? score - 300000 : score;
+
+
+        score += checkAcrossTheRiver(board, player);
+
+        return score;
+    }
+
+    private static int checkAcrossTheRiver(Check board, int player) {
+        // check for pawn, rook, knight, cannon
+        int score = 0;
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 10; y++) {
+                int piece = board.getPiece(x, y);
+                if (piece >= 0) {
+                    ChessPiece chessPiece = StaticPieces.getPieces().elementAt(piece);
+                        if (chessPiece.getTYPE() == Piece.RED_PAWN_0 || chessPiece.getTYPE() == Piece.RED_PAWN_1 ||
+                                chessPiece.getTYPE() == Piece.RED_PAWN_2 || chessPiece.getTYPE() == Piece.RED_PAWN_3
+                                || chessPiece.getTYPE() == Piece.RED_PAWN_4) {
+                            if (y >= 5) {
+                                score -= 50;
+                            }
+                        } else {
+                            if (chessPiece.getTYPE() == Piece.BLACK_PAWN_0 || chessPiece.getTYPE() == Piece.BLACK_PAWN_1
+                                    || chessPiece.getTYPE() == Piece.BLACK_PAWN_2 || chessPiece.getTYPE() == Piece.BLACK_PAWN_3
+                                    || chessPiece.getTYPE() == Piece.BLACK_PAWN_4) {
+                                if (y <= 4) {
+                                    score += 50;
+                                }
+                            }
+                        }
+
+//                        if (chessPiece.getTYPE() == Piece.RED_LEFT_ROOK || chessPiece.getTYPE() == Piece.RED_RIGHT_ROOK ||
+//                                chessPiece.getTYPE() == Piece.BLACK_LEFT_ROOK || chessPiece.getTYPE() == Piece.BLACK_RIGHT_ROOK) {
+//                            if (y >= 5) {
+//                                score += 50;
+//                            }
+//                        } else {
+//                            if (chessPiece.getTYPE() == Piece.RED_LEFT_ROOK || chessPiece.getTYPE() == Piece.RED_RIGHT_ROOK ||
+//                                    chessPiece.getTYPE() == Piece.BLACK_LEFT_ROOK || chessPiece.getTYPE() == Piece.BLACK_RIGHT_ROOK) {
+//                                if (y <= 4) {
+//                                    score += 50;
+//                                }
+//                            }
+//                        }
+//
+//                        if (chessPiece.getTYPE() == Piece.RED_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.RED_RIGHT_KNIGHT ||
+//                                chessPiece.getTYPE() == Piece.BLACK_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.BLACK_RIGHT_KNIGHT) {
+//                            if (y >= 5) {
+//                                score += 50;
+//                            }
+//                        } else {
+//                            if (chessPiece.getTYPE() == Piece.RED_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.RED_RIGHT_KNIGHT ||
+//                                    chessPiece.getTYPE() == Piece.BLACK_LEFT_KNIGHT || chessPiece.getTYPE() == Piece.BLACK_RIGHT_KNIGHT) {
+//                                if (y <= 4) {
+//                                    score += 50;
+//                                }
+//                            }
+//                        }
+//
+//                        if (chessPiece.getTYPE() == Piece.RED_LEFT_CANNON || chessPiece.getTYPE() == Piece.RED_RIGHT_CANNON ||
+//                                chessPiece.getTYPE() == Piece.BLACK_LEFT_CANNON || chessPiece.getTYPE() == Piece.BLACK_RIGHT_CANNON) {
+//                            if (y >= 5) {
+//                                score += 50;
+//                            }
+//                        } else {
+//                            if (chessPiece.getTYPE() == Piece.RED_LEFT_CANNON || chessPiece.getTYPE() == Piece.RED_RIGHT_CANNON ||
+//                                    chessPiece.getTYPE() == Piece.BLACK_LEFT_CANNON || chessPiece.getTYPE() == Piece.BLACK_RIGHT_CANNON) {
+//                                if (y <= 4) {
+//                                    score += 50;
+//                                }
+//                            }
+//                        }
+
                 }
             }
         }
         return score;
+    }
+
+    private static boolean checkMateForEnemy(Check board, int player) {
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 10; y++) {
+                int piece = board.getPiece(x, y);
+                if (piece >= 0) {
+                    ChessPiece enemyPiece = StaticPieces.getPieces().elementAt(piece);
+                    if (enemyPiece.getCOLOR() == Piece.RED && enemyPiece.checkMate())
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkMate(Check board, int player) {
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 10; y++) {
+                int piece = board.getPiece(x, y);
+                if (piece >= 0) {
+                    ChessPiece enemyPiece = StaticPieces.getPieces().elementAt(piece);
+                    if (enemyPiece.getCOLOR() == Piece.BLACK && enemyPiece.checkMate())
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -94,33 +203,6 @@ public class Ai {
         List<Move> moves = generateMoves(board, player);
         if (moves.isEmpty()) return player == Piece.BLACK ? -100000 : 100000; // Không còn nước đi
 
-//        if (player == Piece.BLACK) {
-//            int maxEval = Integer.MIN_VALUE;
-//            for (Move move : moves) {
-//                Check newBoard = board.clone();
-//                newBoard.setPiece(move.toX, move.toY, newBoard.getPiece(move.fromX, move.fromY));
-//                newBoard.setPiece(move.fromX, move.fromY, 0); // Xóa quân cờ cũ
-//
-//                int eval = minimax(newBoard, depth - 1, alpha, beta, player);
-//                maxEval = Math.max(maxEval, eval);
-//                alpha = Math.max(alpha, eval);
-//                if (beta <= alpha) break; // Cắt tỉa Alpha-Beta
-//            }
-//            return maxEval;
-//        } else {
-//            int minEval = Integer.MAX_VALUE;
-//            for (Move move : moves) {
-//                Check newBoard = board.clone();
-//                newBoard.setPiece(move.toX, move.toY, newBoard.getPiece(move.fromX, move.fromY));
-//                newBoard.setPiece(move.fromX, move.fromY, 0);
-//
-//                int eval = minimax(newBoard, depth - 1, alpha, beta, player);
-//                minEval = Math.min(minEval, eval);
-//                beta = Math.min(beta, eval);
-//                if (beta <= alpha) break;
-//            }
-//            return minEval;
-//        }
         if (player == Piece.BLACK) {
             int maxEval = Integer.MIN_VALUE;
             for (Move move : moves) {
@@ -204,23 +286,23 @@ public class Ai {
         // Phân loại quân cờ
         if (piece == Piece.RED_LEFT_ROOK || piece == Piece.RED_RIGHT_ROOK ||
                 piece == Piece.BLACK_LEFT_ROOK || piece == Piece.BLACK_RIGHT_ROOK) {
-            addRookMoves(x, y, board, moves);
+            moves.addAll(addRookMoves(x, y, board));
         } else if (piece == Piece.RED_LEFT_KNIGHT || piece == Piece.RED_RIGHT_KNIGHT ||
                 piece == Piece.BLACK_LEFT_KNIGHT || piece == Piece.BLACK_RIGHT_KNIGHT) {
-            addKnightMoves(x, y, board, moves);
+            moves.addAll(addKnightMoves(x, y, board));
         } else if (piece == Piece.RED_LEFT_CANNON || piece == Piece.RED_RIGHT_CANNON ||
                 piece == Piece.BLACK_LEFT_CANNON || piece == Piece.BLACK_RIGHT_CANNON) {
-            addCannonMoves(x, y, board, moves);
+            moves.addAll(addCannonMoves(x, y, board));
         } else if (piece >= Piece.RED_PAWN_0 && piece <= Piece.BLACK_PAWN_4) {
-            addPawnMoves(x, y, board, moves);
+            moves.addAll(addPawnMoves(x, y, board));
         } else if (piece == Piece.RED_GENERAL || piece == Piece.BLACK_GENERAL) {
-            addGeneralMoves(x, y, board, moves);
+            moves.addAll(addGeneralMoves(x, y, board));
         } else if (piece == Piece.RED_LEFT_ADVISOR || piece == Piece.RED_RIGHT_ADVISOR ||
                 piece == Piece.BLACK_LEFT_ADVISOR || piece == Piece.BLACK_RIGHT_ADVISOR) {
-            addAdvisorMoves(x, y, board, moves);
+            moves.addAll(addAdvisorMoves(x, y, board));
         } else if (piece == Piece.RED_LEFT_ELEPHANT || piece == Piece.RED_RIGHT_ELEPHANT ||
                 piece == Piece.BLACK_LEFT_ELEPHANT || piece == Piece.BLACK_RIGHT_ELEPHANT) {
-            addElephantMoves(x, y, board, moves);
+            moves.addAll(addElephantMoves(x, y, board));
         }
 
         return moves;
@@ -232,9 +314,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addElephantMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addElephantMoves(int x, int y, Check board) {
+        List<Move> moves = new ArrayList<>();
         int[][] directions = {{2, 2}, {2, -2}, {-2, 2}, {-2, -2}}; // Chéo 2 ô
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
@@ -250,6 +332,7 @@ public class Ai {
                 }
             }
         }
+        return moves;
     }
 
     /**
@@ -258,9 +341,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addAdvisorMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addAdvisorMoves(int x, int y, Check board ) {
+        List<Move> moves = new ArrayList<>();
         int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Chéo 4 hướng
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
@@ -274,6 +357,7 @@ public class Ai {
                 }
             }
         }
+        return moves;
     }
 
     /**
@@ -282,9 +366,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addGeneralMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addGeneralMoves(int x, int y, Check board) {
+        List<Move> moves = new ArrayList<>();
         int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
@@ -298,6 +382,8 @@ public class Ai {
                 }
             }
         }
+
+        return moves;
     }
 
     /**
@@ -306,9 +392,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addRookMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addRookMoves(int x, int y, Check board) {
+        List<Move> moves = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0}; // Trái, Phải, Trên, Dưới
         int[] dy = {0, 0, -1, 1};
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
@@ -329,6 +415,7 @@ public class Ai {
                 ny += dy[i];
             }
         }
+        return moves;
     }
 
     /**
@@ -337,9 +424,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addKnightMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addKnightMoves(int x, int y, Check board) {
+        List<Move> moves = new ArrayList<>();
         int[] dx = {-2, -2, -1, 1, 2, 2, 1, -1};
         int[] dy = {-1, 1, 2, 2, 1, -1, -2, -2};
 
@@ -367,6 +454,7 @@ public class Ai {
                 }
             }
         }
+        return moves;
     }
 
     /**
@@ -375,9 +463,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addCannonMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addCannonMoves(int x, int y, Check board) {
+        List<Move> moves = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0};
         int[] dy = {0, 0, -1, 1};
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
@@ -403,6 +491,7 @@ public class Ai {
                 ny += dy[i];
             }
         }
+        return moves;
     }
 
     /**
@@ -411,9 +500,9 @@ public class Ai {
      * @param x     Tọa độ x
      * @param y     Tọa độ y
      * @param board Bàn cờ
-     * @param moves Danh sách nước đi
      */
-    private static void addPawnMoves(int x, int y, Check board, List<Move> moves) {
+    private static List<Move> addPawnMoves(int x, int y, Check board) {
+        List<Move> moves = new ArrayList<>();
         int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
         int direction = player == Piece.BLACK ? 1 : -1; // Đỏ đi xuống, Đen đi lên
         int newY = y + direction;
@@ -440,8 +529,8 @@ public class Ai {
                 else if (StaticPieces.getPieces().elementAt(board.getPiece(x + 1, y)).getCOLOR() != player)
                     moves.add(new Move(x, y, x + 1, y));
             }
-
         }
+        return moves;
     }
 }
 

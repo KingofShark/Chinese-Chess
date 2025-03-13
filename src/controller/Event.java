@@ -507,7 +507,7 @@ public class Event implements Piece {
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
                 return;
-            Move move = Ai.findBestMove(check, 5, Piece.BLACK);
+            Move move = Ai.findBestMove(check,4, Piece.BLACK);
             typeClick = check.getPiece(move.fromX, move.fromY);
 
 
