@@ -86,17 +86,25 @@ public class Rook extends ChessPiece {
         Check check = StaticPieces.getCheck();
         Vector<ChessPiece> pieces = StaticPieces.getPieces();
         for (int i = locateX + 1; i < 9; i++)
-            if ((check.getPiece(i, locateY) == 0 || check.getPiece(i, locateY) == 1) && pieces.elementAt(check.getPiece(i, locateY))._COLOR_ != this._COLOR_)
+            if ((check.getPiece(i, locateY) == 0 || check.getPiece(i, locateY) == 1) && pieces.elementAt(check.getPiece(i, locateY))._COLOR_ != this._COLOR_) {
                 return true;
+            }else if (!check.isEmpty(i, locateY))
+                break;
         for (int i = locateX - 1; i >= 0; i--)
             if ((check.getPiece(i, locateY) == 0 || check.getPiece(i, locateY) == 1) && pieces.elementAt(check.getPiece(i, locateY))._COLOR_ != this._COLOR_)
                 return true;
+            else if (!check.isEmpty(i, locateY))
+                break;
         for (int i = locateY + 1; i < 10; i++)
             if ((check.getPiece(locateX, i) == 0 || check.getPiece(locateX, i) == 1) && pieces.elementAt(check.getPiece(locateX, i))._COLOR_ != this._COLOR_)
                 return true;
+            else if (!check.isEmpty(locateX, i))
+                break;
         for (int i = locateY - 1; i >= 0; i--)
             if ((check.getPiece(locateX, i) == 0 || check.getPiece(locateX, i) == 1) && pieces.elementAt(check.getPiece(locateX, i))._COLOR_ != this._COLOR_)
                 return true;
+            else if (!check.isEmpty(locateX, i))
+                break;
         return false;
     }
 
