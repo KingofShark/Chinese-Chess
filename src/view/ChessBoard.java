@@ -162,6 +162,8 @@ public class ChessBoard extends JPanel implements Piece {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
+
+        highlight(g);
     }
 
     private void drawBoard(Graphics g) {
@@ -246,11 +248,11 @@ public class ChessBoard extends JPanel implements Piece {
         g2d.draw(line);
 
 
-        highlight(g2d);
     }
 
-    private void highlight(Graphics2D g2) {
-        if (highlightX != -1 && highlightY != -1) {
+    private void highlight(Graphics g) {
+        if (highlightX != -1 && highlightY != -1 && highlightX < 10 && highlightY <11) {
+            Graphics2D g2 = (Graphics2D) g;
             g2.setColor(Color.GREEN);
             g2.setStroke(new BasicStroke(4));
 
@@ -276,7 +278,7 @@ public class ChessBoard extends JPanel implements Piece {
             g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
                     highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4 - 8);
 
-            System.out.println("highlightX: " + highlightX + ", highlightY: " + highlightY);
+            System.out.println("Repainting: highlightX: " + highlightX + ", highlightY: " + highlightY);
 
             highlightX = -1;
             highlightY = -1;

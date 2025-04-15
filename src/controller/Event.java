@@ -548,6 +548,9 @@ public class Event implements Piece {
             if (StaticPieces.getTurn() % 2 == Piece.RED)
                 return;
 
+//            if (true)
+//                return;
+
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
@@ -555,7 +558,7 @@ public class Event implements Piece {
             if (StaticPieces.getSetting().getStatus())
                 return;
 
-            Move move = Ai.findBestMove(check, 4, Piece.BLACK);
+            Move move = Ai.findBestMove(check, 2, Piece.BLACK);
             typeClick = check.getPiece(move.fromX, move.fromY);
 
             if (!check.isEmpty(move.toX, move.toY) && pieces.elementAt(check.getPiece(move.toX, move.toY)).getCOLOR() == Piece.RED) {
