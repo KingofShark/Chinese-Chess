@@ -19,8 +19,10 @@ import static constant.Piece.*;
 public class StaticPieces {
     private static int player;
     private static int turn, minute, second, first;
-    private static final JLabel notice_1 = new JLabel();
-    private static final JLabel notice_2 = new JLabel();
+    private static final RoundedImageLabel notice_1 = new RoundedImageLabel(
+            new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/wait.png"), 30, 30);
+    private static final RoundedImageLabel notice_2 = new RoundedImageLabel(
+            new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/bot.png"), 30, 30);
     private static final CountDown clock_1 = new CountDown("Đen");
     private static final CountDown clock_2 = new CountDown("Đỏ");
     private static final CloseButton closeButton = new CloseButton();
@@ -160,17 +162,17 @@ public class StaticPieces {
         StaticPieces.second = second;
     }
 
-    public static JLabel getNotice_1() {
+    public static RoundedImageLabel getNotice_1() {
         return StaticPieces.notice_1;
     }
 
-    public static JLabel getNotice_2() {
+    public static RoundedImageLabel getNotice_2() {
         return StaticPieces.notice_2;
     }
 
     public static void setNew(JButton start) {
-        StaticPieces.changeImage("ss", 1);
-        StaticPieces.changeImage("ss", 2);
+        StaticPieces.changeImage("wait", 1);
+        StaticPieces.changeImage("wait", 2);
         StaticPieces.getNotice_2().setVisible(true);
         StaticPieces.getNotice_1().setVisible(true);
         StaticPieces.setCheck();
@@ -191,13 +193,13 @@ public class StaticPieces {
         ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/" + status + ".png");
         image = new NewImage().resizeImage(image, 200, 106);
         if (type == 1) {
-            StaticPieces.getNotice_1().setIcon(image);
+//            StaticPieces.getNotice_1().setIcon(image);
             StaticPieces.getNotice_1().setVisible(true);
-            StaticPieces.getNotice_2().setVisible(false);
-        } else if (type == 2) {
-            StaticPieces.getNotice_2().setIcon(image);
             StaticPieces.getNotice_2().setVisible(true);
-            StaticPieces.getNotice_1().setVisible(false);
+        } else if (type == 2) {
+//            StaticPieces.getNotice_2().setIcon(image);
+            StaticPieces.getNotice_2().setVisible(true);
+            StaticPieces.getNotice_1().setVisible(true);
         } else {
             StaticPieces.getNotice_2().setVisible(false);
             StaticPieces.getNotice_1().setVisible(false);
