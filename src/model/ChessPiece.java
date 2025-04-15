@@ -68,6 +68,17 @@ public abstract class ChessPiece extends JButton implements Piece, MovingMethod 
         setIcon(this._image_);
     }
 
+    public void highlight() {
+        this._image_ = new ImageIcon(System.getProperty("user.dir") + "/resource/image/piece_last_move/" + this._COLOR_ + "/" + this._name_ + ".png");
+        this._image_ = new NewImage().resizeImage(this._image_, SIZE_PIECE, SIZE_PIECE);
+        if (Objects.equals(this._image_, new ImageIcon())) {
+            System.out.println("Cannot highlight image " + this._name_);
+            return;
+        }
+        System.out.println("highlight successfully " + this._name_);
+        setIcon(this._image_);
+    }
+
     public int getTYPE() {
         return TYPE;
     }

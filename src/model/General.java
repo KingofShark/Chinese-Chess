@@ -86,6 +86,7 @@ public class General extends ChessPiece {
 
     @Override
     public void updateLocate(String temp) {
+        super.updateLocate(temp);
         switch (temp) {
             case "top" -> locateY--;
             case "right" -> locateX++;

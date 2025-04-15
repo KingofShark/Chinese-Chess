@@ -25,8 +25,10 @@ public class Event implements Piece {
     private boolean status;
     private final Vector<JButton> buttonH;
     private final Vector<JButton> buttonV;
+    private int lastPiece;
 
     public Event() {
+        lastPiece = -1;
         this.typeClick = -1;
         this.status = false;
         this.top = new JButton();
@@ -113,6 +115,9 @@ public class Event implements Piece {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
                 IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
+
+                StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+                System.out.println("now: " + temp.getLocateX() + " " + temp.getLocateY());
                 temp.setLocation(this.top.getX() + Piece.RADIUS - cell / 2, this.top.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
@@ -120,6 +125,8 @@ public class Event implements Piece {
                 temp.updateLocate_("tr");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
+                temp.highlight();
+                lastPiece = temp.getTYPE();
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
@@ -160,6 +167,8 @@ public class Event implements Piece {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
                 IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
+                StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+                System.out.println("now: " + temp.getLocateX() + " " + temp.getLocateY());
                 temp.setLocation(this.right.getX() + Piece.RADIUS - cell / 2, this.right.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
@@ -167,6 +176,10 @@ public class Event implements Piece {
                 temp.updateLocate_("dr");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
+
+                temp.highlight();
+                lastPiece = temp.getTYPE();
+
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
@@ -203,6 +216,8 @@ public class Event implements Piece {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
                 IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
+                StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+                System.out.println("now: " + temp.getLocateX() + " " + temp.getLocateY());
                 temp.setLocation(this.bottom.getX() + Piece.RADIUS - cell / 2, this.bottom.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
                 check.setPiece(temp.getLocateX(), pieces.elementAt(this.typeClick).getLocateY(), -1);
@@ -210,6 +225,10 @@ public class Event implements Piece {
                 temp.updateLocate_("dl");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
+
+                temp.highlight();
+                lastPiece = temp.getTYPE();
+
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
@@ -247,6 +266,8 @@ public class Event implements Piece {
                 ChessPiece temp = pieces.elementAt(this.typeClick);
                 IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                 int cell = temp.getSIZE();
+                StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+                System.out.println("now-l: " + temp.getLocateX() + " " + temp.getLocateY());
                 temp.setLocation(this.left.getX() + Piece.RADIUS - cell / 2, this.left.getY() + Piece.RADIUS - cell / 2);
                 this.status = !this.status;
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
@@ -254,6 +275,10 @@ public class Event implements Piece {
                 temp.updateLocate_("tl");
                 check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                 this.hideButton();
+
+                temp.highlight();
+                lastPiece = temp.getTYPE();
+
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
@@ -291,6 +316,8 @@ public class Event implements Piece {
                     ChessPiece temp = pieces.elementAt(this.typeClick);
                     IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                     int cell = temp.getSIZE();
+                    StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+                    System.out.println("now-h: " + temp.getLocateX() + " " + temp.getLocateY());
                     temp.setLocation(button.getX() + Piece.RADIUS - cell / 2, button.getY() + Piece.RADIUS - cell / 2);
                     this.status = !this.status;
                     check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
@@ -298,6 +325,9 @@ public class Event implements Piece {
                     temp.updateLocate(this.buttonH.indexOf(button));
                     check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                     this.hideButton();
+
+                    temp.highlight();
+                    lastPiece = temp.getTYPE();
                     if (this.checkMate(temp))
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
@@ -337,12 +367,17 @@ public class Event implements Piece {
                     ChessPiece temp = pieces.elementAt(this.typeClick);
                     IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
                     int cell = temp.getSIZE();
+                    StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+                    System.out.println("now-v: " + temp.getLocateX() + " " + temp.getLocateY());
                     temp.setLocation(button.getX() + Piece.RADIUS - cell / 2, button.getY() + Piece.RADIUS - cell / 2);
                     this.status = !this.status;
                     check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
                     temp.updateLocate(button);
                     check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
                     this.hideButton();
+
+                    temp.highlight();
+                    lastPiece = temp.getTYPE();
                     if (this.checkMate(temp))
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
@@ -377,12 +412,17 @@ public class Event implements Piece {
         ChessPiece temp = pieces.elementAt(this.typeClick);
         IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), chessPiece.getTYPE(), StaticPieces.getTurn());
         System.out.println(temp.getName() + " killed " + chessPiece.getName());
+        StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
+        System.out.println("now kill: " + temp.getLocateX() + " " + temp.getLocateY());
         temp.setLocation((chessPiece.getLocateX() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2, (chessPiece.getLocateY() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2);
         this.status = !this.status;
         check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
         temp.updateLocate(chessPiece);
         check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
         this.hideButton();
+
+        temp.highlight();
+        lastPiece = temp.getTYPE();
         chessPiece.setVisible(false);
         if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
             clock_1.stop();
@@ -464,6 +504,12 @@ public class Event implements Piece {
      * hideButton: Ẩn các nút di chuyển
      */
     public void hideButton() {
+
+        if (lastPiece != -1) {
+            ChessPiece lastPiece = StaticPieces.getPieces().elementAt(this.lastPiece);
+            lastPiece.setImage();
+        }
+
         this.top.setVisible(false);
         this.right.setVisible(false);
         this.bottom.setVisible(false);
@@ -501,27 +547,34 @@ public class Event implements Piece {
             System.out.println("máy đi");
             if (StaticPieces.getTurn() % 2 == Piece.RED)
                 return;
+
             CountDown clock_1 = StaticPieces.getClock_1();
             CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
                 return;
-            Move move = Ai.findBestMove(check,4, Piece.BLACK);
-            typeClick = check.getPiece(move.fromX, move.fromY);
 
+            Move move = Ai.findBestMove(check, 4, Piece.BLACK);
+            typeClick = check.getPiece(move.fromX, move.fromY);
 
             if (!check.isEmpty(move.toX, move.toY) && pieces.elementAt(check.getPiece(move.toX, move.toY)).getCOLOR() == Piece.RED) {
                 ChessPiece temp = pieces.elementAt(check.getPiece(move.toX, move.toY));
                 this.setKillEnemies(temp);
                 return;
             }
+
             ChessPiece temp = pieces.elementAt(this.typeClick);
             IOFile.saveLastMove(this.typeClick, temp.getLocateX(), temp.getLocateY(), -1, StaticPieces.getTurn());
             check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
             temp.setLocate(move.toX, move.toY);
             check.setPiece(temp.getLocateX(), temp.getLocateY(), this.typeClick);
             this.hideButton();
+
+            StaticPieces.getChessBoardPanel().highlight(move.fromX, move.fromY);
+            temp.highlight();
+            lastPiece = temp.getTYPE();
+
             if (this.checkMate(temp))
                 return;
             if (StaticPieces.getTurn() % 2 == Piece.BLACK) {

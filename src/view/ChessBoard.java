@@ -17,6 +17,8 @@ public class ChessBoard extends JPanel implements Piece {
     private Boolean pause;
     private JLabel timer_2, timer_1;
     private JButton back;
+    private int highlightX = -1;
+    private int highlightY = -1;
 
     public ChessBoard() {
         this.setup();
@@ -39,14 +41,14 @@ public class ChessBoard extends JPanel implements Piece {
         ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/back.png");
         image = new NewImage().resizeImage(image, 35, 35);
         this.back.setIcon(image);
-        this.back.setLocation(CELL_SIZE * 13 + CELL_SIZE/ 2, CELL_SIZE * 5 + CELL_SIZE / 4);
+        this.back.setLocation(CELL_SIZE * 13 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
         this.back.setRolloverEnabled(false);
         this.back.setBorderPainted(false);
         this.back.setContentAreaFilled(false);
         this.timer_2 = new JLabel();
         this.timer_1 = new JLabel();
-        this.timer_2.setLocation(CELL_SIZE * 11 + CELL_SIZE/2, CELL_SIZE * 6 + CELL_SIZE / 4);
-        this.timer_1.setLocation(CELL_SIZE * 11 + CELL_SIZE/2, CELL_SIZE * 4 + CELL_SIZE / 4);
+        this.timer_2.setLocation(CELL_SIZE * 11 + CELL_SIZE / 2, CELL_SIZE * 6 + CELL_SIZE / 4);
+        this.timer_1.setLocation(CELL_SIZE * 11 + CELL_SIZE / 2, CELL_SIZE * 4 + CELL_SIZE / 4);
 
         this.pause = true;
         this.setBackground(new Color(192, 187, 187));
@@ -129,7 +131,7 @@ public class ChessBoard extends JPanel implements Piece {
 
     public void setButton(JButton button) {
         button.setSize(90, 32);
-        button.setLocation(CELL_SIZE * 11 + CELL_SIZE /2, CELL_SIZE * 5 + CELL_SIZE / 4);
+        button.setLocation(CELL_SIZE * 11 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
         ImageIcon imageIcon;
         imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/stop.png");
         if (this.pause || StaticPieces.getFirst() == 2)
@@ -164,13 +166,40 @@ public class ChessBoard extends JPanel implements Piece {
 
     private void drawBoard(Graphics g) {
         g.setColor(Color.white);
-        g.fillRect(Piece.CELL_SIZE/2, Piece.CELL_SIZE/2, 9 * Piece.CELL_SIZE, 10 * Piece.CELL_SIZE);
+        g.fillRect(Piece.CELL_SIZE / 2, Piece.CELL_SIZE / 2, 9 * Piece.CELL_SIZE, 10 * Piece.CELL_SIZE);
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(new Color(216, 83, 39));
 
-        Stroke stroke = new BasicStroke(5.0f);
+        Stroke stroke = new BasicStroke(4.0f);
         g2d.setStroke(stroke);
         Line2D line;
+
+        // vị trí quân pháo
+        line = new Line2D.Double(2 * CELL_SIZE - 5, 3 * CELL_SIZE - 5, 2 * CELL_SIZE + 5, 3 * CELL_SIZE + 5);
+        g2d.draw(line);
+        line = new Line2D.Double(2 * CELL_SIZE - 5, 3 * CELL_SIZE + 5, 2 * CELL_SIZE + 5, 3 * CELL_SIZE - 5);
+        g2d.draw(line);
+
+        line = new Line2D.Double(8 * CELL_SIZE - 5, 3 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 3 * CELL_SIZE + 5);
+        g2d.draw(line);
+        line = new Line2D.Double(8 * CELL_SIZE - 5, 3 * CELL_SIZE + 5, 8 * CELL_SIZE + 5, 3 * CELL_SIZE - 5);
+        g2d.draw(line);
+
+        line = new Line2D.Double(2 * CELL_SIZE - 5, 8 * CELL_SIZE - 5, 2 * CELL_SIZE + 5, 8 * CELL_SIZE + 5);
+        g2d.draw(line);
+        line = new Line2D.Double(2 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 2 * CELL_SIZE + 5, 8 * CELL_SIZE - 5);
+        g2d.draw(line);
+
+        line = new Line2D.Double(8 * CELL_SIZE - 5, 8 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 8 * CELL_SIZE + 5);
+        g2d.draw(line);
+        line = new Line2D.Double(8 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 8 * CELL_SIZE + 5, 8 * CELL_SIZE - 5);
+        g2d.draw(line);
+
+
+        stroke = new BasicStroke(5.0f);
+        g2d.setStroke(stroke);
+
+        // vẽ bàn cờ
         for (int i = 1; i <= 10; i++) {
             line = new Line2D.Double(CELL_SIZE, i * CELL_SIZE, 9 * CELL_SIZE, i * CELL_SIZE);
             g2d.draw(line);
@@ -215,6 +244,43 @@ public class ChessBoard extends JPanel implements Piece {
         g2d.draw(line);
         line = new Line2D.Double(9 * CELL_SIZE + (double) CELL_SIZE / 2, (double) CELL_SIZE / 2, 9 * CELL_SIZE + (double) CELL_SIZE / 2, 10 * CELL_SIZE + (double) CELL_SIZE / 2);
         g2d.draw(line);
+
+
+        highlight(g2d);
+    }
+
+    private void highlight(Graphics2D g2) {
+        if (highlightX != -1 && highlightY != -1) {
+            g2.setColor(Color.GREEN);
+            g2.setStroke(new BasicStroke(4));
+
+            // Vẽ 4 góc
+            // Trên trái
+            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
+                    highlightX * CELL_SIZE - CELL_SIZE / 4 + 8, highlightY * CELL_SIZE - CELL_SIZE / 4 );
+            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
+                    highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4 + 8);
+
+            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
+                    highlightX * CELL_SIZE + CELL_SIZE / 4 - 8, highlightY * CELL_SIZE - CELL_SIZE / 4);
+            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
+                    highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4 + 8);
+
+            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
+                    highlightX * CELL_SIZE + CELL_SIZE / 4 - 8, highlightY * CELL_SIZE + CELL_SIZE / 4);
+            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
+                    highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4 - 8);
+
+            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
+                    highlightX * CELL_SIZE - CELL_SIZE / 4 + 8, highlightY * CELL_SIZE + CELL_SIZE / 4);
+            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
+                    highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4 - 8);
+
+            System.out.println("highlightX: " + highlightX + ", highlightY: " + highlightY);
+
+            highlightX = -1;
+            highlightY = -1;
+        }
     }
 
     private void backLastMove(JButton button) {
@@ -244,6 +310,12 @@ public class ChessBoard extends JPanel implements Piece {
         });
     }
 
+    public void highlight(int x, int y){
+        highlightX = x + 1;
+        highlightY = y + 1;
+
+        this.repaint();
+    }
     public Boolean getPause() {
         return pause;
     }

@@ -129,6 +129,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public void updateLocate(String temp) {
+        super.updateLocate(temp);
         if (temp.equals("top"))
             locateY--;
         if (temp.equals("bottom"))

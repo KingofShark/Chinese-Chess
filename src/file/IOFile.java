@@ -160,9 +160,31 @@ public class IOFile {
             fileWriter.close();
             return last;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return new Vector<>();
         }
     }
+
+    public static Vector<Integer> getLastMove(){
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/lastmove.txt"));
+            String line = bufferedReader.readLine();
+            String[] temp = line.split(" ");
+            Vector<Integer> last = new Vector<>();
+            last.add(Integer.parseInt(temp[0]));
+            last.add(Integer.parseInt(temp[1]));
+            last.add(Integer.parseInt(temp[2]));
+            last.add(Integer.parseInt(temp[3]));
+            last.add(Integer.parseInt(temp[4]));
+            bufferedReader.close();
+            FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/resource/file/lastmove.txt", false);
+            fileWriter.write("");
+            fileWriter.close();
+            return last;
+        } catch (IOException e) {
+            return new Vector<>();
+        }
+    }
+
     public static void saveLastMove(int move, int x, int y, int kill, int turn){
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/lastmove.txt"));

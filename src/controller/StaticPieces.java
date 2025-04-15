@@ -176,7 +176,7 @@ public class StaticPieces {
         StaticPieces.setCheck();
         StaticPieces.setFirst(2);
         StaticPieces.setTurn(new Random().nextInt(101));
-        //StaticPieces.setTurn(0);
+        StaticPieces.setTurn(0);
         StaticPieces.getClock_1().setTime(StaticPieces.minute, StaticPieces.second);
         StaticPieces.getClock_2().setTime(StaticPieces.minute, StaticPieces.second);
         for (ChessPiece _piece_ : StaticPieces.getPieces()) {
