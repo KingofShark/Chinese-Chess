@@ -172,8 +172,10 @@ public class Home extends JFrame {
                 this.setSize(Piece._width_, Piece._height_);
                 this.setLocationRelativeTo(null);
                 JButton start = new JButton();
+
                 StaticPieces.setNew(start);
                 StaticPieces.getSetting().setChessBoard(this, start);
+                StaticPieces.getChessBoardPanel().goHome(this);
             }).start();
         });
     }
@@ -186,6 +188,7 @@ public class Home extends JFrame {
                 this.setLocationRelativeTo(null);
                 IOFile.readGame();
                 JButton start = new JButton();
+
                 StaticPieces.setNewSetting();
                 StaticPieces.getSetting().setChessBoard(this, start);
                 StaticPieces.getChessBoardPanel().setButton(start);
