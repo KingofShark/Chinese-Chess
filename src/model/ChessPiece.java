@@ -90,7 +90,7 @@ public abstract class ChessPiece extends JButton implements Piece, MovingMethod 
     public void setLocate(int x, int y) {
         this.locateX = x;
         this.locateY = y;
-        int X = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int X = PADDING + (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         int Y = (locateY + 1)* Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         this.setBounds(X, Y, SIZE_PIECE, SIZE_PIECE);
     }
