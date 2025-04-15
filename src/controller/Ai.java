@@ -344,7 +344,10 @@ public class Ai {
             int midX = x + dir[0] / 2, midY = y + dir[1] / 2;
             int newX = x + dir[0], newY = y + dir[1];
 
-            if ((newX >= 0 && newX < 9) && ((newY >= 0 && newY <= 4) || (newY >= 5 && newY <= 9)) && board.isEmpty(midX, midY)) {
+            if ((newX >= 0 && newX < 9) && ((
+                    ((newY >= 0 && newY <= 4) && player == Piece.BLACK)
+                            || ((newY >= 5 && newY <= 9) && player == Piece.RED)))
+                    && board.isEmpty(midX, midY)) {
                 if (board.isEmpty(newX, newY)) {
                     moves.add(new Move(x, y, newX, newY));
                 } else if (StaticPieces.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
