@@ -130,12 +130,12 @@ public class Event implements Piece {
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                    clock_1.stop();
-                    clock_2.resume();
+                    StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getNotice_1().startCountdown();
                     StaticPieces.changeImage("wait", 2);
                 } else {
-                    clock_2.stop();
-                    clock_1.resume();
+                    StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getNotice_2().startCountdown();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -157,8 +157,6 @@ public class Event implements Piece {
      */
     private void setMoveRight() {
         this.right.addActionListener(_ -> {
-            CountDown clock_1 = StaticPieces.getClock_1();
-            CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
@@ -183,12 +181,12 @@ public class Event implements Piece {
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                    clock_1.stop();
-                    clock_2.resume();
+                    StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getNotice_1().startCountdown();
                     StaticPieces.changeImage("wait", 2);
                 } else {
-                    clock_2.stop();
-                    clock_1.resume();
+                    StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getNotice_2().startCountdown();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -232,12 +230,12 @@ public class Event implements Piece {
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                    clock_1.stop();
-                    clock_2.resume();
+                    StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getNotice_1().startCountdown();
                     StaticPieces.changeImage("wait", 2);
                 } else {
-                    clock_2.stop();
-                    clock_1.resume();
+                    StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getNotice_2().startCountdown();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -256,8 +254,6 @@ public class Event implements Piece {
 
     private void setMoveLeft() {
         this.left.addActionListener(_ -> {
-            CountDown clock_1 = StaticPieces.getClock_1();
-            CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
@@ -282,12 +278,12 @@ public class Event implements Piece {
                 if (this.checkMate(temp))
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                    clock_1.stop();
-                    clock_2.resume();
+                    StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getNotice_1().startCountdown();
                     StaticPieces.changeImage("wait", 2);
                 } else {
-                    clock_2.stop();
-                    clock_1.resume();
+                    StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getNotice_2().startCountdown();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -306,8 +302,6 @@ public class Event implements Piece {
     private void setMoveHAnother() {
         for (JButton button : this.buttonH) {
             button.addActionListener(_ -> {
-                CountDown clock_1 = StaticPieces.getClock_1();
-                CountDown clock_2 = StaticPieces.getClock_2();
                 Check check = StaticPieces.getCheck();
                 Vector<ChessPiece> pieces = StaticPieces.getPieces();
                 if (StaticPieces.getSetting().getStatus())
@@ -331,12 +325,12 @@ public class Event implements Piece {
                     if (this.checkMate(temp))
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                        clock_1.stop();
-                        clock_2.resume();
+                        StaticPieces.getNotice_2().stopCountdown();
+                        StaticPieces.getNotice_1().startCountdown();
                         StaticPieces.changeImage("wait", 2);
                     } else {
-                        clock_2.stop();
-                        clock_1.resume();
+                        StaticPieces.getNotice_1().stopCountdown();
+                        StaticPieces.getNotice_2().startCountdown();
                         StaticPieces.changeImage("wait", 1);
                     }
                     StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -357,8 +351,6 @@ public class Event implements Piece {
     private void setMoveVAnother() {
         for (JButton button : this.buttonV) {
             button.addActionListener(_ -> {
-                CountDown clock_1 = StaticPieces.getClock_1();
-                CountDown clock_2 = StaticPieces.getClock_2();
                 Check check = StaticPieces.getCheck();
                 Vector<ChessPiece> pieces = StaticPieces.getPieces();
                 if (StaticPieces.getSetting().getStatus())
@@ -381,12 +373,12 @@ public class Event implements Piece {
                     if (this.checkMate(temp))
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                        clock_1.stop();
-                        clock_2.resume();
+                        StaticPieces.getNotice_2().stopCountdown();
+                        StaticPieces.getNotice_1().startCountdown();
                         StaticPieces.changeImage("wait", 2);
                     } else {
-                        clock_2.stop();
-                        clock_1.resume();
+                        StaticPieces.getNotice_1().stopCountdown();
+                        StaticPieces.getNotice_2().startCountdown();
                         StaticPieces.changeImage("wait", 1);
                     }
                     StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -405,8 +397,6 @@ public class Event implements Piece {
     }
 
     private void setKillEnemies(ChessPiece chessPiece) {
-        CountDown clock_1 = StaticPieces.getClock_1();
-        CountDown clock_2 = StaticPieces.getClock_2();
         Check check = StaticPieces.getCheck();
         Vector<ChessPiece> pieces = StaticPieces.getPieces();
         ChessPiece temp = pieces.elementAt(this.typeClick);
@@ -414,7 +404,10 @@ public class Event implements Piece {
         System.out.println(temp.getName() + " killed " + chessPiece.getName());
         StaticPieces.getChessBoardPanel().highlight(temp.getLocateX(), temp.getLocateY());
         System.out.println("now kill: " + temp.getLocateX() + " " + temp.getLocateY());
-        temp.setLocation((chessPiece.getLocateX() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2, (chessPiece.getLocateY() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2);
+        temp.setLocation(
+                PADDING + (chessPiece.getLocateX() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2,
+                (chessPiece.getLocateY() + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2
+        );
         this.status = !this.status;
         check.setPiece(temp.getLocateX(), temp.getLocateY(), -1);
         temp.updateLocate(chessPiece);
@@ -425,27 +418,27 @@ public class Event implements Piece {
         lastPiece = temp.getTYPE();
         chessPiece.setVisible(false);
         if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-            clock_1.stop();
-            clock_2.resume();
+            StaticPieces.getNotice_2().stopCountdown();
+            StaticPieces.getNotice_1().startCountdown();
             StaticPieces.changeImage("wait", 2);
         } else {
-            clock_2.stop();
-            clock_1.resume();
+            StaticPieces.getNotice_1().stopCountdown();
+            StaticPieces.getNotice_2().startCountdown();
             StaticPieces.changeImage("wait", 1);
         }
         ChessPiece general_red = pieces.firstElement();
         if (general_red.checkMate()) {
             StaticPieces.setTurn(-1);
-            clock_1.stop();
-            clock_2.stop();
+            StaticPieces.getNotice_2().stopCountdown();
+            StaticPieces.getNotice_1().stopCountdown();
             StaticPieces.changeImage("", 0);
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == Piece.BLACK) ? "Đen thắng" : "Đỏ thắng");
             return;
         }
         if (chessPiece.getTYPE() == 0 || chessPiece.getTYPE() == 1) {
             StaticPieces.setTurn(-1);
-            clock_1.stop();
-            clock_2.stop();
+            StaticPieces.getNotice_2().stopCountdown();
+            StaticPieces.getNotice_1().stopCountdown();
             StaticPieces.changeImage("", 0);
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == 0) ? "Đen thắng" : "Đỏ thắng");
             return;
@@ -533,8 +526,8 @@ public class Event implements Piece {
         ChessPiece general_red = StaticPieces.getPieces().firstElement();
         if (general_red.checkMate()) {
             StaticPieces.setTurn(-1);
-            clock_1.stop();
-            clock_2.stop();
+            StaticPieces.getNotice_2().stopCountdown();
+            StaticPieces.getNotice_1().stopCountdown();
             JOptionPane.showMessageDialog(null, (temp.getTYPE() % 2 == Piece.BLACK) ? "Đỏ thắng" : "Đen thắng");
             return true;
         }
@@ -548,11 +541,9 @@ public class Event implements Piece {
             if (StaticPieces.getTurn() % 2 == Piece.RED)
                 return;
 
-//            if (true)
-//                return;
+            if (true)
+                return;
 
-            CountDown clock_1 = StaticPieces.getClock_1();
-            CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
@@ -581,12 +572,12 @@ public class Event implements Piece {
             if (this.checkMate(temp))
                 return;
             if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                clock_1.stop();
-                clock_2.resume();
+                StaticPieces.getNotice_2().stopCountdown();
+                StaticPieces.getNotice_1().startCountdown();
                 StaticPieces.changeImage("wait", 2);
             } else {
-                clock_2.stop();
-                clock_1.resume();
+                StaticPieces.getNotice_1().stopCountdown();
+                StaticPieces.getNotice_2().startCountdown();
                 StaticPieces.changeImage("wait", 1);
             }
             StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
