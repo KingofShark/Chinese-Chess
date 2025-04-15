@@ -1,22 +1,21 @@
 package view;
 
-import controller.Ai;
 import model.ChessPiece;
 import constant.Piece;
 import controller.StaticPieces;
 import file.IOFile;
 import image.NewImage;
-import model.Move;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Vector;
 
 public class ChessBoard extends JPanel implements Piece {
     private Boolean pause;
     private JLabel timer_2, timer_1;
-    private JButton back;
+    private JButton back, returnButton;
     private int highlightX = -1;
     private int highlightY = -1;
 
@@ -25,12 +24,12 @@ public class ChessBoard extends JPanel implements Piece {
     }
 
     private void setup() {
-        StaticPieces.getNotice_1().setSize(200, 106);
-        StaticPieces.getNotice_2().setSize(200, 106);
-        StaticPieces.getNotice_1().setLocation(11 * CELL_SIZE - CELL_SIZE / 4, 3 * CELL_SIZE - CELL_SIZE / 2);
-        StaticPieces.getNotice_2().setLocation(11 * CELL_SIZE - CELL_SIZE / 4, 7 * CELL_SIZE);
-        StaticPieces.changeImage("ss", 1);
-        StaticPieces.changeImage("ss", 2);
+        StaticPieces.getNotice_1().setSize(200, 200);
+        StaticPieces.getNotice_2().setSize(200, 200);
+        StaticPieces.getNotice_1().setLocation(CELL_SIZE, 3 * CELL_SIZE);
+        StaticPieces.getNotice_2().setLocation(PADDING + 11 * CELL_SIZE - CELL_SIZE / 2, 3 * CELL_SIZE);
+        StaticPieces.changeImage("wait", 1);
+        StaticPieces.changeImage("wait", 2);
         StaticPieces.getNotice_1().setVisible(true);
         StaticPieces.getNotice_2().setVisible(true);
         this.add(StaticPieces.getNotice_2());
@@ -41,14 +40,15 @@ public class ChessBoard extends JPanel implements Piece {
         ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/back.png");
         image = new NewImage().resizeImage(image, 35, 35);
         this.back.setIcon(image);
-        this.back.setLocation(CELL_SIZE * 13 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
+        this.back.setLocation(PADDING + CELL_SIZE * 13 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
         this.back.setRolloverEnabled(false);
         this.back.setBorderPainted(false);
         this.back.setContentAreaFilled(false);
+
         this.timer_2 = new JLabel();
         this.timer_1 = new JLabel();
-        this.timer_2.setLocation(CELL_SIZE * 11 + CELL_SIZE / 2, CELL_SIZE * 6 + CELL_SIZE / 4);
-        this.timer_1.setLocation(CELL_SIZE * 11 + CELL_SIZE / 2, CELL_SIZE * 4 + CELL_SIZE / 4);
+        this.timer_2.setLocation(CELL_SIZE + 50, CELL_SIZE * 4 + 50);
+        this.timer_1.setLocation(PADDING + 11 * CELL_SIZE - CELL_SIZE / 2 + 50, CELL_SIZE * 4 + 50);
 
         this.pause = true;
         this.setBackground(new Color(192, 187, 187));
@@ -90,27 +90,31 @@ public class ChessBoard extends JPanel implements Piece {
                 return;
 
             if (StaticPieces.getFirst() == 2) {
-                JOptionPane.showMessageDialog(null, (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước", "người đi trước", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        null,
+                        (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước", "người đi trước",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/start.png");
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
                 button.setIcon(imageIcon);
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getEvent().setMachine();
                     StaticPieces.getClock_1().resume();
-                    StaticPieces.changeImage("wait", 2);
+                    StaticPieces.getNotice_2().startCountdown();
                 } else {
+                    StaticPieces.getNotice_1().startCountdown();
                     StaticPieces.getClock_2().resume();
-                    StaticPieces.changeImage("wait", 1);
                 }
             }
             StaticPieces.setFirst(StaticPieces.getTurn() % 2);
             if (this.pause) {
                 if (StaticPieces.getFirst() == Piece.BLACK) {
-                    StaticPieces.getClock_1().resume();
-                    StaticPieces.changeImage("wait", 1);
+                    StaticPieces.getNotice_2().startCountdown();
                 } else {
                     StaticPieces.getClock_2().resume();
-                    StaticPieces.changeImage("wait", 2);
+                    StaticPieces.getNotice_1().startCountdown();
                 }
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/stop.png");
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
@@ -131,7 +135,7 @@ public class ChessBoard extends JPanel implements Piece {
 
     public void setButton(JButton button) {
         button.setSize(90, 32);
-        button.setLocation(CELL_SIZE * 11 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
+        button.setLocation(PADDING + CELL_SIZE * 4 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
         ImageIcon imageIcon;
         imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/stop.png");
         if (this.pause || StaticPieces.getFirst() == 2)
@@ -139,7 +143,17 @@ public class ChessBoard extends JPanel implements Piece {
         imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
         button.setIcon(imageIcon);
         button.setBorderPainted(false);
+        this.returnButton = new JButton();
+        this.returnButton.setSize(35, 35);
+        ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/back_.png");
+        image = new NewImage().resizeImage(image, 35, 35);
+        this.returnButton.setIcon(image);
+        this.returnButton.setLocation(CELL_SIZE / 2, CELL_SIZE / 2);
+        this.returnButton.setRolloverEnabled(false);
+        this.returnButton.setBorderPainted(false);
+        this.returnButton.setContentAreaFilled(false);
         this.add(button);
+        this.add(this.returnButton);
     }
 
     public void setTime(int type, int minute, int second) {
@@ -162,123 +176,137 @@ public class ChessBoard extends JPanel implements Piece {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
-
         highlight(g);
     }
 
     private void drawBoard(Graphics g) {
-        g.setColor(Color.white);
-        g.fillRect(Piece.CELL_SIZE / 2, Piece.CELL_SIZE / 2, 9 * Piece.CELL_SIZE, 10 * Piece.CELL_SIZE);
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(new Color(216, 83, 39));
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/background.png");
+        Image bg = image.getImage();
+        g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+
+
+
+        g.setColor(Color.white);
+        g.fillRect(PADDING + Piece.CELL_SIZE / 2, Piece.CELL_SIZE / 2, 9 * Piece.CELL_SIZE, 10 * Piece.CELL_SIZE);
+        g.setColor(new Color(248, 9, 9));
+
 
         Stroke stroke = new BasicStroke(4.0f);
         g2d.setStroke(stroke);
         Line2D line;
 
         // vị trí quân pháo
-        line = new Line2D.Double(2 * CELL_SIZE - 5, 3 * CELL_SIZE - 5, 2 * CELL_SIZE + 5, 3 * CELL_SIZE + 5);
+        line = new Line2D.Double(PADDING + 2 * CELL_SIZE - 5, 3 * CELL_SIZE - 5, PADDING + 2 * CELL_SIZE + 5, 3 * CELL_SIZE + 5);
         g2d.draw(line);
-        line = new Line2D.Double(2 * CELL_SIZE - 5, 3 * CELL_SIZE + 5, 2 * CELL_SIZE + 5, 3 * CELL_SIZE - 5);
-        g2d.draw(line);
-
-        line = new Line2D.Double(8 * CELL_SIZE - 5, 3 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 3 * CELL_SIZE + 5);
-        g2d.draw(line);
-        line = new Line2D.Double(8 * CELL_SIZE - 5, 3 * CELL_SIZE + 5, 8 * CELL_SIZE + 5, 3 * CELL_SIZE - 5);
+        line = new Line2D.Double(PADDING + 2 * CELL_SIZE - 5, 3 * CELL_SIZE + 5, PADDING + 2 * CELL_SIZE + 5, 3 * CELL_SIZE - 5);
         g2d.draw(line);
 
-        line = new Line2D.Double(2 * CELL_SIZE - 5, 8 * CELL_SIZE - 5, 2 * CELL_SIZE + 5, 8 * CELL_SIZE + 5);
+        line = new Line2D.Double(PADDING + 8 * CELL_SIZE - 5, 3 * CELL_SIZE - 5, PADDING + 8 * CELL_SIZE + 5, 3 * CELL_SIZE + 5);
         g2d.draw(line);
-        line = new Line2D.Double(2 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 2 * CELL_SIZE + 5, 8 * CELL_SIZE - 5);
-        g2d.draw(line);
-
-        line = new Line2D.Double(8 * CELL_SIZE - 5, 8 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 8 * CELL_SIZE + 5);
-        g2d.draw(line);
-        line = new Line2D.Double(8 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, 8 * CELL_SIZE + 5, 8 * CELL_SIZE - 5);
+        line = new Line2D.Double(PADDING + 8 * CELL_SIZE - 5, 3 * CELL_SIZE + 5, PADDING + 8 * CELL_SIZE + 5, 3 * CELL_SIZE - 5);
         g2d.draw(line);
 
+        line = new Line2D.Double(PADDING + 2 * CELL_SIZE - 5, 8 * CELL_SIZE - 5, PADDING + 2 * CELL_SIZE + 5, 8 * CELL_SIZE + 5);
+        g2d.draw(line);
+        line = new Line2D.Double(PADDING + 2 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, PADDING + 2 * CELL_SIZE + 5, 8 * CELL_SIZE - 5);
+        g2d.draw(line);
 
-        stroke = new BasicStroke(5.0f);
+        line = new Line2D.Double(PADDING + 8 * CELL_SIZE - 5, 8 * CELL_SIZE - 5, PADDING + 8 * CELL_SIZE + 5, 8 * CELL_SIZE + 5);
+        g2d.draw(line);
+        line = new Line2D.Double(PADDING + 8 * CELL_SIZE - 5, 8 * CELL_SIZE + 5, PADDING + 8 * CELL_SIZE + 5, 8 * CELL_SIZE - 5);
+        g2d.draw(line);
+
+
+        stroke = new BasicStroke(2.0f);
         g2d.setStroke(stroke);
 
         // vẽ bàn cờ
         for (int i = 1; i <= 10; i++) {
-            line = new Line2D.Double(CELL_SIZE, i * CELL_SIZE, 9 * CELL_SIZE, i * CELL_SIZE);
+            line = new Line2D.Double(PADDING + CELL_SIZE, i * CELL_SIZE, PADDING + 9 * CELL_SIZE, i * CELL_SIZE);
             g2d.draw(line);
         }
-        line = new Line2D.Double(CELL_SIZE, CELL_SIZE, CELL_SIZE, 10 * CELL_SIZE);
+        line = new Line2D.Double(PADDING + CELL_SIZE, CELL_SIZE, PADDING + CELL_SIZE, 10 * CELL_SIZE);
         g2d.draw(line);
-        line = new Line2D.Double(9 * CELL_SIZE, CELL_SIZE, 9 * CELL_SIZE, 10 * CELL_SIZE);
+        line = new Line2D.Double(PADDING + 9 * CELL_SIZE, CELL_SIZE, PADDING + 9 * CELL_SIZE, 10 * CELL_SIZE);
         g2d.draw(line);
         for (int i = 2; i <= 8; i++) {
-            line = new Line2D.Double(i * CELL_SIZE, CELL_SIZE, i * CELL_SIZE, 5 * CELL_SIZE);
+            line = new Line2D.Double(PADDING + i * CELL_SIZE, CELL_SIZE, PADDING + i * CELL_SIZE, 5 * CELL_SIZE);
             g2d.draw(line);
-            line = new Line2D.Double(i * CELL_SIZE, 6 * CELL_SIZE, i * CELL_SIZE, 10 * CELL_SIZE);
+            line = new Line2D.Double(PADDING + i * CELL_SIZE, 6 * CELL_SIZE, PADDING + i * CELL_SIZE, 10 * CELL_SIZE);
             g2d.draw(line);
         }
         // ô tướng
-        line = new Line2D.Double(4 * CELL_SIZE, CELL_SIZE + 1, 6 * CELL_SIZE, 3 * CELL_SIZE);
+        line = new Line2D.Double(PADDING + 4 * CELL_SIZE, CELL_SIZE + 1, PADDING + 6 * CELL_SIZE, 3 * CELL_SIZE);
         g2d.draw(line);
-        line = new Line2D.Double(4 * CELL_SIZE, 3 * CELL_SIZE, 6 * CELL_SIZE, CELL_SIZE + 1);
+        line = new Line2D.Double(PADDING + 4 * CELL_SIZE, 3 * CELL_SIZE, PADDING + 6 * CELL_SIZE, CELL_SIZE + 1);
         g2d.draw(line);
-        line = new Line2D.Double(4 * CELL_SIZE, 8 * CELL_SIZE, 6 * CELL_SIZE, 10 * CELL_SIZE - 1);
+        line = new Line2D.Double(PADDING + 4 * CELL_SIZE, 8 * CELL_SIZE, PADDING + 6 * CELL_SIZE, 10 * CELL_SIZE - 1);
         g2d.draw(line);
-        line = new Line2D.Double(4 * CELL_SIZE, 10 * CELL_SIZE - 1, 6 * CELL_SIZE, 8 * CELL_SIZE);
+        line = new Line2D.Double(PADDING + 4 * CELL_SIZE, 10 * CELL_SIZE - 1, PADDING + 6 * CELL_SIZE, 8 * CELL_SIZE);
         g2d.draw(line);
         // sông
-        line = new Line2D.Double(CELL_SIZE, 5 * CELL_SIZE + 1, 5 * CELL_SIZE, 6 * CELL_SIZE - 1);
+        line = new Line2D.Double(PADDING + CELL_SIZE, 5 * CELL_SIZE + 1, PADDING + 5 * CELL_SIZE, 6 * CELL_SIZE - 1);
         g2d.draw(line);
-        line = new Line2D.Double(CELL_SIZE, 6 * CELL_SIZE + 1, 5 * CELL_SIZE, 5 * CELL_SIZE - 1);
+        line = new Line2D.Double(PADDING + CELL_SIZE, 6 * CELL_SIZE + 1, PADDING + 5 * CELL_SIZE, 5 * CELL_SIZE - 1);
         g2d.draw(line);
-        line = new Line2D.Double(5 * CELL_SIZE, 5 * CELL_SIZE, 9 * CELL_SIZE, 6 * CELL_SIZE - 1);
+        line = new Line2D.Double(PADDING + 5 * CELL_SIZE, 5 * CELL_SIZE, PADDING + 9 * CELL_SIZE, 6 * CELL_SIZE - 1);
         g2d.draw(line);
-        line = new Line2D.Double(5 * CELL_SIZE, 6 * CELL_SIZE, 9 * CELL_SIZE, 5 * CELL_SIZE - 1);
+        line = new Line2D.Double(PADDING + 5 * CELL_SIZE, 6 * CELL_SIZE, PADDING + 9 * CELL_SIZE, 5 * CELL_SIZE - 1);
         g2d.draw(line);
 
         //
-        stroke = new BasicStroke(10.0f);
-        g2d.setStroke(stroke);
-        line = new Line2D.Double((double) CELL_SIZE / 2, (double) CELL_SIZE / 2, 9 * CELL_SIZE + (double) CELL_SIZE / 2, (double) CELL_SIZE / 2);
-        g2d.draw(line);
-        line = new Line2D.Double((double) CELL_SIZE / 2, 10 * CELL_SIZE + (double) CELL_SIZE / 2, 9 * CELL_SIZE + (double) CELL_SIZE / 2, 10 * CELL_SIZE + (double) CELL_SIZE / 2);
-        g2d.draw(line);
-        line = new Line2D.Double((double) CELL_SIZE / 2, (double) CELL_SIZE / 2, (double) CELL_SIZE / 2, 10 * CELL_SIZE + (double) CELL_SIZE / 2);
-        g2d.draw(line);
-        line = new Line2D.Double(9 * CELL_SIZE + (double) CELL_SIZE / 2, (double) CELL_SIZE / 2, 9 * CELL_SIZE + (double) CELL_SIZE / 2, 10 * CELL_SIZE + (double) CELL_SIZE / 2);
-        g2d.draw(line);
 
+        stroke = new BasicStroke(30);
+        g2d.setStroke(stroke);
+        g2d.setColor(new Color(169, 97, 50)); // màu viền
+
+        // Tính toán vùng bao quanh bàn cờ
+        double x = PADDING + (double) CELL_SIZE / 2;
+        double y = (double) CELL_SIZE / 2;
+        double width = 9 * CELL_SIZE;
+        double height = 10 * CELL_SIZE;
+
+        RoundRectangle2D roundedBorder = new RoundRectangle2D.Double(x, y, width, height, 30, 30);
+        g2d.draw(roundedBorder);
 
     }
 
     private void highlight(Graphics g) {
-        if (highlightX != -1 && highlightY != -1 && highlightX < 10 && highlightY <11) {
+        if (highlightX != -1 && highlightY != -1 && highlightX < 10 && highlightY < 11) {
+
             Graphics2D g2 = (Graphics2D) g;
             g2.setColor(Color.GREEN);
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setStroke(new BasicStroke(4));
 
-            // Vẽ 4 góc
-            // Trên trái
-            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
-                    highlightX * CELL_SIZE - CELL_SIZE / 4 + 8, highlightY * CELL_SIZE - CELL_SIZE / 4 );
-            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
-                    highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4 + 8);
+            int cornerLength = 8;
+            int quarterCell = CELL_SIZE / 4;
 
-            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
-                    highlightX * CELL_SIZE + CELL_SIZE / 4 - 8, highlightY * CELL_SIZE - CELL_SIZE / 4);
-            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4,
-                    highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE - CELL_SIZE / 4 + 8);
+            int centerX = PADDING + highlightX * CELL_SIZE;
+            int centerY = highlightY * CELL_SIZE;
 
-            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
-                    highlightX * CELL_SIZE + CELL_SIZE / 4 - 8, highlightY * CELL_SIZE + CELL_SIZE / 4);
-            g2.drawLine(highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
-                    highlightX * CELL_SIZE + CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4 - 8);
+            int[][] corners = {
+                    {-quarterCell, -quarterCell}, // top-left
+                    {+quarterCell, -quarterCell}, // top-right
+                    {+quarterCell, +quarterCell}, // bottom-right
+                    {-quarterCell, +quarterCell}  // bottom-left
+            };
 
-            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
-                    highlightX * CELL_SIZE - CELL_SIZE / 4 + 8, highlightY * CELL_SIZE + CELL_SIZE / 4);
-            g2.drawLine(highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4,
-                    highlightX * CELL_SIZE - CELL_SIZE / 4, highlightY * CELL_SIZE + CELL_SIZE / 4 - 8);
+            for (int[] offset : corners) {
+                int cx = centerX + offset[0];
+                int cy = centerY + offset[1];
 
-            System.out.println("Repainting: highlightX: " + highlightX + ", highlightY: " + highlightY);
+                int xDir = (offset[0] > 0) ? -1 : 1;
+                int yDir = (offset[1] > 0) ? -1 : 1;
+
+                g2.drawLine(cx, cy, cx + xDir * cornerLength, cy); // ngang
+                g2.drawLine(cx, cy, cx, cy + yDir * cornerLength); // dọc
+            }
+
+
+            System.out.println("Repainting: PADDING + highlightX: " + PADDING + highlightX + ", highlightY: " + highlightY);
 
             highlightX = -1;
             highlightY = -1;
@@ -312,12 +340,34 @@ public class ChessBoard extends JPanel implements Piece {
         });
     }
 
-    public void highlight(int x, int y){
+    public void goHome(Home home){
+        returnButton.addActionListener(_ ->{
+            new Thread(() -> {
+                if (StaticPieces.getFirst() != 2)
+                    file.IOFile.saveGame();
+                home.setButton();
+                StaticPieces.getChessBoardPanel().removePieces();
+                StaticPieces.getChessBoardPanel().setVisible(false);
+
+                StaticPieces.getNotice_2().stopCountdown();
+                StaticPieces.getNotice_1().startCountdown();
+
+                StaticPieces.getCloseButton().setClose(home.getMenu());
+                StaticPieces.getCloseButton().setHide(home.getMenu());
+                home.getMenu().setVisible(true);
+                home.setSize(500, 700);
+                home.setLocationRelativeTo(null);
+            }).start();
+        });
+    }
+
+    public void highlight(int x, int y) {
         highlightX = x + 1;
         highlightY = y + 1;
 
         this.repaint();
     }
+
     public Boolean getPause() {
         return pause;
     }
