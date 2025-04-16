@@ -166,37 +166,34 @@ public class Home extends JFrame {
     }
 
     private void setNewGame() {
-        this.newGame.addActionListener(e -> {
-            new Thread(() -> {
-                this.menu.setVisible(false);
-                this.setSize(Piece._width_, Piece._height_);
-                this.setLocationRelativeTo(null);
-                JButton start = new JButton();
+        this.newGame.addActionListener(_ -> new Thread(() -> {
+            this.menu.setVisible(false);
+            this.setSize(Piece._width_, Piece._height_);
+            this.setLocationRelativeTo(null);
+            JButton start = new JButton();
 
-                StaticPieces.setNew(start);
-                StaticPieces.getSetting().setChessBoard(this, start);
-                StaticPieces.getChessBoardPanel().goHome(this);
-            }).start();
-        });
+            StaticPieces.setNew(start);
+            StaticPieces.getSetting().setChessBoard(this, start);
+            StaticPieces.getChessBoardPanel().goHome(this);
+        }).start());
     }
 
     private void setOldGame() {
-        this.oldGame.addActionListener(e -> {
-            new Thread(() -> {
-                this.menu.setVisible(false);
-                this.setSize(Piece._width_, Piece._height_);
-                this.setLocationRelativeTo(null);
-                IOFile.readGame();
-                JButton start = new JButton();
+        this.oldGame.addActionListener(_ -> new Thread(() -> {
+            this.menu.setVisible(false);
+            this.setSize(Piece._width_, Piece._height_);
+            this.setLocationRelativeTo(null);
+            IOFile.readGame();
+            JButton start = new JButton();
 
-                StaticPieces.setNewSetting();
-                StaticPieces.getSetting().setChessBoard(this, start);
-                StaticPieces.getChessBoardPanel().setButton(start);
-                StaticPieces.getChessBoardPanel().play(start);
-                StaticPieces.setEvent();
-                StaticPieces.getChessBoardPanel().setVisible(true);
-            }).start();
-        });
+            StaticPieces.setNewSetting();
+            StaticPieces.getSetting().setChessBoard(this, start);
+            StaticPieces.getChessBoardPanel().setButton(start);
+            StaticPieces.getChessBoardPanel().play(start);
+            StaticPieces.setEvent();
+            StaticPieces.getChessBoardPanel().setVisible(true);
+            StaticPieces.getChessBoardPanel().goHome(this);
+        }).start());
     }
 
     private void setQuit() {
