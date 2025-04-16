@@ -240,6 +240,11 @@ public class StaticPieces {
     }
 
     public static class CustomSliderUI extends BasicSliderUI {
+
+        private final Color trackColor = new Color(200, 200, 255);
+        private final Color thumbColor = new Color(100, 100, 255);
+        private final Color thumbBorderColor = new Color(50, 50, 200);
+
         public CustomSliderUI(JSlider b) {
             super(b);
         }
@@ -249,6 +254,47 @@ public class StaticPieces {
             super.installDefaults(slider);
             slider.setBackground(Color.WHITE);
             slider.setForeground(Color.BLUE);
+            slider.setOpaque(false);
+        }
+
+        @Override
+        public void paintTrack(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int cy = trackRect.y + (trackRect.height / 2) - 2;
+            int trackLeft = trackRect.x;
+            int trackRight = trackRect.x + trackRect.width;
+
+            // Vẽ thanh track (nền)
+            g2.setColor(trackColor);
+            g2.fillRoundRect(trackLeft, cy, trackRight - trackLeft, 6, 4, 4);
+        }
+
+        @Override
+        public void paintThumb(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int thumbWidth = 10;
+            int thumbHeight = 10;
+
+            int x = thumbRect.x + (thumbRect.width - thumbWidth) / 2;
+            int y = thumbRect.y + (thumbRect.height - thumbHeight) / 2;
+
+            // Vẽ bóng
+            g2.setColor(new Color(0, 0, 0, 50));
+            g2.fillOval(x + 1, y + 1, thumbWidth, thumbHeight);
+
+            // Vẽ thumb chính
+            g2.setColor(thumbColor);
+            g2.fillOval(x, y, thumbWidth, thumbHeight);
+
+            // Viền
+            g2.setColor(thumbBorderColor);
+            g2.drawOval(x, y, thumbWidth, thumbHeight);
+
+            g2.dispose();
         }
     }
 }
