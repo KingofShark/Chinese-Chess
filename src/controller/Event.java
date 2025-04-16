@@ -131,11 +131,15 @@ public class Event implements Piece {
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getClock_2().stop();
                     StaticPieces.getNotice_1().startCountdown();
+                    StaticPieces.getClock_1().resume();
                     StaticPieces.changeImage("wait", 2);
                 } else {
                     StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getClock_1().stop();
                     StaticPieces.getNotice_2().startCountdown();
+                    StaticPieces.getClock_2().resume();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -182,11 +186,15 @@ public class Event implements Piece {
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getClock_2().stop();
                     StaticPieces.getNotice_1().startCountdown();
+                    StaticPieces.getClock_1().resume();
                     StaticPieces.changeImage("wait", 2);
                 } else {
                     StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getClock_1().stop();
                     StaticPieces.getNotice_2().startCountdown();
+                    StaticPieces.getClock_2().resume();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -231,11 +239,15 @@ public class Event implements Piece {
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getClock_2().stop();
                     StaticPieces.getNotice_1().startCountdown();
+                    StaticPieces.getClock_1().resume();
                     StaticPieces.changeImage("wait", 2);
                 } else {
                     StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getClock_1().stop();
                     StaticPieces.getNotice_2().startCountdown();
+                    StaticPieces.getClock_2().resume();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -279,11 +291,15 @@ public class Event implements Piece {
                     return;
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getNotice_2().stopCountdown();
+                    StaticPieces.getClock_2().stop();
                     StaticPieces.getNotice_1().startCountdown();
+                    StaticPieces.getClock_1().resume();
                     StaticPieces.changeImage("wait", 2);
                 } else {
                     StaticPieces.getNotice_1().stopCountdown();
+                    StaticPieces.getClock_1().stop();
                     StaticPieces.getNotice_2().startCountdown();
+                    StaticPieces.getClock_2().resume();
                     StaticPieces.changeImage("wait", 1);
                 }
                 StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -326,11 +342,15 @@ public class Event implements Piece {
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                         StaticPieces.getNotice_2().stopCountdown();
+                        StaticPieces.getClock_2().stop();
                         StaticPieces.getNotice_1().startCountdown();
+                        StaticPieces.getClock_1().resume();
                         StaticPieces.changeImage("wait", 2);
                     } else {
                         StaticPieces.getNotice_1().stopCountdown();
+                        StaticPieces.getClock_1().stop();
                         StaticPieces.getNotice_2().startCountdown();
+                        StaticPieces.getClock_2().resume();
                         StaticPieces.changeImage("wait", 1);
                     }
                     StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -374,11 +394,15 @@ public class Event implements Piece {
                         return;
                     if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                         StaticPieces.getNotice_2().stopCountdown();
+                        StaticPieces.getClock_2().stop();
                         StaticPieces.getNotice_1().startCountdown();
+                        StaticPieces.getClock_1().resume();
                         StaticPieces.changeImage("wait", 2);
                     } else {
                         StaticPieces.getNotice_1().stopCountdown();
+                        StaticPieces.getClock_1().stop();
                         StaticPieces.getNotice_2().startCountdown();
+                        StaticPieces.getClock_2().resume();
                         StaticPieces.changeImage("wait", 1);
                     }
                     StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
@@ -419,11 +443,15 @@ public class Event implements Piece {
         chessPiece.setVisible(false);
         if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
             StaticPieces.getNotice_2().stopCountdown();
+            StaticPieces.getClock_2().stop();
             StaticPieces.getNotice_1().startCountdown();
+            StaticPieces.getClock_1().resume();
             StaticPieces.changeImage("wait", 2);
         } else {
             StaticPieces.getNotice_1().stopCountdown();
+            StaticPieces.getClock_1().stop();
             StaticPieces.getNotice_2().startCountdown();
+            StaticPieces.getClock_2().resume();
             StaticPieces.changeImage("wait", 1);
         }
         ChessPiece general_red = pieces.firstElement();
@@ -431,6 +459,8 @@ public class Event implements Piece {
             StaticPieces.setTurn(-1);
             StaticPieces.getNotice_2().stopCountdown();
             StaticPieces.getNotice_1().stopCountdown();
+            StaticPieces.getClock_2().stop();
+            StaticPieces.getClock_1().stop();
             StaticPieces.changeImage("", 0);
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == Piece.BLACK) ? "Đen thắng" : "Đỏ thắng");
             return;
@@ -438,7 +468,9 @@ public class Event implements Piece {
         if (chessPiece.getTYPE() == 0 || chessPiece.getTYPE() == 1) {
             StaticPieces.setTurn(-1);
             StaticPieces.getNotice_2().stopCountdown();
+            StaticPieces.getClock_2().stop();
             StaticPieces.getNotice_1().stopCountdown();
+            StaticPieces.getClock_1().stop();
             StaticPieces.changeImage("", 0);
             JOptionPane.showMessageDialog(null, (chessPiece.getTYPE() == 0) ? "Đen thắng" : "Đỏ thắng");
             return;
@@ -528,6 +560,8 @@ public class Event implements Piece {
             StaticPieces.setTurn(-1);
             StaticPieces.getNotice_2().stopCountdown();
             StaticPieces.getNotice_1().stopCountdown();
+            StaticPieces.getClock_2().stop();
+            StaticPieces.getClock_1().stop();
             JOptionPane.showMessageDialog(null, (temp.getTYPE() % 2 == Piece.BLACK) ? "Đỏ thắng" : "Đen thắng");
             return true;
         }
@@ -573,11 +607,15 @@ public class Event implements Piece {
                 return;
             if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                 StaticPieces.getNotice_2().stopCountdown();
+                StaticPieces.getClock_2().stop();
                 StaticPieces.getNotice_1().startCountdown();
+                StaticPieces.getClock_1().resume();
                 StaticPieces.changeImage("wait", 2);
             } else {
                 StaticPieces.getNotice_1().stopCountdown();
+                StaticPieces.getClock_1().stop();
                 StaticPieces.getNotice_2().startCountdown();
+                StaticPieces.getClock_2().resume();
                 StaticPieces.changeImage("wait", 1);
             }
             StaticPieces.setTurn((StaticPieces.getTurn() > 0) ? StaticPieces.getTurn() - 1 : 1);
