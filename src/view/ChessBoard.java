@@ -15,7 +15,7 @@ import java.util.Vector;
 public class ChessBoard extends JPanel implements Piece {
     private Boolean pause;
     private JLabel timer_2, timer_1;
-    private JButton back, returnButton;
+    private JButton back, returnButton, surrender, me, bot;
     private int highlightX = -1;
     private int highlightY = -1;
 
@@ -30,10 +30,6 @@ public class ChessBoard extends JPanel implements Piece {
         StaticPieces.getNotice_2().setLocation(PADDING + 11 * CELL_SIZE - CELL_SIZE / 2, 3 * CELL_SIZE);
         StaticPieces.changeImage("wait", 1);
         StaticPieces.changeImage("wait", 2);
-        StaticPieces.getNotice_1().setVisible(true);
-        StaticPieces.getNotice_2().setVisible(true);
-        this.add(StaticPieces.getNotice_2());
-        this.add(StaticPieces.getNotice_1());
 
         this.back = new JButton();
         this.back.setSize(35, 35);
@@ -47,15 +43,57 @@ public class ChessBoard extends JPanel implements Piece {
 
         this.timer_2 = new JLabel();
         this.timer_1 = new JLabel();
-        this.timer_2.setLocation(CELL_SIZE + 50, CELL_SIZE * 4 + 50);
-        this.timer_1.setLocation(PADDING + 11 * CELL_SIZE - CELL_SIZE / 2 + 50, CELL_SIZE * 4 + 50);
+        this.timer_1.setLocation(30, 5);
+        this.timer_2.setLocation(30, 5);
+        this.timer_1.setHorizontalAlignment(SwingConstants.CENTER);
+        this.timer_1.setVerticalAlignment(SwingConstants.CENTER);
+        this.timer_1.setOpaque(true);
+        this.timer_1.setForeground(new Color(244, 192, 21));
+
+        this.timer_2.setHorizontalAlignment(SwingConstants.CENTER);
+        this.timer_2.setVerticalAlignment(SwingConstants.CENTER);
+        this.timer_2.setOpaque(true);
+        this.timer_2.setForeground(new Color(244, 192, 21));
 
         this.pause = true;
         this.setBackground(new Color(192, 187, 187));
         this.setSize(_width_, _height_);
+
+
+        JLayeredPane layeredMe = new JLayeredPane();
+        layeredMe.setBounds(CELL_SIZE + 20, CELL_SIZE * 3 + 217, 130, 40);
+        this.add(layeredMe);
+
+        this.me = new JButton();
+        this.me.setSize(40, 40);
+        image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/piece/0/General.png");
+        image = new NewImage().resizeImage(image, 40, 40);
+        this.me.setIcon(image);
+        this.me.setLocation(0, 0);
+        this.me.setBorderPainted(false);
+        this.me.setContentAreaFilled(false);
+
+        layeredMe.add(this.timer_1, JLayeredPane.DEFAULT_LAYER);
+        layeredMe.add(this.me, JLayeredPane.POPUP_LAYER);
+
+        JLayeredPane layeredBot = new JLayeredPane();
+        layeredBot.setBounds(PADDING + 11 * CELL_SIZE - CELL_SIZE / 2 + 20, CELL_SIZE * 3 + 217, 130, 40);
+        this.add(layeredBot);
+
+        this.bot = new JButton();
+        this.bot.setSize(40, 40);
+        image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/piece/1/General.png");
+        image = new NewImage().resizeImage(image, 40, 40);
+        this.bot.setIcon(image);
+        this.bot.setLocation(0, 0);
+        this.bot.setBorderPainted(false);
+        this.bot.setContentAreaFilled(false);
+
+        layeredBot.add(this.timer_2, JLayeredPane.DEFAULT_LAYER);
+        layeredBot.add(this.bot, JLayeredPane.POPUP_LAYER);
+
+
         this.add(this.back);
-        this.add(this.timer_2);
-        this.add(this.timer_1);
         StaticPieces.getClock_1().start(this.timer_1);
         StaticPieces.getClock_2().start(this.timer_2);
         this.setLayout(null);
@@ -86,6 +124,7 @@ public class ChessBoard extends JPanel implements Piece {
         StaticPieces.getCloseButton().setClose(this);
         StaticPieces.getCloseButton().setHide(this);
         button.addActionListener(e -> {
+            button.setVisible(false);
             if (StaticPieces.getTurn() == -1)
                 return;
 
@@ -101,25 +140,27 @@ public class ChessBoard extends JPanel implements Piece {
                 button.setIcon(imageIcon);
                 if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
                     StaticPieces.getEvent().setMachine();
-                    StaticPieces.getClock_1().resume();
+                    StaticPieces.getClock_2().resume();
                     StaticPieces.getNotice_2().startCountdown();
                 } else {
                     StaticPieces.getNotice_1().startCountdown();
-                    StaticPieces.getClock_2().resume();
+                    StaticPieces.getClock_1().resume();
                 }
             }
             StaticPieces.setFirst(StaticPieces.getTurn() % 2);
             if (this.pause) {
                 if (StaticPieces.getFirst() == Piece.BLACK) {
+                    StaticPieces.getClock_2().resume();
+                    StaticPieces.getClock_1().stop();
                     StaticPieces.getNotice_2().startCountdown();
                 } else {
-                    StaticPieces.getClock_2().resume();
+                    StaticPieces.getClock_1().resume();
+                    StaticPieces.getClock_2().stop();
                     StaticPieces.getNotice_1().startCountdown();
                 }
                 ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/stop.png");
                 imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
                 button.setIcon(imageIcon);
-                StaticPieces.getSetting().closeSetting();
             } else {
                 StaticPieces.getClock_1().stop();
                 StaticPieces.getClock_2().stop();
@@ -152,20 +193,57 @@ public class ChessBoard extends JPanel implements Piece {
         this.returnButton.setRolloverEnabled(false);
         this.returnButton.setBorderPainted(false);
         this.returnButton.setContentAreaFilled(false);
+
+        this.surrender = new JButton();
+        this.surrender.setSize(76, 30);
+
+        image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/surrender.png");
+        image = new NewImage().resizeImage(image, 76, 30);
+        this.surrender.setIcon(image);
+        this.surrender.setLocation(CELL_SIZE + 62, 3 * CELL_SIZE + 320);
+//        this.surrender.setRolloverEnabled(false);
+        this.surrender.setBorderPainted(false);
+        this.surrender.setContentAreaFilled(false);
+
+
+        StaticPieces.getNotice_1().setVisible(true);
+        StaticPieces.getNotice_2().setVisible(true);
+        this.add(StaticPieces.getNotice_2());
+        this.add(StaticPieces.getNotice_1());
+
         this.add(button);
         this.add(this.returnButton);
+        this.add(this.surrender);
+
+        clickSurrender();
+    }
+
+    private void clickSurrender() {
+        this.surrender.addActionListener(e -> {
+            this.requestFocus();
+//            JOptionPane.showMessageDialog(
+//                    null,
+//                    "Đen thắng", "Người chơi đầu hàng",
+//                    JOptionPane.INFORMATION_MESSAGE
+//            );
+//            System.exit(0);
+        });
     }
 
     public void setTime(int type, int minute, int second) {
         if (type == 0) {
             this.timer_1.setSize(100, 30);
-            this.timer_1.setFont(new Font("Arial", Font.BOLD, 30));
+            this.timer_1.setBorder(BorderFactory.createLineBorder(new Color(244, 192, 21), 2));
+            this.timer_1.setBackground(new Color(140, 41, 24));
+            this.timer_1.setFont(new Font("Arial", Font.BOLD, 20));
             String _minute = minute > 9 ? "" + minute : "0" + minute;
             String _second = second > 9 ? "" + second : "0" + second;
             this.timer_1.setText(_minute + " : " + _second);
         } else {
             this.timer_2.setSize(100, 30);
-            this.timer_2.setFont(new Font("Arial", Font.BOLD, 30));
+            this.timer_2.setBorder(BorderFactory.createLineBorder(new Color(244, 192, 21), 2));
+            this.timer_2.setBackground(new Color(140, 41, 24));
+            this.timer_2.setFont(new Font("Arial", Font.BOLD, 20));
             String _minute = minute > 9 ? "" + minute : "0" + minute;
             String _second = second > 9 ? "" + second : "0" + second;
             this.timer_2.setText(_minute + " : " + _second);
@@ -185,7 +263,6 @@ public class ChessBoard extends JPanel implements Piece {
         ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/background.png");
         Image bg = image.getImage();
         g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-
 
 
         g.setColor(Color.white);
@@ -340,17 +417,19 @@ public class ChessBoard extends JPanel implements Piece {
         });
     }
 
-    public void goHome(Home home){
-        returnButton.addActionListener(_ ->{
+    public void goHome(Home home) {
+        returnButton.addActionListener(_ -> {
             new Thread(() -> {
                 if (StaticPieces.getFirst() != 2)
                     file.IOFile.saveGame();
                 home.setButton();
+                for (ChessPiece piece : StaticPieces.getPieces())
+                    piece.setImage();
                 StaticPieces.getChessBoardPanel().removePieces();
                 StaticPieces.getChessBoardPanel().setVisible(false);
 
                 StaticPieces.getNotice_2().stopCountdown();
-                StaticPieces.getNotice_1().startCountdown();
+                StaticPieces.getNotice_1().stopCountdown();
 
                 StaticPieces.getCloseButton().setClose(home.getMenu());
                 StaticPieces.getCloseButton().setHide(home.getMenu());
