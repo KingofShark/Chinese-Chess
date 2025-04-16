@@ -1,5 +1,7 @@
 package model;
 
+import controller.StaticPieces;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -8,19 +10,18 @@ import java.awt.image.BufferedImage;
 
 public class RoundedImageLabel extends JLabel {
     private final BufferedImage image;
-    int countdown = 90; // số giây đếm ngược
+    int countdown; // số giây đếm ngược
     int timeLeft = countdown;
     private final Timer timer;
     private boolean showCountdown = false;
 
     public RoundedImageLabel(ImageIcon icon, int arcW, int arcH) {
         this.image = toBufferedImage(icon.getImage());
-
+        countdown = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
         timer = new Timer(1000, e -> {
             timeLeft--;
             repaint();
             if (timeLeft <= 0) {
-                JOptionPane.showMessageDialog(null, "Hết giờ\n");
                 ((Timer) e.getSource()).stop();
             }
         });
@@ -28,6 +29,15 @@ public class RoundedImageLabel extends JLabel {
     }
 
     public void startCountdown() {
+        countdown = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
+        System.out.println(countdown);
+        timeLeft = countdown;
+        showCountdown = true;
+        timer.start();
+    }
+
+    public void startCountdown(int countdown) {
+        System.out.println(countdown);
         timeLeft = countdown;
         showCountdown = true;
         timer.start();
@@ -48,6 +58,14 @@ public class RoundedImageLabel extends JLabel {
         g2.drawImage(img, 0, 0, null);
         g2.dispose();
         return bimage;
+    }
+
+    public void setNewCountdown(int countdown) {
+        this.countdown = countdown;
+        this.timeLeft = countdown;
+        this.showCountdown = false;
+
+        this.repaint();
     }
 
 
@@ -98,32 +116,6 @@ public class RoundedImageLabel extends JLabel {
             Arc2D arc = new Arc2D.Double(centerX - innerDiameter / 2, centerY - innerDiameter / 2, innerDiameter, innerDiameter,
                     90, -angle, Arc2D.OPEN);
             g2.draw(arc);
-
-            // Che toàn bộ 1/4 dưới cùng
-            g2.setColor(new Color(120, 109, 109));  // Màu nền để che đi phần dưới cùng
-            g2.fill(new Arc2D.Float(centerX - innerDiameter / 2, centerY - innerDiameter / 2, innerDiameter, innerDiameter,
-                    225, 90, Arc2D.CHORD));  // Chọn 1/4 dưới để che
-
-            // Vẽ số đếm ngược vào đoạn đã che
-            g2.setFont(new Font("Arial", Font.BOLD, 24)); // Giảm kích thước font để tránh bị cắt
-            g2.setColor(Color.WHITE);
-            String text = String.valueOf(timeLeft);
-            FontMetrics fm = g2.getFontMetrics();
-
-            // Tính toán vị trí vẽ số sao cho nó nằm ở phần che khuất (dưới cùng)
-            int textWidth = fm.stringWidth(text);
-            int textHeight = fm.getAscent();
-
-            // Căn chỉnh vị trí vẽ số ở đoạn 1/4 dưới cùng
-            int x = centerX - textWidth / 2;
-            int y = centerY + innerDiameter / 2 + textHeight / 4;  // Vẽ vào phần dưới cùng của vòng tròn
-
-            // Nếu số quá lớn, điều chỉnh lại cho vừa với vòng tròn
-            if (textWidth > innerDiameter - 20) {  // Điều chỉnh nếu số quá to
-                x = centerX - (innerDiameter - 20) / 2;
-            }
-
-            g2.drawString(text, x, y - 10); // Vẽ số đếm vào vị trí mới
         }
 
         g2.dispose();
