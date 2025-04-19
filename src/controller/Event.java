@@ -65,8 +65,7 @@ public class Event implements Piece {
             _piece_.addActionListener(_ -> {
                 CountDown clock_1 = StaticPieces.getClock_1();
                 CountDown clock_2 = StaticPieces.getClock_2();
-                if (StaticPieces.getChessBoardPanel().getPause() || clock_1.getFullTime() ||
-                        clock_2.getFullTime() || StaticPieces.getSetting().getStatus() || StaticPieces.getTurn() == -1)
+                if (clock_1.getFullTime() || clock_2.getFullTime())
                     return;
                 if (StaticPieces.getTurn() % 2 == 1 - _piece_.getCOLOR()) {
                     for (Integer temp : this.choose) {
@@ -105,8 +104,6 @@ public class Event implements Piece {
      */
     private void setMoveTop() {
         this.top.addActionListener(_ -> {
-            CountDown clock_1 = StaticPieces.getClock_1();
-            CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
@@ -212,8 +209,6 @@ public class Event implements Piece {
 
     private void setMoveBottom() {
         this.bottom.addActionListener(_ -> {
-            CountDown clock_1 = StaticPieces.getClock_1();
-            CountDown clock_2 = StaticPieces.getClock_2();
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
@@ -553,8 +548,6 @@ public class Event implements Piece {
      * @return: True nếu chiếu bí, ngược lại False
      */
     private Boolean checkMate(ChessPiece temp) {
-        CountDown clock_1 = StaticPieces.getClock_1();
-        CountDown clock_2 = StaticPieces.getClock_2();
         ChessPiece general_red = StaticPieces.getPieces().firstElement();
         if (general_red.checkMate()) {
             StaticPieces.setTurn(-1);
@@ -575,15 +568,14 @@ public class Event implements Piece {
             if (StaticPieces.getTurn() % 2 == Piece.RED)
                 return;
 
-//            if (true)
-//                return;
-
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
             if (StaticPieces.getSetting().getStatus())
                 return;
 
             Move move = Ai.findBestMove(check, 4, Piece.BLACK, 100000000);
+            if (StaticPieces.getClock_2().getFullTime() || StaticPieces.getClock_1().getFullTime())
+                return;
             typeClick = check.getPiece(move.fromX, move.fromY);
 
             if (!check.isEmpty(move.toX, move.toY) && pieces.elementAt(check.getPiece(move.toX, move.toY)).getCOLOR() == Piece.RED) {
