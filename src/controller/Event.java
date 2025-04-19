@@ -583,7 +583,7 @@ public class Event implements Piece {
             if (StaticPieces.getSetting().getStatus())
                 return;
 
-            Move move = Ai.findBestMove(check, 2, Piece.BLACK);
+            Move move = Ai.findBestMove(check, 4, Piece.BLACK, 100000000);
             typeClick = check.getPiece(move.fromX, move.fromY);
 
             if (!check.isEmpty(move.toX, move.toY) && pieces.elementAt(check.getPiece(move.toX, move.toY)).getCOLOR() == Piece.RED) {
