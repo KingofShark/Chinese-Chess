@@ -3,7 +3,6 @@ package controller;
 import model.*;
 import view.ChessBoard;
 import view.CountDown;
-import image.NewImage;
 import view.CloseButton;
 import sound.SoundEffect;
 
@@ -17,16 +16,15 @@ import java.util.Vector;
 import static constant.Piece.*;
 
 public class StaticPieces {
-    private static int player;
-    private static int turn, minute, second, first;
+    private static int turn, minute, second;
     private static final RoundedImageLabel notice_1 = new RoundedImageLabel(
             new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/wait.png"), 30, 30);
     private static final RoundedImageLabel notice_2 = new RoundedImageLabel(
             new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/bot.png"), 30, 30);
-    private static final CountDown clock_1 = new CountDown("Đen");
-    private static final CountDown clock_2 = new CountDown("Đỏ");
+    private static final CountDown clock_1 = new CountDown();
+    private static final CountDown clock_2 = new CountDown();
     private static final CloseButton closeButton = new CloseButton();
-    private static final ChessBoard chessBoard = new ChessBoard();
+    private static ChessBoard chessBoard = new ChessBoard();
     private static Check check = new Check();
     private static final SoundEffect soundEffect = new SoundEffect();
     private static Setting setting = new Setting();
@@ -40,15 +38,6 @@ public class StaticPieces {
     public static Check getCheck() {
         return StaticPieces.check;
     }
-
-    public static int getPlayer() {
-        return player;
-    }
-
-    public static void setPlayer(int player) {
-        StaticPieces.player = player;
-    }
-
     public static void setCheck() {
         StaticPieces.check = new Check();
     }
@@ -134,16 +123,12 @@ public class StaticPieces {
         StaticPieces.turn = turn;
     }
 
-    public static void setFirst(int first) {
-        StaticPieces.first = first;
-    }
-
-    public static int getFirst() {
-        return first;
-    }
-
     public static ChessBoard getChessBoardPanel() {
         return StaticPieces.chessBoard;
+    }
+
+    public static void setChessBoardPanel(ChessBoard chessBoard) {
+        StaticPieces.chessBoard = chessBoard;
     }
 
     public static int getMinute() {
@@ -176,9 +161,7 @@ public class StaticPieces {
         StaticPieces.getNotice_2().setVisible(true);
         StaticPieces.getNotice_1().setVisible(true);
         StaticPieces.setCheck();
-        StaticPieces.setFirst(2);
-        StaticPieces.setTurn(new Random().nextInt(101));
-        StaticPieces.setTurn(0);
+        StaticPieces.setTurn(new Random().nextInt(2));
         StaticPieces.getClock_1().setTime(StaticPieces.minute, StaticPieces.second);
         StaticPieces.getClock_2().setTime(StaticPieces.minute, StaticPieces.second);
         for (ChessPiece _piece_ : StaticPieces.getPieces()) {
@@ -190,14 +173,10 @@ public class StaticPieces {
     }
 
     public static void changeImage(String status, int type) {
-        ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/" + status + ".png");
-        image = new NewImage().resizeImage(image, 200, 106);
         if (type == 1) {
-//            StaticPieces.getNotice_1().setIcon(image);
             StaticPieces.getNotice_1().setVisible(true);
             StaticPieces.getNotice_2().setVisible(true);
         } else if (type == 2) {
-//            StaticPieces.getNotice_2().setIcon(image);
             StaticPieces.getNotice_2().setVisible(true);
             StaticPieces.getNotice_1().setVisible(true);
         } else {
