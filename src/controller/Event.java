@@ -575,8 +575,8 @@ public class Event implements Piece {
             if (StaticPieces.getTurn() % 2 == Piece.RED)
                 return;
 
-            if (true)
-                return;
+//            if (true)
+//                return;
 
             Check check = StaticPieces.getCheck();
             Vector<ChessPiece> pieces = StaticPieces.getPieces();
