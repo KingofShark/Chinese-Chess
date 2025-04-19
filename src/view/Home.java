@@ -1,12 +1,15 @@
 package view;
 
 import constant.Piece;
+import controller.Notification;
 import controller.StaticPieces;
 import file.IOFile;
 import image.NewImage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
 import java.util.Vector;
@@ -121,6 +124,7 @@ public class Home extends JFrame {
         this.setEvent();
         this.level = 0;
     }
+
     private void addHoverEffect(JButton button) {
         ImageIcon defaultIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/" + button.getName() + ".png");
         ImageIcon hoverIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/moved/" + button.getName() + ".png");
@@ -130,7 +134,6 @@ public class Home extends JFrame {
         button.setIcon(defaultIcon);
         button.setRolloverIcon(hoverIcon);
     }
-
 
 
     private void setOption(JButton button) {
@@ -166,16 +169,21 @@ public class Home extends JFrame {
     }
 
     private void setNewGame() {
-        this.newGame.addActionListener(_ -> new Thread(() -> {
-            this.menu.setVisible(false);
-            this.setSize(Piece._width_, Piece._height_);
-            this.setLocationRelativeTo(null);
-            JButton start = new JButton();
+        this.newGame.addActionListener(e -> {
+            Notification notification = new Notification();
+            notification.Loading("Vui lòng đợi...");
+            new Thread(() -> {
+                this.setSize(Piece._width_, Piece._height_);
+                this.setLocationRelativeTo(null);
+                JButton start = new JButton();
 
-            StaticPieces.setNew(start);
-            StaticPieces.getSetting().setChessBoard(this, start);
-            StaticPieces.getChessBoardPanel().goHome(this);
-        }).start());
+                StaticPieces.setNew(start);
+                this.menu.setVisible(false);
+                StaticPieces.getSetting().setChessBoard(this, start);
+                StaticPieces.getChessBoardPanel().goHome(this);
+                notification.setVisible(false);
+            }).start();
+        });
     }
 
     private void setOldGame() {
@@ -202,16 +210,16 @@ public class Home extends JFrame {
 
     private void setClickSetting() {
         this.setting.addActionListener(e -> {
-                level++;
-                newGame.setVisible(false);
-                oldGame.setVisible(false);
-                setting.setVisible(false);
-                quit.setVisible(false);
+            level++;
+            newGame.setVisible(false);
+            oldGame.setVisible(false);
+            setting.setVisible(false);
+            quit.setVisible(false);
 
-                volume.setVisible(true);
-                backHome.setVisible(true);
-                backHome.setLocation(200, 450);
-                time.setVisible(true);
+            volume.setVisible(true);
+            backHome.setVisible(true);
+            backHome.setLocation(200, 450);
+            time.setVisible(true);
         });
     }
 
@@ -263,9 +271,9 @@ public class Home extends JFrame {
         this.addHoverEffect(this.volume);
         this.addHoverEffect(this.time);
         this.addHoverEffect(this.backHome);
-        this.addHoverEffect(this.ten);
-        this.addHoverEffect(this.twelve);
-        this.addHoverEffect(this.fifteen);
+        this.addEffectForButton(this.ten, "1 phút");
+        this.addEffectForButton(this.twelve, "2 phút");
+        this.addEffectForButton(this.fifteen, "3 phút");
 
         this.menu.add(this.volume);
         this.menu.add(this.time);
@@ -274,6 +282,23 @@ public class Home extends JFrame {
         this.menu.add(this.ten);
         this.menu.add(this.twelve);
         this.menu.add(this.fifteen);
+    }
+
+    private void addEffectForButton(JButton button, String title) {
+        ImageIcon defaultIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/time_option.png");
+        ImageIcon hoverIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/moved/hover.png");
+        defaultIcon = new NewImage().resizeImage(defaultIcon, 100, 36);
+        hoverIcon = new NewImage().resizeImage(hoverIcon, 100, 36);
+
+        button.setFont(new Font("Tahoma", Font.BOLD, 16));
+        button.setText(title);
+        button.setIcon(defaultIcon);
+        button.setRolloverIcon(hoverIcon);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setVerticalTextPosition(SwingConstants.CENTER);
     }
 
     private void setClickBack() {
@@ -347,7 +372,7 @@ public class Home extends JFrame {
             });
         });
     }
-    
+
 
     private void setTime() {
         this.time.addActionListener(e -> {
@@ -362,12 +387,13 @@ public class Home extends JFrame {
             this.fifteen.setVisible(true);
         });
     }
-    private void chooseTime(){
+
+    private void chooseTime() {
         this.ten.addActionListener(e -> {
-            StaticPieces.setMinute(10);
+            StaticPieces.setMinute(1);
             StaticPieces.setSecond(0);
 
-            IOFile.saveTime(10, 0);
+            IOFile.saveTime(1, 0);
 
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
@@ -380,10 +406,10 @@ public class Home extends JFrame {
         });
 
         this.twelve.addActionListener(e -> {
-            StaticPieces.setMinute(12);
+            StaticPieces.setMinute(2);
             StaticPieces.setSecond(0);
 
-            IOFile.saveTime(12, 0);
+            IOFile.saveTime(2, 0);
 
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
@@ -396,10 +422,10 @@ public class Home extends JFrame {
         });
 
         this.fifteen.addActionListener(e -> {
-            StaticPieces.setMinute(15);
+            StaticPieces.setMinute(3);
             StaticPieces.setSecond(0);
 
-            IOFile.saveTime(15, 0);
+            IOFile.saveTime(3, 0);
 
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
