@@ -117,7 +117,7 @@ public class IOFile {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
             String line = bufferedReader.readLine();
             if (line == null) {
-                newTime.add(15);
+                newTime.add(1);
                 newTime.add(0);
             } else {
                 line = bufferedReader.readLine();
@@ -125,7 +125,7 @@ public class IOFile {
                     newTime.add(Integer.parseInt(line.split(" ")[0]));
                     newTime.add(Integer.parseInt(line.split(" ")[1]));
                 }else{
-                    newTime.add(15);
+                    newTime.add(1);
                     newTime.add(0);
                 }
             }
