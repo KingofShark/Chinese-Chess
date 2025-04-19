@@ -71,10 +71,6 @@ public class Setting implements Piece {
 
     private void clickSetting() {
         this.setting.addActionListener(_ -> {
-            if (StaticPieces.getTurn() % 2 == Piece.BLACK && StaticPieces.getFirst() != 2)
-                StaticPieces.changeImage("wait", 1);
-            else
-                StaticPieces.changeImage("wait", 2);
 
             this.slider_1.setBounds(Piece.CELL_SIZE * 14, 2 * CELL_SIZE - Piece.CELL_SIZE / 2, 200, 50);
             this.label_1.setBounds(Piece.CELL_SIZE * 14, CELL_SIZE / 2, 150, 50);
