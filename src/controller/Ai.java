@@ -560,6 +560,9 @@ public class Ai {
      * Enhanced minimax with PVS
      */
     public static int minimax(Check board, int depth, int alpha, int beta, int player, boolean isMaximizing, List<Check> history) {
+        if (StaticPieces.getClock_2().getFullTime() || StaticPieces.getClock_1().getFullTime()) {
+            return 0;
+        }
         long zobristKey = board.getZobristKey();
         TranspositionEntry entry = transpositionTable.get(zobristKey);
         if (entry != null && entry.depth >= depth) {
