@@ -1,5 +1,6 @@
 package view;
 
+import controller.Notification;
 import model.ChessPiece;
 import constant.Piece;
 import controller.StaticPieces;
@@ -13,11 +14,15 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.Vector;
 
 public class ChessBoard extends JPanel implements Piece {
-    private Boolean pause;
     private JLabel timer_2, timer_1;
-    private JButton back, returnButton, surrender, me, bot;
+    private JButton back;
+    private JLayeredPane layeredMe, layeredBot;
+    private JButton returnButton;
+    private JButton surrender;
+    private JButton play;
     private int highlightX = -1;
     private int highlightY = -1;
+    private Notification notificationPanel;
 
     public ChessBoard() {
         this.setup();
@@ -55,56 +60,72 @@ public class ChessBoard extends JPanel implements Piece {
         this.timer_2.setOpaque(true);
         this.timer_2.setForeground(new Color(244, 192, 21));
 
-        this.pause = true;
         this.setBackground(new Color(192, 187, 187));
         this.setSize(_width_, _height_);
 
 
-        JLayeredPane layeredMe = new JLayeredPane();
+        layeredMe = new JLayeredPane();
         layeredMe.setBounds(CELL_SIZE + 20, CELL_SIZE * 3 + 217, 130, 40);
         this.add(layeredMe);
 
-        this.me = new JButton();
-        this.me.setSize(40, 40);
+        JButton me = new JButton();
+        me.setSize(40, 40);
         image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/piece/0/General.png");
         image = new NewImage().resizeImage(image, 40, 40);
-        this.me.setIcon(image);
-        this.me.setLocation(0, 0);
-        this.me.setBorderPainted(false);
-        this.me.setContentAreaFilled(false);
+        me.setIcon(image);
+        me.setLocation(0, 0);
+        me.setBorderPainted(false);
+        me.setContentAreaFilled(false);
 
         layeredMe.add(this.timer_1, JLayeredPane.DEFAULT_LAYER);
-        layeredMe.add(this.me, JLayeredPane.POPUP_LAYER);
+        layeredMe.add(me, JLayeredPane.POPUP_LAYER);
 
-        JLayeredPane layeredBot = new JLayeredPane();
+        layeredBot = new JLayeredPane();
         layeredBot.setBounds(PADDING + 11 * CELL_SIZE - CELL_SIZE / 2 + 20, CELL_SIZE * 3 + 217, 130, 40);
         this.add(layeredBot);
 
-        this.bot = new JButton();
-        this.bot.setSize(40, 40);
+        JButton bot = new JButton();
+        bot.setSize(40, 40);
         image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/piece/1/General.png");
         image = new NewImage().resizeImage(image, 40, 40);
-        this.bot.setIcon(image);
-        this.bot.setLocation(0, 0);
-        this.bot.setBorderPainted(false);
-        this.bot.setContentAreaFilled(false);
+        bot.setIcon(image);
+        bot.setLocation(0, 0);
+        bot.setBorderPainted(false);
+        bot.setContentAreaFilled(false);
 
         layeredBot.add(this.timer_2, JLayeredPane.DEFAULT_LAYER);
-        layeredBot.add(this.bot, JLayeredPane.POPUP_LAYER);
+        layeredBot.add(bot, JLayeredPane.POPUP_LAYER);
 
+
+        notificationPanel = new Notification();
+        notificationPanel.setLocation((this.getWidth() - notificationPanel.getWidth()) / 2,
+                (this.getHeight() - notificationPanel.getHeight()) / 2);
+        this.add(notificationPanel);
 
         this.add(this.back);
-        StaticPieces.getClock_1().start(this.timer_1);
-        StaticPieces.getClock_2().start(this.timer_2);
+        StaticPieces.getClock_1().start(this.timer_1, () -> {
+            setFullTime();
+        });
+        StaticPieces.getClock_2().start(this.timer_2, () -> {
+            setFullTime();
+        });
         this.setLayout(null);
     }
 
-    public void setNew(JButton start) {
+    private void setFullTime() {
+        ImageIcon imageIcon;
+        imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/replay.png");
+        imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
+        this.play.setIcon(imageIcon);
+        this.play.setVisible(true);
+    }
+
+    public void setNew(JButton button) {
         this.setTime(0, StaticPieces.getMinute(), StaticPieces.getSecond());
         this.setTime(1, StaticPieces.getMinute(), StaticPieces.getSecond());
-        this.setButton(start);
-        this.backLastMove(start);
-        this.play(start);
+        this.setButton(button);
+        this.backLastMove(button);
+        this.play(button);
         this.setVisible(true);
     }
 
@@ -112,85 +133,68 @@ public class ChessBoard extends JPanel implements Piece {
         for (ChessPiece piece : StaticPieces.getPieces())
             piece.resetDefauft();
         this.removeAll();
-        this.add(this.timer_1);
-        this.add(this.timer_2);
+        this.add(this.layeredMe);
+        this.add(this.layeredBot);
         this.add(this.back);
+        this.add(this.notificationPanel);
         this.add(StaticPieces.getNotice_1());
         this.add(StaticPieces.getNotice_2());
-        this.pause = true;
     }
 
     public void play(JButton button) {
         StaticPieces.getCloseButton().setClose(this);
         StaticPieces.getCloseButton().setHide(this);
         button.addActionListener(e -> {
-            button.setVisible(false);
-            if (StaticPieces.getTurn() == -1)
-                return;
+            clickPlay(button);
+        });
+    }
 
-            if (StaticPieces.getFirst() == 2) {
-                JOptionPane.showMessageDialog(
-                        null,
-                        (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước", "người đi trước",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+    private void clickPlay(JButton button) {
+        button.setVisible(false);
+        if (StaticPieces.getClock_2().getFullTime() || StaticPieces.getClock_1().getFullTime()) {
+            notificationPanel.Loading("Vui lòng đợi...");
+            int turn = StaticPieces.getTurn();
+            new Thread(() -> {
+                StaticPieces.setNew(button);
+                StaticPieces.setTurn(turn + 1);
+                notificationPanel.setVisible(false);
+            }).start();
+        }
+        if (StaticPieces.getTurn() == -1)
+            return;
+        String message = (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước";
+        showMessage(message);
+    }
 
-                ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/start.png");
-                imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
-                button.setIcon(imageIcon);
-                if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
-                    StaticPieces.getEvent().setMachine();
-                    StaticPieces.getClock_2().resume();
-                    StaticPieces.getNotice_2().startCountdown();
-                } else {
-                    StaticPieces.getNotice_1().startCountdown();
-                    StaticPieces.getClock_1().resume();
-                }
-            }
-            StaticPieces.setFirst(StaticPieces.getTurn() % 2);
-            if (this.pause) {
-                if (StaticPieces.getFirst() == Piece.BLACK) {
-                    StaticPieces.getClock_2().resume();
-                    StaticPieces.getClock_1().stop();
-                    StaticPieces.getNotice_2().startCountdown();
-                } else {
-                    StaticPieces.getClock_1().resume();
-                    StaticPieces.getClock_2().stop();
-                    StaticPieces.getNotice_1().startCountdown();
-                }
-                ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/stop.png");
-                imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
-                button.setIcon(imageIcon);
+    private void showMessage(String message) {
+        notificationPanel.showNotification(message, () -> {
+            if (StaticPieces.getTurn() % 2 == Piece.BLACK) {
+                StaticPieces.getEvent().setMachine();
+                StaticPieces.getClock_2().resume();
+                StaticPieces.getNotice_2().startCountdown();
             } else {
-                StaticPieces.getClock_1().stop();
-                StaticPieces.getClock_2().stop();
-                StaticPieces.changeImage("", 0);
-                StaticPieces.getEvent().hideButton();
-                ImageIcon imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/start.png");
-                imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
-                button.setIcon(imageIcon);
+                StaticPieces.getNotice_1().startCountdown();
+                StaticPieces.getClock_1().resume();
             }
-            this.pause = !this.pause;
         });
     }
 
     public void setButton(JButton button) {
-        button.setSize(90, 32);
-        button.setLocation(PADDING + CELL_SIZE * 4 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
+        this.play = button;
+        this.play.setSize(90, 32);
+        this.play.setLocation(PADDING + CELL_SIZE * 4 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
         ImageIcon imageIcon;
-        imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/stop.png");
-        if (this.pause || StaticPieces.getFirst() == 2)
-            imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/start.png");
+        imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/start.png");
         imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
-        button.setIcon(imageIcon);
-        button.setBorderPainted(false);
+        this.play.setIcon(imageIcon);
+        this.play.setBorderPainted(false);
+
         this.returnButton = new JButton();
         this.returnButton.setSize(35, 35);
         ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/back_.png");
         image = new NewImage().resizeImage(image, 35, 35);
         this.returnButton.setIcon(image);
         this.returnButton.setLocation(CELL_SIZE / 2, CELL_SIZE / 2);
-        this.returnButton.setRolloverEnabled(false);
         this.returnButton.setBorderPainted(false);
         this.returnButton.setContentAreaFilled(false);
 
@@ -200,8 +204,7 @@ public class ChessBoard extends JPanel implements Piece {
         image = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/surrender.png");
         image = new NewImage().resizeImage(image, 76, 30);
         this.surrender.setIcon(image);
-        this.surrender.setLocation(CELL_SIZE + 62, 3 * CELL_SIZE + 320);
-//        this.surrender.setRolloverEnabled(false);
+        this.surrender.setLocation(CELL_SIZE + 62, 3 * CELL_SIZE + 270);
         this.surrender.setBorderPainted(false);
         this.surrender.setContentAreaFilled(false);
 
@@ -211,7 +214,7 @@ public class ChessBoard extends JPanel implements Piece {
         this.add(StaticPieces.getNotice_2());
         this.add(StaticPieces.getNotice_1());
 
-        this.add(button);
+        this.add(this.play);
         this.add(this.returnButton);
         this.add(this.surrender);
 
@@ -220,13 +223,19 @@ public class ChessBoard extends JPanel implements Piece {
 
     private void clickSurrender() {
         this.surrender.addActionListener(e -> {
-            this.requestFocus();
-//            JOptionPane.showMessageDialog(
-//                    null,
-//                    "Đen thắng", "Người chơi đầu hàng",
-//                    JOptionPane.INFORMATION_MESSAGE
-//            );
-//            System.exit(0);
+            if (this.play.isVisible())
+                return;
+            notificationPanel.showNotification("Bạn chắc chắn muốn đầu hàng?", new Notification.Handlers() {
+                @Override
+                public void onPositive() {
+                    System.out.println("Đầu hàng");
+                }
+
+                @Override
+                public void onNegative() {
+                    System.out.println("Hủy đầu hàng");
+                }
+            });
         });
     }
 
@@ -268,7 +277,6 @@ public class ChessBoard extends JPanel implements Piece {
         g.setColor(new Color(225, 187, 138));
         g.fillRect(PADDING + Piece.CELL_SIZE / 2 - 13, Piece.CELL_SIZE / 4,
                 9 * Piece.CELL_SIZE + CELL_SIZE / 2 - 8, 11 * Piece.CELL_SIZE - 15);
-//        g.setColor(new Color(248, 9, 9));
         g.setColor(Color.BLACK);
 
         Stroke stroke = new BasicStroke(4.0f);
@@ -339,9 +347,9 @@ public class ChessBoard extends JPanel implements Piece {
         g2d.setStroke(stroke);
         g2d.setColor(Color.BLACK);
 
-        double x = PADDING + Piece.CELL_SIZE / 2 - 13;
+        double x = PADDING + (double) Piece.CELL_SIZE / 2 - 13;
         double y = (double) CELL_SIZE / 4;
-        double width = 9 * Piece.CELL_SIZE + CELL_SIZE / 2 - 8;
+        double width = 9 * Piece.CELL_SIZE + (double) CELL_SIZE / 2 - 8;
         double height = 11 * Piece.CELL_SIZE - 15;
 
         RoundRectangle2D roundedBorder = new RoundRectangle2D.Double(x, y, width, height, 0, 0);
@@ -380,10 +388,6 @@ public class ChessBoard extends JPanel implements Piece {
                 g2.drawLine(cx, cy, cx + xDir * cornerLength, cy); // ngang
                 g2.drawLine(cx, cy, cx, cy + yDir * cornerLength); // dọc
             }
-
-
-            System.out.println("Repainting: PADDING + highlightX: " + PADDING + highlightX + ", highlightY: " + highlightY);
-
             highlightX = -1;
             highlightY = -1;
         }
@@ -393,8 +397,6 @@ public class ChessBoard extends JPanel implements Piece {
         this.back.addActionListener(e -> {
             if (IOFile.isEmpty(System.getProperty("user.dir") + "/resource/file/lastmove.txt"))
                 return;
-            if (StaticPieces.getTurn() == -1)
-                this.pause = true;
             StaticPieces.getEvent().hideButton();
             StaticPieces.getClock_1().stop();
             StaticPieces.getClock_2().stop();
@@ -418,25 +420,57 @@ public class ChessBoard extends JPanel implements Piece {
 
     public void goHome(Home home) {
         returnButton.addActionListener(_ -> {
+            final boolean[] isBack = {false, false};
+            notificationPanel.showNotification("Bạn có chắc chắn muốn về trang chủ?", new Notification.Handlers() {
+                @Override
+                public void onPositive() {
+                    isBack[0] = true;
+                    isBack[1] = true;
+                }
+
+                @Override
+                public void onNegative() {
+                    isBack[1] = true;
+                }
+            });
             new Thread(() -> {
-                if (StaticPieces.getFirst() != 2)
-                    file.IOFile.saveGame();
-                home.setButton();
-                for (ChessPiece piece : StaticPieces.getPieces())
-                    piece.setImage();
-                StaticPieces.getChessBoardPanel().removePieces();
-                StaticPieces.getChessBoardPanel().setVisible(false);
-
-                StaticPieces.getNotice_2().stopCountdown();
-                StaticPieces.getNotice_1().stopCountdown();
-
-                StaticPieces.getCloseButton().setClose(home.getMenu());
-                StaticPieces.getCloseButton().setHide(home.getMenu());
-                home.getMenu().setVisible(true);
-                home.setSize(500, 700);
-                home.setLocationRelativeTo(null);
+                while (!isBack[0] && !isBack[1]) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("isBack[0] = " + isBack[0]);
+                if (isBack[0]) {
+                    backHome(home);
+                }
             }).start();
+
         });
+    }
+
+    private void backHome(Home home) {
+        notificationPanel.Loading("Vui lòng đợi...");
+        StaticPieces.getClock_1().setFullTime(true);
+        StaticPieces.getClock_2().setFullTime(true);
+        if (!this.play.isVisible())
+            file.IOFile.saveGame();
+        home.setButton();
+        for (ChessPiece piece : StaticPieces.getPieces())
+            piece.setImage();
+        StaticPieces.getChessBoardPanel().removePieces();
+        StaticPieces.getChessBoardPanel().setVisible(false);
+
+        StaticPieces.getNotice_2().stopCountdown();
+        StaticPieces.getNotice_1().stopCountdown();
+
+        StaticPieces.getCloseButton().setClose(home.getMenu());
+        StaticPieces.getCloseButton().setHide(home.getMenu());
+        home.getMenu().setVisible(true);
+        home.setSize(500, 700);
+        home.setLocationRelativeTo(null);
+        notificationPanel.setVisible(false);
     }
 
     public void highlight(int x, int y) {
@@ -444,10 +478,6 @@ public class ChessBoard extends JPanel implements Piece {
         highlightY = y + 1;
 
         this.repaint();
-    }
-
-    public Boolean getPause() {
-        return pause;
     }
 }
 
