@@ -29,7 +29,7 @@ public class RoundedImageLabel extends JLabel {
     }
 
     public void startCountdown() {
-        countdown = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
+        countdown = 60;
         System.out.println(countdown);
         timeLeft = countdown;
         showCountdown = true;

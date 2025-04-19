@@ -265,10 +265,11 @@ public class ChessBoard extends JPanel implements Piece {
         g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
 
 
-        g.setColor(Color.white);
-        g.fillRect(PADDING + Piece.CELL_SIZE / 2, Piece.CELL_SIZE / 2, 9 * Piece.CELL_SIZE, 10 * Piece.CELL_SIZE);
-        g.setColor(new Color(248, 9, 9));
-
+        g.setColor(new Color(225, 187, 138));
+        g.fillRect(PADDING + Piece.CELL_SIZE / 2 - 13, Piece.CELL_SIZE / 4,
+                9 * Piece.CELL_SIZE + CELL_SIZE / 2 - 8, 11 * Piece.CELL_SIZE - 15);
+//        g.setColor(new Color(248, 9, 9));
+        g.setColor(Color.BLACK);
 
         Stroke stroke = new BasicStroke(4.0f);
         g2d.setStroke(stroke);
@@ -334,18 +335,16 @@ public class ChessBoard extends JPanel implements Piece {
         g2d.draw(line);
 
         //
-
-        stroke = new BasicStroke(30);
+        stroke = new BasicStroke(5);
         g2d.setStroke(stroke);
-        g2d.setColor(new Color(169, 97, 50)); // màu viền
+        g2d.setColor(Color.BLACK);
 
-        // Tính toán vùng bao quanh bàn cờ
-        double x = PADDING + (double) CELL_SIZE / 2;
-        double y = (double) CELL_SIZE / 2;
-        double width = 9 * CELL_SIZE;
-        double height = 10 * CELL_SIZE;
+        double x = PADDING + Piece.CELL_SIZE / 2 - 13;
+        double y = (double) CELL_SIZE / 4;
+        double width = 9 * Piece.CELL_SIZE + CELL_SIZE / 2 - 8;
+        double height = 11 * Piece.CELL_SIZE - 15;
 
-        RoundRectangle2D roundedBorder = new RoundRectangle2D.Double(x, y, width, height, 30, 30);
+        RoundRectangle2D roundedBorder = new RoundRectangle2D.Double(x, y, width, height, 0, 0);
         g2d.draw(roundedBorder);
 
     }
