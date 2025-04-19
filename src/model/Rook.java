@@ -65,7 +65,7 @@ public class Rook extends ChessPiece {
             }
             if (!check.isEmpty(locateX, i))
                 break;
-            buttonV.elementAt(j).setLocation((PADDING + locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
+            buttonV.elementAt(j).setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
             buttonV.elementAt(j).setVisible(true);
         }
         for (int i = locateY - 1; i >= 0; i--, j++) {
