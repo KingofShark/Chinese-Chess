@@ -29,9 +29,9 @@ public class RoundedImageLabel extends JLabel {
     }
 
     public void startCountdown() {
-        countdown = 60;
-        System.out.println(countdown);
-        timeLeft = countdown;
+        countdown = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
+        timeLeft = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
+        System.out.println("count" + timeLeft);
         showCountdown = true;
         timer.start();
     }
@@ -110,7 +110,7 @@ public class RoundedImageLabel extends JLabel {
                 g2.setColor(Color.RED);
             }
             g2.setStroke(new BasicStroke(9));
-            double angle = 360.0 * timeLeft / countdown;
+            double angle = 360.0 * (timeLeft) / countdown;
             int innerDiameter = diameter - 8; // Giảm 20px để tạo khoảng cách giữa viền và countdown
 
             Arc2D arc = new Arc2D.Double(centerX - innerDiameter / 2, centerY - innerDiameter / 2, innerDiameter, innerDiameter,

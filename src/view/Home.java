@@ -390,7 +390,7 @@ public class Home extends JFrame {
 
     private void chooseTime() {
         this.ten.addActionListener(e -> {
-            StaticPieces.setMinute(1);
+            StaticPieces.setMinute(10);
             StaticPieces.setSecond(0);
 
             IOFile.saveTime(1, 0);

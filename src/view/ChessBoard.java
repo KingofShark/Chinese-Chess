@@ -154,6 +154,8 @@ public class ChessBoard extends JPanel implements Piece {
         if (StaticPieces.getClock_2().getFullTime() || StaticPieces.getClock_1().getFullTime()) {
             notificationPanel.Loading("Vui lòng đợi...");
             int turn = StaticPieces.getTurn();
+
+            System.out.println("turn = " + turn);
             new Thread(() -> {
                 StaticPieces.setNew(button);
                 StaticPieces.setTurn(turn + 1);
@@ -176,13 +178,17 @@ public class ChessBoard extends JPanel implements Piece {
                 StaticPieces.getNotice_1().startCountdown();
                 StaticPieces.getClock_1().resume();
             }
+
+            new Thread(() -> {
+                StaticPieces.getSoundEffect().playSounEffect("start_end");
+            }).start();
         });
     }
 
     public void setButton(JButton button) {
         this.play = button;
         this.play.setSize(90, 32);
-        this.play.setLocation(PADDING + CELL_SIZE * 4 + CELL_SIZE / 2, CELL_SIZE * 5 + CELL_SIZE / 4);
+        this.play.setLocation(PADDING + CELL_SIZE * 4 + CELL_SIZE / 2 - 10, CELL_SIZE * 5 + CELL_SIZE / 4);
         ImageIcon imageIcon;
         imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/start.png");
         imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);
@@ -228,7 +234,12 @@ public class ChessBoard extends JPanel implements Piece {
             notificationPanel.showNotification("Bạn chắc chắn muốn đầu hàng?", new Notification.Handlers() {
                 @Override
                 public void onPositive() {
-                    System.out.println("Đầu hàng");
+                    notificationPanel.showNotification("Bạn thua!", () -> {
+                        setFullTime();
+                        StaticPieces.getClock_1().setFullTime(true);
+                        StaticPieces.getClock_2().stop();
+                    });
+
                 }
 
                 @Override

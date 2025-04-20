@@ -1,6 +1,7 @@
 package view;
 
 import controller.StaticPieces;
+
 import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,12 +13,14 @@ public class CountDown {
     private Boolean fullTime;
     private FullTimeListener listener;
     private JLabel label;
-    public CountDown(){
+
+    public CountDown() {
         this.pause = true;
         this.fullTime = false;
         this.timer = new Timer();
     }
-    public void start(JLabel label, final FullTimeListener listener){
+
+    public void start(JLabel label, final FullTimeListener listener) {
         this.listener = listener;
         this.label = label;
         this.timer.scheduleAtFixedRate(new TimerTask() {
@@ -27,14 +30,16 @@ public class CountDown {
             }
         }, 0, 1000);
     }
-    public void setTime(int minute, int second){
+
+    public void setTime(int minute, int second) {
         this.minute = minute;
-        this.second = second; this.pause = true;
+        this.second = second;
+        this.pause = true;
         this.fullTime = false;
     }
 
-    private void updateTime(){
-        if(!pause && !fullTime&& !StaticPieces.getSetting().getStatus()){
+    private void updateTime() {
+        if (!pause && !fullTime) {
             if (this.minute == 0 && this.second == 0) {
                 this.fullTime = true;
                 listener.onFullTime();
@@ -56,8 +61,11 @@ public class CountDown {
         this.fullTime = fullTime;
     }
 
-    public Boolean getFullTime() { return fullTime;}
-    public void stop(){
+    public Boolean getFullTime() {
+        return fullTime;
+    }
+
+    public void stop() {
         this.pause = true;
         this.minute = StaticPieces.getMinute();
         this.second = StaticPieces.getSecond();
@@ -65,11 +73,18 @@ public class CountDown {
         String temp2 = (this.second < 10) ? "0" : "";
         label.setText(temp1 + this.minute + " : " + temp2 + this.second);
     }
-    public void resume(){
+
+    public void resume() {
         this.pause = false;
     }
-    public int getMinute() {return minute;}
-    public int getSecond() {return second;}
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public int getSecond() {
+        return second;
+    }
 
     public interface FullTimeListener {
         void onFullTime();
