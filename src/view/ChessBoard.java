@@ -155,17 +155,20 @@ public class ChessBoard extends JPanel implements Piece {
             notificationPanel.Loading("Vui lòng đợi...");
             int turn = StaticPieces.getTurn();
 
-            System.out.println("turn = " + turn);
             new Thread(() -> {
                 StaticPieces.setNew(button);
                 StaticPieces.setTurn(turn + 1);
                 notificationPanel.setVisible(false);
+
+                System.out.println("turn = " + StaticPieces.getTurn());
+                String message = (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước";
+                showMessage(message);
             }).start();
+        } else if (StaticPieces.getTurn() != -1) {
+            System.out.println("turn = " + StaticPieces.getTurn());
+            String message = (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước";
+            showMessage(message);
         }
-        if (StaticPieces.getTurn() == -1)
-            return;
-        String message = (StaticPieces.getTurn() % 2 == 1) ? "Đen đi trước" : "Đỏ đi trước";
-        showMessage(message);
     }
 
     private void showMessage(String message) {

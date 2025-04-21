@@ -1,5 +1,6 @@
 package file;
 
+import controller.Constant;
 import model.ChessPiece;
 import controller.StaticPieces;
 import model.Check;
@@ -86,6 +87,41 @@ public class IOFile {
         }
     }
 
+    public static void saveLevel(int level) {
+        int minute = IOFile.getTime().firstElement();
+        int second = IOFile.getTime().lastElement();
+        int newVolume1 = IOFile.getVolume().firstElement();
+        int newVolume2 = IOFile.getVolume().lastElement();
+
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
+            bufferedWriter.write(newVolume1 + " " + newVolume2 + "\n" + minute + " " + second + "\n" + level);
+        } catch (Exception e) {
+            System.out.println("Cannot open file: " + e.getMessage());
+        }
+    }
+
+    public static int getLevel() {
+        int level = 0;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
+            String line = bufferedReader.readLine();
+            if (line == null) {
+                level = Constant.EASY;
+            } else {
+                line = bufferedReader.readLine();
+                if(line != null) {
+                    line  = bufferedReader.readLine();
+                    level = Integer.parseInt(line);
+                    System.out.println("Level: " + level);
+                }else{
+                    level = Constant.EASY;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Read file for level error: " + e.getMessage());
+        }
+        return level;
+    }
+
     public static void saveVolume(int newVolume1, int newVolume2) {
         int minute = IOFile.getTime().firstElement();
         int second = IOFile.getTime().lastElement();
@@ -106,6 +142,7 @@ public class IOFile {
             } else {
                 newVolume.add(Integer.parseInt(line.split(" ")[0]));
                 newVolume.add(Integer.parseInt(line.split(" ")[1]));
+                System.out.println("Volume: " + newVolume.firstElement() + " " + newVolume.lastElement());
             }
         } catch (Exception e) {
             System.out.println("Read file error: " + e.getMessage());
@@ -124,6 +161,7 @@ public class IOFile {
                 if(line != null) {
                     newTime.add(Integer.parseInt(line.split(" ")[0]));
                     newTime.add(Integer.parseInt(line.split(" ")[1]));
+                    System.out.println("Time: " + newTime.firstElement() + " " + newTime.lastElement());
                 }else{
                     newTime.add(1);
                     newTime.add(0);

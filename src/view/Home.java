@@ -1,6 +1,7 @@
 package view;
 
 import constant.Piece;
+import controller.Constant;
 import controller.Notification;
 import controller.StaticPieces;
 import file.IOFile;
@@ -11,6 +12,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.CharsetDecoder;
 import java.util.Objects;
 import java.util.Vector;
 
@@ -30,12 +34,16 @@ public class Home extends JFrame {
     private final JButton fifteen;
     private final JButton twelve;
     private final JButton ten;
+    private final JButton levalButton;
+    private final JButton hardButton;
+    private final JButton easyButton;
     private int level;
 
     public Home() {
         new Thread(() -> {
             StaticPieces.getSoundEffect().playBackgroundMusic();
             StaticPieces.setup();
+            StaticPieces.setLevel(IOFile.getLevel());
             StaticPieces.setMinute(IOFile.getTime().firstElement());
             StaticPieces.setSecond(IOFile.getTime().lastElement());
             StaticPieces.setSecond(0);
@@ -85,6 +93,12 @@ public class Home extends JFrame {
         this.backHome = new JButton();
         this.volume = new JButton();
         this.time = new JButton();
+        this.levalButton = new JButton();
+        this.hardButton = new JButton();
+        this.easyButton = new JButton();
+        this.easyButton.setVisible(false);
+        this.hardButton.setVisible(false);
+        this.levalButton.setVisible(false);
 
         this.menu = new JPanel() {
             @Override
@@ -179,7 +193,7 @@ public class Home extends JFrame {
 
                 StaticPieces.setNew(start);
                 this.menu.setVisible(false);
-                StaticPieces.getSetting().setChessBoard(this, start);
+                StaticPieces.getSetting().setChessBoard();
                 StaticPieces.getChessBoardPanel().goHome(this);
                 notification.setVisible(false);
             }).start();
@@ -195,7 +209,7 @@ public class Home extends JFrame {
             JButton start = new JButton();
 
             StaticPieces.setNewSetting();
-            StaticPieces.getSetting().setChessBoard(this, start);
+            StaticPieces.getSetting().setChessBoard();
             StaticPieces.getChessBoardPanel().setButton(start);
             StaticPieces.getChessBoardPanel().play(start);
             StaticPieces.setEvent();
@@ -218,8 +232,9 @@ public class Home extends JFrame {
 
             volume.setVisible(true);
             backHome.setVisible(true);
-            backHome.setLocation(200, 450);
+            backHome.setLocation(200, 500);
             time.setVisible(true);
+            levalButton.setVisible(true);
         });
     }
 
@@ -240,8 +255,9 @@ public class Home extends JFrame {
         this.time.setBorderPainted(false);
         this.time.setVisible(false);
 
+
         this.backHome.setSize(100, 36);
-        this.backHome.setLocation(200, 450);
+        this.backHome.setLocation(200, 500);
         this.backHome.setName("back2");
         this.backHome.setContentAreaFilled(false);
         this.backHome.setBorderPainted(false);
@@ -268,20 +284,65 @@ public class Home extends JFrame {
         this.ten.setBorderPainted(false);
         this.ten.setVisible(false);
 
+        this.hardButton.setSize(100, 36);
+        this.hardButton.setName("hardButton");
+        this.hardButton.setLocation(200, 350);
+        this.hardButton.setContentAreaFilled(false);
+        this.hardButton.setBorderPainted(false);
+        this.hardButton.setVisible(false);
+
+        this.easyButton.setSize(100, 36);
+        this.easyButton.setLocation(200, 400);
+        this.easyButton.setName("easyButton");
+        this.easyButton.setContentAreaFilled(false);
+        this.easyButton.setBorderPainted(false);
+        this.easyButton.setVisible(false);
+
+
+        this.levalButton.setSize(100, 36);
+        this.levalButton.setLocation(200, 450);
+        this.levalButton.setName("levalButton");
+        this.levalButton.setContentAreaFilled(false);
+        this.levalButton.setBorderPainted(false);
+        this.levalButton.setVisible(false);
+
         this.addHoverEffect(this.volume);
         this.addHoverEffect(this.time);
+        this.addHoverEffect(this.easyButton);
         this.addHoverEffect(this.backHome);
         this.addEffectForButton(this.ten, "1 phút");
         this.addEffectForButton(this.twelve, "2 phút");
         this.addEffectForButton(this.fifteen, "3 phút");
+        this.addEffectForButton(this.levalButton, "Độ khó");
+        this.addEffectForButton(this.hardButton, "Khó");
+        this.addEffectForButton(this.easyButton, "Dễ");
+        this.addEffectForButton(this.levalButton, "Độ khó");
 
         this.menu.add(this.volume);
         this.menu.add(this.time);
         this.menu.add(this.backHome);
 
+        this.menu.add(this.hardButton);
+        this.menu.add(this.easyButton);
+        this.menu.add(this.levalButton);
+
         this.menu.add(this.ten);
         this.menu.add(this.twelve);
         this.menu.add(this.fifteen);
+    }
+
+    private void clickLevel() {
+        this.levalButton.addActionListener(e -> {
+            this.level++;
+            this.quit.setVisible(false);
+            this.volume.setVisible(false);
+            this.backHome.setLocation(200, 450);
+            this.time.setVisible(false);
+
+            this.hardButton.setVisible(true);
+            this.easyButton.setVisible(true);
+            this.backHome.setVisible(true);
+        });
     }
 
     private void addEffectForButton(JButton button, String title) {
@@ -290,7 +351,21 @@ public class Home extends JFrame {
         defaultIcon = new NewImage().resizeImage(defaultIcon, 100, 36);
         hoverIcon = new NewImage().resizeImage(hoverIcon, 100, 36);
 
-        button.setFont(new Font("Tahoma", Font.BOLD, 16));
+        Font font = null;
+        try {
+            font = Font
+                    .createFont(Font.TRUETYPE_FONT, new File(System.getProperty("user.dir") + "/resource/file/arialbd.ttf"))
+                    .deriveFont(Font.BOLD, 17.5f);
+        } catch (FontFormatException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(font);
+
+        button.setFont(font);
         button.setText(title);
         button.setIcon(defaultIcon);
         button.setRolloverIcon(hoverIcon);
@@ -308,6 +383,7 @@ public class Home extends JFrame {
                     backHome.setVisible(false);
                     time.setVisible(false);
                     volume.setVisible(false);
+                    levalButton.setVisible(false);
 
                     newGame.setVisible(true);
                     if (!IOFile.isEmpty(System.getProperty("user.dir") + "/resource/file/old.txt"))
@@ -322,18 +398,23 @@ public class Home extends JFrame {
                     slider_2.setVisible(false);
                     label_2.setVisible(false);
 
-                    backHome.setLocation(200, 450);
+                    backHome.setLocation(200, 500);
                     time.setVisible(true);
                     volume.setVisible(true);
 
                     ten.setVisible(false);
                     twelve.setVisible(false);
                     fifteen.setVisible(false);
+
+                    hardButton.setVisible(false);
+                    easyButton.setVisible(false);
                     level--;
                     break;
             }
         });
     }
+
+
 
     private void setVolume() {
         this.volume.addActionListener(e -> {
@@ -438,6 +519,34 @@ public class Home extends JFrame {
         });
     }
 
+    private void chooseLevel(){
+        this.hardButton.addActionListener(e -> {
+            StaticPieces.setLevel(Constant.HARD);
+            IOFile.saveLevel(Constant.HARD);
+            this.backHome.setLocation(200, 450);
+            this.time.setVisible(true);
+            this.volume.setVisible(true);
+            this.levalButton.setVisible(true);
+
+            this.hardButton.setVisible(false);
+            this.easyButton.setVisible(false);
+            this.level--;
+        });
+
+        this.easyButton.addActionListener(e -> {
+            StaticPieces.setLevel(Constant.EASY);
+            IOFile.saveLevel(Constant.EASY);
+            this.backHome.setLocation(200, 450);
+            this.time.setVisible(true);
+            this.volume.setVisible(true);
+            this.levalButton.setVisible(true);
+
+            this.hardButton.setVisible(false);
+            this.easyButton.setVisible(false);
+            this.level--;
+        });
+    }
+
     private void setEvent() {
         this.setNewGame();
         this.setQuit();
@@ -449,6 +558,8 @@ public class Home extends JFrame {
         this.setVolume();
         this.setTime();
         this.chooseTime();
+        this.clickLevel();
+        this.chooseLevel();
     }
 
     private void closeFrame() {

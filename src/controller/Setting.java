@@ -1,11 +1,9 @@
 package controller;
 
 import constant.Piece;
-import controller.StaticPieces;
 import file.IOFile;
 import image.NewImage;
 import view.ChessBoard;
-import view.Home;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +40,7 @@ public class Setting implements Piece {
         this.label_2.setVisible(false);
     }
 
-    public void setChessBoard(Home home, JButton start) {
+    public void setChessBoard() {
         ChessBoard chessBoard = StaticPieces.getChessBoardPanel();
         chessBoard.add(slider_1);
         chessBoard.add(label_1);
@@ -56,13 +54,10 @@ public class Setting implements Piece {
 
     private void setSetting() {
         this.setting.setSize(50, 50);
-        this.setting.setLocation(Piece.CELL_SIZE * 14, Piece.CELL_SIZE / 2);
+        this.setting.setLocation(Piece.CELL_SIZE * 14, Piece.CELL_SIZE / 2 - 10);
         ImageIcon defaultIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/menu/vol.png");
-//        ImageIcon hoverIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/moved/setting2.png");
         defaultIcon = new NewImage().resizeImage(defaultIcon, 36, 36);
-//        hoverIcon = new NewImage().resizeImage(hoverIcon, 36, 36);
         this.setting.setIcon(defaultIcon);
-//        this.setting.setRolloverIcon(hoverIcon);
         this.setting.setBorderPainted(false);
         this.setting.setContentAreaFilled(false);
         this.setting.setFocusPainted(false);
@@ -72,13 +67,13 @@ public class Setting implements Piece {
     private void clickSetting() {
         this.setting.addActionListener(_ -> {
 
-            this.slider_1.setBounds(Piece.CELL_SIZE * 14, 2 * CELL_SIZE - Piece.CELL_SIZE / 2, 200, 50);
-            this.label_1.setBounds(Piece.CELL_SIZE * 14, CELL_SIZE / 2, 150, 50);
+            this.slider_1.setBounds(Piece.CELL_SIZE * 14 + CELL_SIZE / 2, 2 * CELL_SIZE - Piece.CELL_SIZE / 2 - 10, 200, 50);
+            this.label_1.setBounds(Piece.CELL_SIZE * 14 + CELL_SIZE / 2, CELL_SIZE - 10, 150, 50);
             this.slider_1.setVisible(!status);
             this.label_1.setVisible(!status);
 
-            this.slider_2.setBounds(Piece.CELL_SIZE * 14, 3 * CELL_SIZE - Piece.CELL_SIZE / 2, 200, 50);
-            this.label_2.setBounds(14 * CELL_SIZE, CELL_SIZE, 150, 50);
+            this.slider_2.setBounds(Piece.CELL_SIZE * 14 + CELL_SIZE / 2, 3 * CELL_SIZE - Piece.CELL_SIZE / 2 - 10, 200, 50);
+            this.label_2.setBounds(14 * CELL_SIZE + CELL_SIZE / 2, 2 * CELL_SIZE - 10, 150, 50);
             this.slider_2.setVisible(!status);
             this.label_2.setVisible(!status);
 

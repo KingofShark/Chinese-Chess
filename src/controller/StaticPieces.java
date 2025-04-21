@@ -16,7 +16,7 @@ import java.util.Vector;
 import static constant.Piece.*;
 
 public class StaticPieces {
-    private static int turn, minute, second;
+    private static int turn, minute, second, level;
     private static final RoundedImageLabel notice_1 = new RoundedImageLabel(
             new ImageIcon(System.getProperty("user.dir") + "/resource/image/effect/wait.png"), 30, 30);
     private static final RoundedImageLabel notice_2 = new RoundedImageLabel(
@@ -40,6 +40,14 @@ public class StaticPieces {
     }
     public static void setCheck() {
         StaticPieces.check = new Check();
+    }
+
+    public static int getLevel() {
+        return level;
+    }
+
+    public static void setLevel(int level) {
+        StaticPieces.level = level;
     }
 
     public static void setup() {
