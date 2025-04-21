@@ -582,6 +582,15 @@ public class Event implements Piece {
             Move move = Ai.findBestMove(check, 4, Piece.BLACK, 100000000);
             if (StaticPieces.getClock_2().getFullTime() || StaticPieces.getClock_1().getFullTime())
                 return;
+            if (move == null){
+                StaticPieces.getChessBoardPanel().setFullTime();
+                StaticPieces.getNotice_2().stopCountdown();
+                StaticPieces.getNotice_1().stopCountdown();
+                StaticPieces.getClock_2().stop();
+                StaticPieces.getClock_1().stop();
+                StaticPieces.getChessBoardPanel().getNotificationPanel().showNotification("Hết cờ, Bạn thắng!");
+                return;
+            }
             typeClick = check.getPiece(move.fromX, move.fromY);
 
             if (!check.isEmpty(move.toX, move.toY) && pieces.elementAt(check.getPiece(move.toX, move.toY)).getCOLOR() == Piece.RED) {

@@ -28,6 +28,10 @@ public class ChessBoard extends JPanel implements Piece {
         this.setup();
     }
 
+    public Notification getNotificationPanel() {
+        return notificationPanel;
+    }
+
     private void setup() {
         StaticPieces.getNotice_1().setSize(200, 200);
         StaticPieces.getNotice_2().setSize(200, 200);
@@ -112,7 +116,7 @@ public class ChessBoard extends JPanel implements Piece {
         this.setLayout(null);
     }
 
-    private void setFullTime() {
+    public void setFullTime() {
         ImageIcon imageIcon;
         imageIcon = new ImageIcon(System.getProperty("user.dir") + "/resource/image/replay.png");
         imageIcon = new NewImage().resizeImage(imageIcon, 90, 32);

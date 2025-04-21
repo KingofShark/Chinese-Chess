@@ -401,6 +401,7 @@ public class Home extends JFrame {
                     backHome.setLocation(200, 500);
                     time.setVisible(true);
                     volume.setVisible(true);
+                    levalButton.setVisible(true);
 
                     ten.setVisible(false);
                     twelve.setVisible(false);
@@ -432,6 +433,7 @@ public class Home extends JFrame {
             this.volume.setVisible(false);
             this.backHome.setLocation(200, 500);
             this.time.setVisible(false);
+            this.levalButton.setVisible(false);
 
             this.slider_1.setBounds(150, 350, 200, 50);
             this.label_1.setBounds(150, 320, 150, 50);
@@ -462,6 +464,7 @@ public class Home extends JFrame {
             this.volume.setVisible(false);
             this.backHome.setLocation(200, 500);
             this.time.setVisible(false);
+            this.levalButton.setVisible(false);
 
             this.ten.setVisible(true);
             this.twelve.setVisible(true);
