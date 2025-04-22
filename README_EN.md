@@ -145,5 +145,5 @@ For questions or support, please open an issue on GitHub or contact via email: t
 
 ---
 
-**Author**: Trương Văn Minh\
+**Author**: Trương Văn Minh, Trịnh Mạnh Quang, Đặng Quốc Hiếu\
 **Repository**: https://github.com/Mr-1504/Chinese-Chess
