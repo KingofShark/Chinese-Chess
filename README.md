@@ -145,5 +145,5 @@ Nếu bạn có câu hỏi hoặc cần hỗ trợ, hãy mở một issue trên 
 
 ---
 
-**Tác giả**: Trương Văn Minh\
+**Tác giả**: Trương Văn Minh, Trịnh Mạnh Quang, Đặng Quốc Hiếu\
 **Repository**: https://github.com/Mr-1504/Chinese-Chess
