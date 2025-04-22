@@ -2,6 +2,7 @@ package controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Notification extends JPanel {
     private final JLabel notificationLabel;
@@ -41,6 +42,9 @@ public class Notification extends JPanel {
 
 
     private void clickCloseButton() {
+        for (ActionListener al : negativeButton.getActionListeners()) {
+            negativeButton.removeActionListener(al);
+        }
         negativeButton.addActionListener(e -> {
             this.setVisible(false);
         });
@@ -52,6 +56,11 @@ public class Notification extends JPanel {
         notificationLabel.setText(message);
         this.setVisible(true);
 
+
+        for (ActionListener al : positiveButton.getActionListeners()) {
+            positiveButton.removeActionListener(al);
+        }
+
         positiveButton.addActionListener(_ -> this.setVisible(false));
     }
 
@@ -60,6 +69,14 @@ public class Notification extends JPanel {
         negativeButton.setVisible(true);
         positiveButton.setVisible(true);
         this.setVisible(true);
+
+        for (ActionListener al : negativeButton.getActionListeners()) {
+            negativeButton.removeActionListener(al);
+        }
+        for (ActionListener al : positiveButton.getActionListeners()) {
+            positiveButton.removeActionListener(al);
+        }
+
         negativeButton.addActionListener(e -> {
             handler.onNegative();
             this.setVisible(false);
@@ -77,6 +94,11 @@ public class Notification extends JPanel {
         positiveButton.setVisible(true);
         this.setVisible(true);
 
+
+        for (ActionListener al : positiveButton.getActionListeners()) {
+            positiveButton.removeActionListener(al);
+        }
+
         positiveButton.addActionListener(e -> {
             handler.onProcess();
             this.setVisible(false);
@@ -90,7 +112,7 @@ public class Notification extends JPanel {
         this.setVisible(true);
     }
 
-    public static interface Handlers {
+    public interface Handlers {
         void onPositive();
         void onNegative();
     }

@@ -83,7 +83,7 @@ public class Ai {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
-                    ChessPiece p = StaticPieces.getPieces().elementAt(piece);
+                    ChessPiece p = GameController.getPieces().elementAt(piece);
                     int sign = (p.getCOLOR() == Piece.BLACK ? 1 : -1);
                     score += sign * pieceValues[piece][phaseIdx];
 
@@ -171,7 +171,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player) {
                     if (piece == Piece.BLACK_LEFT_KNIGHT || piece == Piece.BLACK_RIGHT_KNIGHT) {
                         if (y > 1) score += 20;
                     } else if (piece == Piece.RED_LEFT_KNIGHT || piece == Piece.RED_RIGHT_KNIGHT) {
@@ -192,11 +192,11 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player) {
                     for (int ox = 0; ox < 9; ox++) {
                         for (int oy = 0; oy < 10; oy++) {
                             int opiece = board.getPiece(ox, oy);
-                            if (opiece >= 0 && StaticPieces.getPieces().elementAt(opiece).getCOLOR() == opponent) {
+                            if (opiece >= 0 && GameController.getPieces().elementAt(opiece).getCOLOR() == opponent) {
                                 List<Move> oppMoves = getValidMoves(ox, oy, opiece, board);
                                 for (Move m : oppMoves) {
                                     if (m.toX == x && m.toY == y) {
@@ -230,7 +230,7 @@ public class Ai {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
-                    ChessPiece p = StaticPieces.getPieces().elementAt(piece);
+                    ChessPiece p = GameController.getPieces().elementAt(piece);
                     if (p.getCOLOR() == player && p.checkMate()) {
                         return true;
                     }
@@ -253,7 +253,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player &&
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player &&
                         (piece == Piece.BLACK_GENERAL || piece == Piece.RED_GENERAL)) {
                     kingX = x;
                     kingY = y;
@@ -267,7 +267,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == opponent) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == opponent) {
                     List<Move> moves = getValidMoves(x, y, piece, board);
                     for (Move move : moves) {
                         if (move.toX == kingX && move.toY == kingY) return true;
@@ -287,7 +287,7 @@ public class Ai {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
-                    ChessPiece p = StaticPieces.getPieces().elementAt(piece);
+                    ChessPiece p = GameController.getPieces().elementAt(piece);
                     if (p.getCOLOR() == player) {
                         if (p.getTYPE() >= Piece.RED_PAWN_0 && p.getTYPE() <= Piece.RED_PAWN_4) {
                             if (y <= 4) score -= 100;
@@ -311,8 +311,8 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player) {
-                    ChessPiece p = StaticPieces.getPieces().elementAt(piece);
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player) {
+                    ChessPiece p = GameController.getPieces().elementAt(piece);
                     // Reward Rook and Cannon on same file
                     if (p.getTYPE() == Piece.BLACK_LEFT_ROOK || p.getTYPE() == Piece.BLACK_RIGHT_ROOK) {
                         for (int ny = 0; ny < 10; ny++) {
@@ -361,7 +361,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player &&
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player &&
                         (piece == Piece.BLACK_GENERAL || piece == Piece.RED_GENERAL)) {
                     kingX = x;
                     kingY = y;
@@ -376,7 +376,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == opponent &&
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == opponent &&
                         (piece == Piece.RED_LEFT_ROOK || piece == Piece.RED_RIGHT_ROOK ||
                                 piece == Piece.BLACK_LEFT_ROOK || piece == Piece.BLACK_RIGHT_ROOK ||
                                 piece == Piece.RED_LEFT_CANNON || piece == Piece.RED_RIGHT_CANNON ||
@@ -402,7 +402,7 @@ public class Ai {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
-                    ChessPiece p = StaticPieces.getPieces().elementAt(piece);
+                    ChessPiece p = GameController.getPieces().elementAt(piece);
                     if (p.getCOLOR() == player) {
                         if (p.getTYPE() == Piece.BLACK_LEFT_KNIGHT || p.getTYPE() == Piece.BLACK_RIGHT_KNIGHT) {
                             if ((x == 2 && y == 2) || (x == 6 && y == 2)) {
@@ -448,7 +448,7 @@ public class Ai {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
                 if (piece >= 0) {
-                    ChessPiece p = StaticPieces.getPieces().elementAt(piece);
+                    ChessPiece p = GameController.getPieces().elementAt(piece);
                     if (p.getCOLOR() == player && (p.getTYPE() == Piece.BLACK_GENERAL || p.getTYPE() == Piece.RED_GENERAL)) {
                         if (player == Piece.BLACK && y > 2) score += 50;
                         else if (player == Piece.RED && y < 7) score -= 50;
@@ -560,7 +560,7 @@ public class Ai {
      * Enhanced minimax with PVS
      */
     public static int minimax(Check board, int depth, int alpha, int beta, int player, boolean isMaximizing, List<Check> history) {
-        if (StaticPieces.getClock_2().getFullTime() || StaticPieces.getClock_1().getFullTime()) {
+        if (GameController.getClock_2().isFullTime() || GameController.getClock_1().isFullTime()) {
             return 0;
         }
         long zobristKey = board.getZobristKey();
@@ -748,7 +748,7 @@ public class Ai {
         List<Move> developmentMoves = new ArrayList<>();
         List<Move> others = new ArrayList<>();
         int player = moves.isEmpty() ? Piece.BLACK :
-                StaticPieces.getPieces().elementAt(board.getPiece(moves.get(0).fromX, moves.get(0).fromY)).getCOLOR();
+                GameController.getPieces().elementAt(board.getPiece(moves.get(0).fromX, moves.get(0).fromY)).getCOLOR();
 
         // Add killer moves
         for (int i = 0; i < 4; i++) {
@@ -892,7 +892,7 @@ public class Ai {
         for (int ox = 0; ox < 9; ox++) {
             for (int oy = 0; oy < 10; oy++) {
                 int piece = board.getPiece(ox, oy);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == opponent) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == opponent) {
                     List<Move> moves = getValidMoves(ox, oy, piece, board);
                     for (Move m : moves) {
                         if (m.toX == x && m.toY == y) {
@@ -906,12 +906,17 @@ public class Ai {
         return false;
     }
 
+    public static boolean isHasValidMoves(Check board, int player) {
+        List<Move> moves = generateMoves(board, player);
+        return !moves.isEmpty();
+    }
+
     public static List<Move> generateMoves(Check board, int player) {
         List<Move> moves = new ArrayList<>();
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player) {
                     List<Move> pieceMoves = getValidMoves(x, y, piece, board);
                     for (Move move : pieceMoves) {
                         Check tempBoard = board.clone();
@@ -931,7 +936,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player) {
                     List<Move> moves = getValidMoves(x, y, piece, board);
                     for (Move move : moves) {
                         if (board.getPiece(move.toX, move.toY) >= 0) {
@@ -954,7 +959,7 @@ public class Ai {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 10; y++) {
                 int piece = board.getPiece(x, y);
-                if (piece >= 0 && StaticPieces.getPieces().elementAt(piece).getCOLOR() == player) {
+                if (piece >= 0 && GameController.getPieces().elementAt(piece).getCOLOR() == player) {
                     List<Move> moves = getValidMoves(x, y, piece, board);
                     for (Move move : moves) {
                         Check tempBoard = board.clone();
@@ -997,7 +1002,7 @@ public class Ai {
     private static List<Move> addElephantMoves(int x, int y, Check board) {
         List<Move> moves = new ArrayList<>();
         int[][] directions = {{2, 2}, {2, -2}, {-2, 2}, {-2, -2}};
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
         for (int[] dir : directions) {
             int midX = x + dir[0] / 2, midY = y + dir[1] / 2;
@@ -1009,7 +1014,7 @@ public class Ai {
                     && board.isEmpty(midX, midY)) {
                 if (board.isEmpty(newX, newY)) {
                     moves.add(new Move(x, y, newX, newY));
-                } else if (StaticPieces.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
+                } else if (GameController.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
                     moves.add(new Move(x, y, newX, newY));
                 }
             }
@@ -1020,12 +1025,12 @@ public class Ai {
     private static List<Move> addAdvisorMoves(int x, int y, Check board) {
         List<Move> moves = new ArrayList<>();
         int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
         for (int[] dir : directions) {
             int newX = x + dir[0], newY = y + dir[1];
             if (newX >= 3 && newX <= 5 && ((player == Piece.BLACK && newY >= 0 && newY <= 2) || (player == Piece.RED && newY >= 7 && newY <= 9))) {
-                if (board.isEmpty(newX, newY) || StaticPieces.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
+                if (board.isEmpty(newX, newY) || GameController.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
                     moves.add(new Move(x, y, newX, newY));
                 }
             }
@@ -1036,12 +1041,12 @@ public class Ai {
     private static List<Move> addGeneralMoves(int x, int y, Check board) {
         List<Move> moves = new ArrayList<>();
         int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
         for (int[] dir : directions) {
             int newX = x + dir[0], newY = y + dir[1];
             if (newX >= 3 && newX <= 5 && ((player == Piece.BLACK && newY >= 0 && newY <= 2) || (player == Piece.RED && newY >= 7 && newY <= 9))) {
-                if (board.isEmpty(newX, newY) || StaticPieces.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
+                if (board.isEmpty(newX, newY) || GameController.getPieces().elementAt(board.getPiece(newX, newY)).getCOLOR() != player) {
                     moves.add(new Move(x, y, newX, newY));
                 }
             }
@@ -1085,7 +1090,7 @@ public class Ai {
         List<Move> moves = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0};
         int[] dy = {0, 0, -1, 1};
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i], ny = y + dy[i];
@@ -1093,7 +1098,7 @@ public class Ai {
                 if (board.isEmpty(nx, ny)) {
                     moves.add(new Move(x, y, nx, ny));
                 } else {
-                    if (StaticPieces.getPieces().elementAt(board.getPiece(nx, ny)).getCOLOR() != player) {
+                    if (GameController.getPieces().elementAt(board.getPiece(nx, ny)).getCOLOR() != player) {
                         moves.add(new Move(x, y, nx, ny));
                     }
                     break;
@@ -1109,13 +1114,13 @@ public class Ai {
         List<Move> moves = new ArrayList<>();
         int[][] directions = {{-2, -1}, {-2, 1}, {2, -1}, {2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}};
         int[][] blocks = {{-1, 0}, {-1, 0}, {1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, -1}, {0, 1}};
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
         for (int i = 0; i < 8; i++) {
             int nx = x + directions[i][0], ny = y + directions[i][1];
             int bx = x + blocks[i][0], by = y + blocks[i][1];
             if (nx >= 0 && nx < 9 && ny >= 0 && ny < 10 && board.isEmpty(bx, by)) {
-                if (board.isEmpty(nx, ny) || StaticPieces.getPieces().elementAt(board.getPiece(nx, ny)).getCOLOR() != player) {
+                if (board.isEmpty(nx, ny) || GameController.getPieces().elementAt(board.getPiece(nx, ny)).getCOLOR() != player) {
                     moves.add(new Move(x, y, nx, ny));
                 }
             }
@@ -1127,7 +1132,7 @@ public class Ai {
         List<Move> moves = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0};
         int[] dy = {0, 0, -1, 1};
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
 
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i], ny = y + dy[i];
@@ -1141,7 +1146,7 @@ public class Ai {
                     if (!jumped) {
                         jumped = true;
                     } else {
-                        if (StaticPieces.getPieces().elementAt(board.getPiece(nx, ny)).getCOLOR() != player) {
+                        if (GameController.getPieces().elementAt(board.getPiece(nx, ny)).getCOLOR() != player) {
                             moves.add(new Move(x, y, nx, ny));
                         }
                         break;
@@ -1156,21 +1161,21 @@ public class Ai {
 
     private static List<Move> addPawnMoves(int x, int y, Check board) {
         List<Move> moves = new ArrayList<>();
-        int player = StaticPieces.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
+        int player = GameController.getPieces().elementAt(board.getPiece(x, y)).getCOLOR();
         int direction = (player == Piece.BLACK) ? 1 : -1;
         int newY = y + direction;
 
         if (newY >= 0 && newY < 10) {
-            if (board.isEmpty(x, newY) || StaticPieces.getPieces().elementAt(board.getPiece(x, newY)).getCOLOR() != player) {
+            if (board.isEmpty(x, newY) || GameController.getPieces().elementAt(board.getPiece(x, newY)).getCOLOR() != player) {
                 moves.add(new Move(x, y, x, newY));
             }
         }
 
         if ((player == Piece.BLACK && y >= 5) || (player == Piece.RED && y <= 4)) {
-            if (x > 0 && (board.isEmpty(x - 1, y) || StaticPieces.getPieces().elementAt(board.getPiece(x - 1, y)).getCOLOR() != player)) {
+            if (x > 0 && (board.isEmpty(x - 1, y) || GameController.getPieces().elementAt(board.getPiece(x - 1, y)).getCOLOR() != player)) {
                 moves.add(new Move(x, y, x - 1, y));
             }
-            if (x < 8 && (board.isEmpty(x + 1, y) || StaticPieces.getPieces().elementAt(board.getPiece(x + 1, y)).getCOLOR() != player)) {
+            if (x < 8 && (board.isEmpty(x + 1, y) || GameController.getPieces().elementAt(board.getPiece(x + 1, y)).getCOLOR() != player)) {
                 moves.add(new Move(x, y, x + 1, y));
             }
         }
@@ -1194,7 +1199,7 @@ public class Ai {
 
     private static boolean isValidMove(Check board, Move move, int player) {
         int piece = board.getPiece(move.fromX, move.fromY);
-        if (piece < 0 || StaticPieces.getPieces().elementAt(piece).getCOLOR() != player) return false;
+        if (piece < 0 || GameController.getPieces().elementAt(piece).getCOLOR() != player) return false;
         List<Move> validMoves = getValidMoves(move.fromX, move.fromY, piece, board);
         for (Move m : validMoves) {
             if (m.toX == move.toX && m.toY == move.toY) {

@@ -2,7 +2,7 @@ package file;
 
 import controller.Constant;
 import model.ChessPiece;
-import controller.StaticPieces;
+import controller.GameController;
 import model.Check;
 
 import java.io.*;
@@ -21,8 +21,8 @@ public class IOFile {
 
     public static void readGame() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/resource/file/old.txt"))) {
-            Check check = StaticPieces.getCheck();
-            Vector<ChessPiece> pieces = StaticPieces.getPieces();
+            Check check = GameController.getCheck();
+            Vector<ChessPiece> pieces = GameController.getPieces();
             for (int i = 0; i < 10; i++) {
                 String line = bufferedReader.readLine();
                 if (line == null)
@@ -34,7 +34,7 @@ public class IOFile {
                         check.setPiece(j, i, pieceIndex);
                         pieces.elementAt(pieceIndex).setLocate(j, i);
                         pieces.elementAt(pieceIndex).setVisible(true);
-                        StaticPieces.getChessBoardPanel().add(pieces.elementAt(pieceIndex));
+                        GameController.getChessBoardPanel().add(pieces.elementAt(pieceIndex));
                     }
                     if(pieceIndex == 18)
                         System.out.println(pieces.elementAt(pieceIndex));
@@ -47,13 +47,13 @@ public class IOFile {
                 System.out.println();
             }
 
-            StaticPieces.setTurn(Integer.parseInt(bufferedReader.readLine()));
+            GameController.setTurn(Integer.parseInt(bufferedReader.readLine()));
             String[] temp = bufferedReader.readLine().split(" ");
-            StaticPieces.getClock_1().setTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
-            StaticPieces.getChessBoardPanel().setTime(0, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+            GameController.getClock_1().setTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+            GameController.getChessBoardPanel().setTime(0, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
             temp = bufferedReader.readLine().split(" ");
-            StaticPieces.getClock_2().setTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
-            StaticPieces.getChessBoardPanel().setTime(1, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+            GameController.getClock_2().setTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+            GameController.getChessBoardPanel().setTime(1, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
         } catch (Exception e) {
             System.out.println("Read file error: " + e.getMessage());
         }
@@ -62,11 +62,11 @@ public class IOFile {
     public static void saveGame() {
         IOFile.deleteLastMove();
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/old.txt"))) {
-            if(StaticPieces.getTurn() == -1){
+            if(GameController.getTurn() == -1){
                 bufferedWriter.close();
                 return;
             }
-            Check check = StaticPieces.getCheck();
+            Check check = GameController.getCheck();
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 9; j++)
                     bufferedWriter.write(check.getPiece(j, i) + " ");
@@ -78,9 +78,9 @@ public class IOFile {
                 }
                 System.out.println();
             }
-            bufferedWriter.write(StaticPieces.getTurn() + "\n");
-            bufferedWriter.write(StaticPieces.getClock_1().getMinute() + " " + StaticPieces.getClock_1().getSecond() + "\n");
-            bufferedWriter.write(StaticPieces.getClock_2().getMinute() + " " + StaticPieces.getClock_2().getSecond());
+            bufferedWriter.write(GameController.getTurn() + "\n");
+            bufferedWriter.write(GameController.getClock_1().getMinute() + " " + GameController.getClock_1().getSecond() + "\n");
+            bufferedWriter.write(GameController.getClock_2().getMinute() + " " + GameController.getClock_2().getSecond());
             System.out.println("Save Game successfully");
         } catch (Exception e) {
             System.out.println("Cannot open file: " + e.getMessage());
@@ -95,6 +95,7 @@ public class IOFile {
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
             bufferedWriter.write(newVolume1 + " " + newVolume2 + "\n" + minute + " " + second + "\n" + level);
+            System.out.println("save level successfully");
         } catch (Exception e) {
             System.out.println("Cannot open file: " + e.getMessage());
         }
@@ -125,8 +126,9 @@ public class IOFile {
     public static void saveVolume(int newVolume1, int newVolume2) {
         int minute = IOFile.getTime().firstElement();
         int second = IOFile.getTime().lastElement();
+        int level = IOFile.getLevel();
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
-            bufferedWriter.write(newVolume1 + " " + newVolume2 + "\n" + minute + " " + second);
+            bufferedWriter.write(newVolume1 + " " + newVolume2 + "\n" + minute + " " + second + "\n" + level);
         } catch (Exception e) {
             System.out.println("Cannot open file: " + e.getMessage());
         }
@@ -175,8 +177,9 @@ public class IOFile {
     public static void saveTime(int minute, int second){
         int vol1 = IOFile.getVolume().firstElement();
         int vol2 = IOFile.getVolume().lastElement();
+        int level = IOFile.getLevel();
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/resource/file/setting.txt"))) {
-            bufferedWriter.write(vol1 + " " + vol2 + "\n" + minute + " " + second);
+            bufferedWriter.write(vol1 + " " + vol2 + "\n" + minute + " " + second + "\n" + level);
         } catch (Exception e) {
             System.out.println("Cannot open file: " + e.getMessage());
         }

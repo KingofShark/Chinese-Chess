@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -32,8 +32,8 @@ public class Cannon extends ChessPiece {
     @Override
     public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
         int j = 0, i;
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> choose = new Vector<>();
         for (i = locateX + 1; i < 9; i++, j++) {
             if (!check.isEmpty(i, locateY))
@@ -105,8 +105,8 @@ public class Cannon extends ChessPiece {
     @Override
     public Boolean checkMate() {
         int j = 0, i;
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         for (i = locateX + 1; i < 9; i++, j++)
             if (!check.isEmpty(i, locateY))
                 break;

@@ -27,8 +27,8 @@ public class Setting implements Piece {
         this.slider_2.setOpaque(false);
         this.slider_1.setFocusable(false);
         this.slider_2.setFocusable(false);
-        this.slider_1.setUI(new StaticPieces.CustomSliderUI(this.slider_1));
-        this.slider_2.setUI(new StaticPieces.CustomSliderUI(this.slider_2));
+        this.slider_1.setUI(new GameController.CustomSliderUI(this.slider_1));
+        this.slider_2.setUI(new GameController.CustomSliderUI(this.slider_2));
         this.label_1.setFont(new Font("Arial", Font.BOLD, 15));
         this.label_2.setFont(new Font("Arial", Font.BOLD, 15));
         this.status = false;
@@ -41,7 +41,7 @@ public class Setting implements Piece {
     }
 
     public void setChessBoard() {
-        ChessBoard chessBoard = StaticPieces.getChessBoardPanel();
+        ChessBoard chessBoard = GameController.getChessBoardPanel();
         chessBoard.add(slider_1);
         chessBoard.add(label_1);
         chessBoard.add(slider_2);
@@ -61,7 +61,7 @@ public class Setting implements Piece {
         this.setting.setBorderPainted(false);
         this.setting.setContentAreaFilled(false);
         this.setting.setFocusPainted(false);
-        StaticPieces.getChessBoardPanel().add(this.setting);
+        GameController.getChessBoardPanel().add(this.setting);
     }
 
     private void clickSetting() {
@@ -79,12 +79,12 @@ public class Setting implements Piece {
 
             this.slider_1.addChangeListener(_ -> {
                 this.label_1.setText(" Nhạc nền: " + this.slider_1.getValue());
-                StaticPieces.getSoundEffect().setVolumeSoundTrack(this.slider_1.getValue());
+                GameController.getSoundEffect().setVolumeSoundTrack(this.slider_1.getValue());
             });
 
             this.slider_2.addChangeListener(_ -> {
                 this.label_2.setText(" Hiệu ứng: " + this.slider_2.getValue());
-                StaticPieces.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
+                GameController.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
             });
             this.status = !this.status;
         });

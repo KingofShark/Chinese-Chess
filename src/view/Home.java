@@ -3,19 +3,15 @@ package view;
 import constant.Piece;
 import controller.Constant;
 import controller.Notification;
-import controller.StaticPieces;
+import controller.GameController;
 import file.IOFile;
 import image.NewImage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.CharsetDecoder;
-import java.util.Objects;
 import java.util.Vector;
 
 public class Home extends JFrame {
@@ -40,13 +36,14 @@ public class Home extends JFrame {
     private int level;
 
     public Home() {
+        setAlwaysOnTop(false);
         new Thread(() -> {
-            StaticPieces.getSoundEffect().playBackgroundMusic();
-            StaticPieces.setup();
-            StaticPieces.setLevel(IOFile.getLevel());
-            StaticPieces.setMinute(IOFile.getTime().firstElement());
-            StaticPieces.setSecond(IOFile.getTime().lastElement());
-            StaticPieces.setSecond(0);
+            GameController.getSoundEffect().playBackgroundMusic();
+            GameController.setup();
+            GameController.setLevel(IOFile.getLevel());
+            GameController.setMinute(IOFile.getTime().firstElement());
+            GameController.setSecond(IOFile.getTime().lastElement());
+            GameController.setSecond(0);
         }).start();
 
         ImageIcon logo = new ImageIcon(System.getProperty("user.dir") + "/resource/image/logo.jpg");
@@ -72,8 +69,8 @@ public class Home extends JFrame {
         this.slider_2.setOpaque(false);
         this.slider_1.setFocusable(false);
         this.slider_2.setFocusable(false);
-        this.slider_1.setUI(new StaticPieces.CustomSliderUI(this.slider_1));
-        this.slider_2.setUI(new StaticPieces.CustomSliderUI(this.slider_2));
+        this.slider_1.setUI(new GameController.CustomSliderUI(this.slider_1));
+        this.slider_2.setUI(new GameController.CustomSliderUI(this.slider_2));
         this.label_1.setFont(new Font("Arial", Font.BOLD, 15));
         this.label_2.setFont(new Font("Arial", Font.BOLD, 15));
 
@@ -119,8 +116,8 @@ public class Home extends JFrame {
 
         this.setSettingHome();
         this.setButton();
-        StaticPieces.getCloseButton().setClose(this.menu);
-        StaticPieces.getCloseButton().setHide(this.menu);
+        GameController.getCloseButton().setClose(this.menu);
+        GameController.getCloseButton().setHide(this.menu);
 
         this.menu.add(this.newGame);
         this.menu.add(this.oldGame);
@@ -130,8 +127,8 @@ public class Home extends JFrame {
         JLabel label = new JLabel();
         label.setText("Cờ Tướng");
         label.setFont((new Font(Font.SANS_SERIF, Font.PLAIN, 30)));
-        this.add(StaticPieces.getChessBoardPanel());
-        StaticPieces.getChessBoardPanel().setVisible(false);
+        this.add(GameController.getChessBoardPanel());
+        GameController.getChessBoardPanel().setVisible(false);
         this.menu.add(label);
         this.add(this.menu);
         this.setVisible(true);
@@ -175,6 +172,17 @@ public class Home extends JFrame {
         button.setBorderPainted(false);
     }
 
+    private void configButton(JButton button, String name, int x, int y) {
+        button.setSize(100, 36);
+        button.setName(name);
+        button.setLocation(x, y);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setVisible(false);
+        this.addHoverEffect(button);
+    }
+
+
     public void setButton() {
         this.setOption(this.newGame);
         this.setOption(this.oldGame);
@@ -191,10 +199,10 @@ public class Home extends JFrame {
                 this.setLocationRelativeTo(null);
                 JButton start = new JButton();
 
-                StaticPieces.setNew(start);
+                GameController.setNew(start);
                 this.menu.setVisible(false);
-                StaticPieces.getSetting().setChessBoard();
-                StaticPieces.getChessBoardPanel().goHome(this);
+                GameController.getSetting().setChessBoard();
+                GameController.getChessBoardPanel().goHome(this);
                 notification.setVisible(false);
             }).start();
         });
@@ -208,18 +216,17 @@ public class Home extends JFrame {
             IOFile.readGame();
             JButton start = new JButton();
 
-            StaticPieces.setNewSetting();
-            StaticPieces.getSetting().setChessBoard();
-            StaticPieces.getChessBoardPanel().setButton(start);
-            StaticPieces.getChessBoardPanel().play(start);
-            StaticPieces.setEvent();
-            StaticPieces.getChessBoardPanel().setVisible(true);
-            StaticPieces.getChessBoardPanel().goHome(this);
+            GameController.setNewSetting();
+            GameController.getSetting().setChessBoard();
+            GameController.getChessBoardPanel().setButton(start);
+            GameController.setEvent();
+            GameController.getChessBoardPanel().setVisible(true);
+            GameController.getChessBoardPanel().goHome(this);
         }).start());
     }
 
     private void setQuit() {
-        this.quit.addActionListener(e -> StaticPieces.confirmQuit(this));
+        this.quit.addActionListener(e -> GameController.confirmQuit(this));
     }
 
     private void setClickSetting() {
@@ -446,12 +453,12 @@ public class Home extends JFrame {
             this.label_2.setVisible(true);
             this.slider_1.addChangeListener(e1 -> {
                 this.label_1.setText(" Nhạc nền: " + this.slider_1.getValue());
-                StaticPieces.getSoundEffect().setVolumeSoundTrack(this.slider_1.getValue());
+                GameController.getSoundEffect().setVolumeSoundTrack(this.slider_1.getValue());
             });
 
             this.slider_2.addChangeListener(e1 -> {
                 this.label_2.setText(" Hiệu ứng: " + this.slider_2.getValue());
-                StaticPieces.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
+                GameController.getSoundEffect().setVolumeSoundEffect(this.slider_2.getValue());
             });
         });
     }
@@ -474,8 +481,8 @@ public class Home extends JFrame {
 
     private void chooseTime() {
         this.ten.addActionListener(e -> {
-            StaticPieces.setMinute(10);
-            StaticPieces.setSecond(0);
+            GameController.setMinute(10);
+            GameController.setSecond(0);
 
             IOFile.saveTime(1, 0);
 
@@ -490,8 +497,8 @@ public class Home extends JFrame {
         });
 
         this.twelve.addActionListener(e -> {
-            StaticPieces.setMinute(2);
-            StaticPieces.setSecond(0);
+            GameController.setMinute(2);
+            GameController.setSecond(0);
 
             IOFile.saveTime(2, 0);
 
@@ -506,8 +513,8 @@ public class Home extends JFrame {
         });
 
         this.fifteen.addActionListener(e -> {
-            StaticPieces.setMinute(3);
-            StaticPieces.setSecond(0);
+            GameController.setMinute(3);
+            GameController.setSecond(0);
 
             IOFile.saveTime(3, 0);
 
@@ -524,7 +531,7 @@ public class Home extends JFrame {
 
     private void chooseLevel(){
         this.hardButton.addActionListener(e -> {
-            StaticPieces.setLevel(Constant.HARD);
+            GameController.setLevel(Constant.HARD);
             IOFile.saveLevel(Constant.HARD);
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
@@ -537,7 +544,7 @@ public class Home extends JFrame {
         });
 
         this.easyButton.addActionListener(e -> {
-            StaticPieces.setLevel(Constant.EASY);
+            GameController.setLevel(Constant.EASY);
             IOFile.saveLevel(Constant.EASY);
             this.backHome.setLocation(200, 450);
             this.time.setVisible(true);
@@ -566,11 +573,11 @@ public class Home extends JFrame {
     }
 
     private void closeFrame() {
-        StaticPieces.getCloseButton().getClose().addActionListener(e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
+        GameController.getCloseButton().getClose().addActionListener(e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
     }
 
     private void hideFrame() {
-        StaticPieces.getCloseButton().getHide().addActionListener(e -> this.setState(JFrame.ICONIFIED));
+        GameController.getCloseButton().getHide().addActionListener(e -> this.setState(JFrame.ICONIFIED));
     }
 
     public JPanel getMenu() {

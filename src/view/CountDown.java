@@ -1,6 +1,6 @@
 package view;
 
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Timer;
@@ -26,6 +26,7 @@ public class CountDown {
         this.timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                System.out.println("minute: " + minute + " second: " + second);
                 updateTime();
             }
         }, 0, 1000);
@@ -61,14 +62,14 @@ public class CountDown {
         this.fullTime = fullTime;
     }
 
-    public Boolean getFullTime() {
+    public Boolean isFullTime() {
         return fullTime;
     }
 
     public void stop() {
         this.pause = true;
-        this.minute = StaticPieces.getMinute();
-        this.second = StaticPieces.getSecond();
+        this.minute = GameController.getMinute();
+        this.second = GameController.getSecond();
         String temp1 = (this.minute < 10) ? "0" : "";
         String temp2 = (this.second < 10) ? "0" : "";
         label.setText(temp1 + this.minute + " : " + temp2 + this.second);

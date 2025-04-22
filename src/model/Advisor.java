@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -31,8 +31,8 @@ public class Advisor extends ChessPiece {
 
     @Override
     public Vector<Integer> choosePiecePosition(JButton top, JButton right, JButton bottom, JButton left) {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> choose = new Vector<>();
         int _top = (_COLOR_ == BLACK) ? 0 : 7;
         int _down = (_COLOR_ == BLACK) ? 2 : 9;

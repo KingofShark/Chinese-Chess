@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -76,8 +76,8 @@ public class Pawn extends ChessPiece {
 //        Sau khi đã qua Sông, Tốt có thể di chuyển cả 2 chiều ngang và dọc.
 //        Tốt chỉ di chuyển mỗi lần 1 ô và chỉ tiến lên không được lùi lại.
 //        Quy tắc đặc biệt: Tốt không có quyền đi ngược lại .
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> choose = new Vector<>();
         if (_COLOR_ == RED && locateY > 0 && check.isEmpty(locateX, locateY - 1)) {
             top.setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
@@ -116,8 +116,8 @@ public class Pawn extends ChessPiece {
 
     @Override
     public Boolean checkMate() {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         if (_COLOR_ == RED && locateY > 0 && (check.getPiece(locateX, locateY - 1) == 0 || check.getPiece(locateX, locateY - 1) == 1) && pieces.elementAt(check.getPiece(locateX, locateY - 1))._COLOR_ != this._COLOR_)
             return true;
         if (_COLOR_ == BLACK && locateY < 9 && (check.getPiece(locateX, locateY + 1) == 0 || check.getPiece(locateX, locateY + 1) == 1) && pieces.elementAt(check.getPiece(locateX, locateY + 1))._COLOR_ != this._COLOR_)

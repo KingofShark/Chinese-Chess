@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -31,8 +31,8 @@ public class Rook extends ChessPiece {
 
     @Override
     public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         int j = 0;
         System.out.println("X: " + locateX + " Y: " + locateY);
         Vector<Integer> choose = new Vector<>();
@@ -83,8 +83,8 @@ public class Rook extends ChessPiece {
 
     @Override
     public Boolean checkMate() {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         for (int i = locateX + 1; i < 9; i++)
             if ((check.getPiece(i, locateY) == 0 || check.getPiece(i, locateY) == 1) && pieces.elementAt(check.getPiece(i, locateY))._COLOR_ != this._COLOR_) {
                 return true;

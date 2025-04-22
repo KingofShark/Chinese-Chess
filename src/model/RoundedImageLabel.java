@@ -1,6 +1,6 @@
 package model;
 
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,27 +10,30 @@ import java.awt.image.BufferedImage;
 
 public class RoundedImageLabel extends JLabel {
     private final BufferedImage image;
-    int countdown; // số giây đếm ngược
+    int countdown;
     int timeLeft = countdown;
     private final Timer timer;
     private boolean showCountdown = false;
 
-    public RoundedImageLabel(ImageIcon icon, int arcW, int arcH) {
+    public RoundedImageLabel(ImageIcon icon) {
         this.image = toBufferedImage(icon.getImage());
-        countdown = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
+        countdown = GameController.getMinute() * 60 + GameController.getSecond();
         timer = new Timer(1000, e -> {
             timeLeft--;
             repaint();
-            if (timeLeft <= 0) {
+            if (timeLeft <= 0 || GameController.getClock_1().isFullTime() || GameController.getClock_2().isFullTime()) {
                 ((Timer) e.getSource()).stop();
+                showCountdown = false;
+                timeLeft = countdown;
+                repaint();
             }
         });
         setOpaque(false);
     }
 
     public void startCountdown() {
-        countdown = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
-        timeLeft = StaticPieces.getMinute() * 60 + StaticPieces.getSecond();
+        countdown = GameController.getMinute() * 60 + GameController.getSecond();
+        timeLeft = GameController.getMinute() * 60 + GameController.getSecond();
         System.out.println("count" + timeLeft);
         showCountdown = true;
         timer.start();
@@ -66,6 +69,15 @@ public class RoundedImageLabel extends JLabel {
         this.showCountdown = false;
 
         this.repaint();
+    }
+
+    public void resetCountdown() {
+        timer.stop();
+        showCountdown = false;
+        countdown = GameController.getMinute() * 60 + GameController.getSecond();
+        timeLeft = countdown;
+        repaint();
+        System.out.println("Countdown reset");
     }
 
 

@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -32,8 +32,8 @@ public class Knight extends ChessPiece {
     @Override
     public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
         Vector<Integer> choose = new Vector<>();
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         if (locateY > 0 && locateX - 1 > 0 && check.isEmpty(locateX - 1, locateY) && check.isEmpty(locateX - 2, locateY - 1)) {
             buttonH.firstElement().setLocation(PADDING + (locateX - 1) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
             buttonH.firstElement().setVisible(true);//tl21
@@ -103,8 +103,8 @@ public class Knight extends ChessPiece {
 
     @Override
     public Boolean checkMate() {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         if (locateY < 8 && locateX < 8 && (check.getPiece(locateX + 1, locateY + 2) == 0 || check.getPiece(locateX + 1, locateY + 2) == 1) && pieces.elementAt(check.getPiece(locateX + 1, locateY + 2))._COLOR_ != this._COLOR_)
             return true;
         if (locateY < 8 && locateX > 0 && (check.getPiece(locateX - 1, locateY + 2) == 0 || check.getPiece(locateX - 1, locateY + 2) == 1) && pieces.elementAt(check.getPiece(locateX - 1, locateY + 2))._COLOR_ != this._COLOR_)

@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -35,8 +35,8 @@ public class Elephant extends ChessPiece {
 //        Tượng: Đi chéo 2 ô (ngang 2 và dọc 2) cho mỗi nước đi.
 //        Tượng chỉ được phép ở một bên của bàn cờ, không được di chuyển sang nữa bàn cờ của đối phương.
 //        Nước đi của tượng sẽ không hợp lệ khi có một quân cờ nằm chặn giữa đường đi.
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> chooses = new Vector<>();
         if((_COLOR_ == BLACK)){
             if (locateY - 1 > 0 && locateX - 1 > 0 && check.isEmpty(locateX - 2, locateY - 2) && check.isEmpty(locateX - 1, locateY - 1)) {
