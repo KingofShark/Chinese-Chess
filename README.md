@@ -14,9 +14,9 @@ Chinese Chess (Cờ Tướng) là một trò chơi chiến lược hai người 
 
 ## Yêu cầu hệ thống
 - **Hệ điều hành**: Windows, macOS, hoặc Linux.
-- **Java**: Java Development Kit (JDK) phiên bản 8 hoặc cao hơn.
+- **Java**: Java Development Kit (JDK) phiên bản 22.0.1 hoặc cao hơn.
 - **RAM**: Tối thiểu 512MB.
-- **Dung lượng đĩa**: Khoảng 50MB cho mã nguồn và tài nguyên.
+- **Dung lượng đĩa**: Khoảng 200MB cho mã nguồn và tài nguyên.
 
 ## Hướng dẫn cài đặt
 
@@ -95,7 +95,7 @@ Chi tiết luật chơi có thể tham khảo tại [Xiangqi Rules](https://en.w
 
 ### 4. Lưu và tải trò chơi
 - **Lưu trò chơi**: Khi quay về trang chủ trong lúc ván đang diễn ra, trò chơi sẽ tự động được lưu.
-- **Tải trò chơi**: Từ menu chính, chọn "Tiếp tục" để tải ván đã lưu.
+- **Tải trò chơi**: Từ menu chính, chọn "Game trước" để tải ván đã lưu.
 
 ## Cấu trúc dự án
 - **`src/controller`**: Chứa các lớp điều khiển trò chơi (`GameController`, `Notification`).
