@@ -5,7 +5,7 @@
 Chinese Chess (Cờ Tướng) là một trò chơi chiến lược hai người truyền thống của Trung Quốc, được tái hiện trong dự án này dưới dạng một ứng dụng Java. Trò chơi cung cấp giao diện trực quan, hỗ trợ chơi đơn (chống lại máy) hoặc chơi đôi (hai người), cùng với các tính năng như đếm ngược thời gian, lưu trò chơi, và đầu hàng. Dự án được phát triển với mục tiêu mang lại trải nghiệm chơi Cờ Tướng mượt mà và hấp dẫn.
 
 ## Tính năng
-- **Chế độ chơi**: Chơi với máy hoặc chơi với người khác.
+- **Chế độ chơi**: Chơi với máy hoặc chơi với người khác (đang phát triển).
 - **Đếm ngược thời gian**: Mỗi người chơi có thời gian giới hạn cho lượt đi, được hiển thị bằng thanh đếm ngược trực quan.
 - **Giao diện thân thiện**: Bàn cờ và quân cờ được thiết kế rõ ràng, dễ thao tác.
 - **Lưu và tải trò chơi**: Lưu trạng thái trò chơi để tiếp tục chơi sau.
