@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -24,15 +24,15 @@ public class Rook extends ChessPiece {
         super.resetDefauft();
         locateX = (POSITION == Piece.RIGHT) ? 8 : 0;
         locateY = (_COLOR_ == BLACK) ? 0 : 9;
-        int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int x = PADDING + (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         int y = (locateY + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
     }
 
     @Override
     public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         int j = 0;
         System.out.println("X: " + locateX + " Y: " + locateY);
         Vector<Integer> choose = new Vector<>();
@@ -43,7 +43,7 @@ public class Rook extends ChessPiece {
             }
             if (!check.isEmpty(i, locateY))
                 break;
-            buttonH.elementAt(j).setLocation((i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
+            buttonH.elementAt(j).setLocation(PADDING + (i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
             buttonH.elementAt(j).setVisible(true);
 
         }
@@ -54,7 +54,7 @@ public class Rook extends ChessPiece {
             }
             if (!check.isEmpty(i, locateY))
                 break;
-            buttonH.elementAt(j).setLocation((i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
+            buttonH.elementAt(j).setLocation(PADDING + (i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
             buttonH.elementAt(j).setVisible(true);
         }
         j = 0;
@@ -65,7 +65,7 @@ public class Rook extends ChessPiece {
             }
             if (!check.isEmpty(locateX, i))
                 break;
-            buttonV.elementAt(j).setLocation((locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
+            buttonV.elementAt(j).setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
             buttonV.elementAt(j).setVisible(true);
         }
         for (int i = locateY - 1; i >= 0; i--, j++) {
@@ -75,7 +75,7 @@ public class Rook extends ChessPiece {
             }
             if (!check.isEmpty(locateX, i))
                 break;
-            buttonV.elementAt(j).setLocation((locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
+            buttonV.elementAt(j).setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
             buttonV.elementAt(j).setVisible(true);
         }
         return choose;
@@ -83,8 +83,8 @@ public class Rook extends ChessPiece {
 
     @Override
     public Boolean checkMate() {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         for (int i = locateX + 1; i < 9; i++)
             if ((check.getPiece(i, locateY) == 0 || check.getPiece(i, locateY) == 1) && pieces.elementAt(check.getPiece(i, locateY))._COLOR_ != this._COLOR_) {
                 return true;
@@ -110,7 +110,7 @@ public class Rook extends ChessPiece {
 
     @Override
     public void updateLocate(JButton button) {
-        locateX = (button.getX() + RADIUS) / CELL_SIZE - 1;
+        locateX = (button.getX() - PADDING + RADIUS) / CELL_SIZE - 1;
         locateY = (button.getY() + RADIUS) / CELL_SIZE - 1;
         System.out.println(_name_ + " update x: " + locateX + ", y: " + locateY);
     }

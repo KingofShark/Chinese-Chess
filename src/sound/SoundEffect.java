@@ -35,6 +35,19 @@ public class SoundEffect {
         }
     }
 
+    public void playSounEffect(String name) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File((System.getProperty("user.dir") + "/resource/sound/" + name + ".wav")));
+            Clip soundEffectMove = AudioSystem.getClip();
+            soundEffectMove.open(audioInputStream);
+            FloatControl volumeMove = (FloatControl) soundEffectMove.getControl(FloatControl.Type.MASTER_GAIN);
+            volumeMove.setValue(this.newVolumeEF);
+            soundEffectMove.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.out.println("Cannot read audio " + name);
+        }
+    }
+
     public void playSoundCheckMate() {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/resource/sound/chieu.wav"));

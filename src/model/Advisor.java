@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -24,33 +24,33 @@ public class Advisor extends ChessPiece {
         super.resetDefauft();
         locateX = (POSITION == Piece.RIGHT) ? 5 : 3;
         locateY = (_COLOR_ == BLACK) ? 0 : 9;
-        int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int x = PADDING + (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         int y = (locateY + 1)* Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         this.setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
     }
 
     @Override
     public Vector<Integer> choosePiecePosition(JButton top, JButton right, JButton bottom, JButton left) {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> choose = new Vector<>();
         int _top = (_COLOR_ == BLACK) ? 0 : 7;
         int _down = (_COLOR_ == BLACK) ? 2 : 9;
         System.out.println("X: " + locateX + ", y: " + locateY);
         if (locateY < _down && locateX < 5 && check.isEmpty(locateX + 1, locateY + 1)) {
-            right.setLocation((locateX + 2) * CELL_SIZE - RADIUS, (locateY + 2) * CELL_SIZE - RADIUS);
+            right.setLocation(PADDING + (locateX + 2) * CELL_SIZE - RADIUS, (locateY + 2) * CELL_SIZE - RADIUS);
             right.setVisible(true);
         }
         if (locateY > _top && locateX < 5 && check.isEmpty(locateX + 1, locateY - 1)) {
-            top.setLocation((locateX + 2) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
+            top.setLocation(PADDING + (locateX + 2) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
             top.setVisible(true);
         }
         if (locateX > 3 && locateY > _top && check.isEmpty(locateX - 1, locateY - 1)) {
-            left.setLocation((locateX) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
+            left.setLocation(PADDING + (locateX) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
             left.setVisible(true);
         }
         if (locateX > 3 && locateY < _down && check.isEmpty(locateX - 1, locateY + 1)) {
-            bottom.setLocation((locateX) * CELL_SIZE - RADIUS, (locateY + 2) * CELL_SIZE - RADIUS);
+            bottom.setLocation(PADDING + (locateX) * CELL_SIZE - RADIUS, (locateY + 2) * CELL_SIZE - RADIUS);
             bottom.setVisible(true);
         }
         if (locateX < 5 && locateY < _down && !check.isEmpty(locateX + 1, locateY + 1) && pieces.elementAt(check.getPiece(locateX + 1, locateY + 1))._COLOR_ != this._COLOR_) {

@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -24,7 +24,7 @@ public class Cannon extends ChessPiece {
         super.resetDefauft();
         this.locateX = (POSITION == Piece.RIGHT) ? 7 : 1;
         this.locateY = (_COLOR_ == BLACK) ? 2 : 7;
-        int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int x = PADDING + (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         int y = (locateY + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         this.setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
     }
@@ -32,13 +32,13 @@ public class Cannon extends ChessPiece {
     @Override
     public Vector<Integer> choosePiecePosition(Vector<JButton> buttonH, Vector<JButton> buttonV) {
         int j = 0, i;
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> choose = new Vector<>();
         for (i = locateX + 1; i < 9; i++, j++) {
             if (!check.isEmpty(i, locateY))
                 break;
-            buttonH.elementAt(j).setLocation((i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
+            buttonH.elementAt(j).setLocation(PADDING + (i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
             buttonH.elementAt(j).setVisible(true);
         }
         for (int k = i + 1; k < 9; k++) {
@@ -54,7 +54,7 @@ public class Cannon extends ChessPiece {
         for (i = locateX - 1; i >= 0; i--, j++) {
             if (!check.isEmpty(i, locateY))
                 break;
-            buttonH.elementAt(j).setLocation((i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
+            buttonH.elementAt(j).setLocation(PADDING + (i + 1) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
             buttonH.elementAt(j).setVisible(true);
         }
         for (int k = i - 1; k >= 0; k--) {
@@ -71,7 +71,7 @@ public class Cannon extends ChessPiece {
         for (i = locateY + 1; i < 10; i++, j++) {
             if (!check.isEmpty(locateX, i))
                 break;
-            buttonV.elementAt(j).setLocation((locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
+            buttonV.elementAt(j).setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
             buttonV.elementAt(j).setVisible(true);
         }
         for (int k = i + 1; k < 10; k++) {
@@ -87,7 +87,7 @@ public class Cannon extends ChessPiece {
         for (i = locateY - 1; i >= 0; i--, j++) {
             if (!check.isEmpty(locateX, i))
                 break;
-            buttonV.elementAt(j).setLocation((locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
+            buttonV.elementAt(j).setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (i + 1) * CELL_SIZE - RADIUS);
             buttonV.elementAt(j).setVisible(true);
         }
         for (int k = i - 1; k >= 0; k--) {
@@ -105,8 +105,8 @@ public class Cannon extends ChessPiece {
     @Override
     public Boolean checkMate() {
         int j = 0, i;
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         for (i = locateX + 1; i < 9; i++, j++)
             if (!check.isEmpty(i, locateY))
                 break;
@@ -155,7 +155,7 @@ public class Cannon extends ChessPiece {
 
     @Override
     public void updateLocate(JButton button) {
-        locateX = (button.getX() + RADIUS) / CELL_SIZE - 1;
+        locateX = (button.getX() - PADDING + RADIUS) / CELL_SIZE - 1;
         locateY = (button.getY() + RADIUS) / CELL_SIZE - 1;
         System.out.println(_name_ + " update x: " + locateX + ", y: " + locateY);
     }

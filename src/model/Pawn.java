@@ -1,7 +1,7 @@
 package model;
 
 import constant.Piece;
-import controller.StaticPieces;
+import controller.GameController;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -64,7 +64,7 @@ public class Pawn extends ChessPiece {
                     locateX = 8;
             }
         }
-        int x = (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
+        int x = PADDING + (locateX + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         int y = (locateY + 1) * Piece.CELL_SIZE - Piece.SIZE_PIECE / 2;
         setBounds(x, y, SIZE_PIECE, SIZE_PIECE);
     }
@@ -76,11 +76,11 @@ public class Pawn extends ChessPiece {
 //        Sau khi đã qua Sông, Tốt có thể di chuyển cả 2 chiều ngang và dọc.
 //        Tốt chỉ di chuyển mỗi lần 1 ô và chỉ tiến lên không được lùi lại.
 //        Quy tắc đặc biệt: Tốt không có quyền đi ngược lại .
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         Vector<Integer> choose = new Vector<>();
         if (_COLOR_ == RED && locateY > 0 && check.isEmpty(locateX, locateY - 1)) {
-            top.setLocation((locateX + 1) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
+            top.setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (locateY) * CELL_SIZE - RADIUS);
             top.setVisible(true);
         }
         if (_COLOR_ == RED && locateY > 0 && !check.isEmpty(locateX, locateY - 1) && pieces.elementAt(check.getPiece(locateX, locateY - 1))._COLOR_ != this._COLOR_) {
@@ -88,7 +88,7 @@ public class Pawn extends ChessPiece {
             pieces.elementAt(check.getPiece(locateX, locateY - 1)).changeImage();
         }
         if (_COLOR_ == BLACK && locateY < 9 && check.isEmpty(locateX, locateY + 1)) {
-            bottom.setLocation((locateX + 1) * CELL_SIZE - RADIUS, (locateY + 2) * CELL_SIZE - RADIUS);
+            bottom.setLocation(PADDING + (locateX + 1) * CELL_SIZE - RADIUS, (locateY + 2) * CELL_SIZE - RADIUS);
             bottom.setVisible(true);
         }
         if (_COLOR_ == BLACK && locateY < 9 && !check.isEmpty(locateX, locateY + 1) && pieces.elementAt(check.getPiece(locateX, locateY + 1))._COLOR_ != this._COLOR_) {
@@ -96,7 +96,7 @@ public class Pawn extends ChessPiece {
             pieces.elementAt(check.getPiece(locateX, locateY + 1)).changeImage();
         }
         if (((_COLOR_ == BLACK && locateY > 4) || ((_COLOR_ == RED) && locateY < 5)) && locateX > 0 && check.isEmpty(locateX - 1, locateY)) {
-            left.setLocation(locateX * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
+            left.setLocation(PADDING + locateX * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
             left.setVisible(true);
         }
         if (((_COLOR_ == BLACK && locateY > 4) || ((_COLOR_ == RED) && locateY < 5)) && locateX > 0 && !check.isEmpty(locateX - 1, locateY) && pieces.elementAt(check.getPiece(locateX - 1, locateY))._COLOR_ != this._COLOR_) {
@@ -104,7 +104,7 @@ public class Pawn extends ChessPiece {
             pieces.elementAt(check.getPiece(locateX - 1, locateY)).changeImage();
         }
         if (((_COLOR_ == BLACK && locateY > 4) || ((_COLOR_ == RED) && locateY < 5)) && locateX < 8 && check.isEmpty(locateX + 1, locateY)) {
-            right.setLocation((locateX + 2) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
+            right.setLocation(PADDING + (locateX + 2) * CELL_SIZE - RADIUS, (locateY + 1) * CELL_SIZE - RADIUS);
             right.setVisible(true);
         }
         if (((_COLOR_ == BLACK && locateY > 4) || ((_COLOR_ == RED) && locateY < 5)) && locateX < 8 && !check.isEmpty(locateX + 1, locateY) && pieces.elementAt(check.getPiece(locateX + 1, locateY))._COLOR_ != this._COLOR_) {
@@ -116,8 +116,8 @@ public class Pawn extends ChessPiece {
 
     @Override
     public Boolean checkMate() {
-        Check check = StaticPieces.getCheck();
-        Vector<ChessPiece> pieces = StaticPieces.getPieces();
+        Check check = GameController.getCheck();
+        Vector<ChessPiece> pieces = GameController.getPieces();
         if (_COLOR_ == RED && locateY > 0 && (check.getPiece(locateX, locateY - 1) == 0 || check.getPiece(locateX, locateY - 1) == 1) && pieces.elementAt(check.getPiece(locateX, locateY - 1))._COLOR_ != this._COLOR_)
             return true;
         if (_COLOR_ == BLACK && locateY < 9 && (check.getPiece(locateX, locateY + 1) == 0 || check.getPiece(locateX, locateY + 1) == 1) && pieces.elementAt(check.getPiece(locateX, locateY + 1))._COLOR_ != this._COLOR_)
