@@ -117,7 +117,7 @@ Vui lòng đọc [CONTRIBUTING.md](CONTRIBUTING.md) để biết thêm chi tiế
 Dự án được phân phối theo [GNU General Public License v3.0](LICENSE).
 
 ## Liên hệ
-Nếu bạn có câu hỏi hoặc cần hỗ trợ, hãy mở một issue trên GitHub hoặc liên hệ qua email: [your-email@example.com](mailto:your-email@example.com).
+Nếu bạn có câu hỏi hoặc cần hỗ trợ, hãy mở một issue trên GitHub hoặc liên hệ qua email: [truongvan.minh1504@gmail.com](mailto:truongvan.minh1504@gmail.com).
 
 ---
 
