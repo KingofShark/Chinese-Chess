@@ -34,7 +34,7 @@ Hoặc tải file ZIP từ GitHub và giải nén.
 Đảm bảo rằng bạn đã cài đặt JDK 8 hoặc cao hơn. Kiểm tra phiên bản Java bằng lệnh:
 
 ```bash
-java -version
+java --version
 ```
 
 Nếu chưa cài đặt, tải và cài đặt JDK từ [trang chính thức của Oracle](https://www.oracle.com/java/technologies/javase-downloads.html) hoặc sử dụng OpenJDK.
@@ -114,7 +114,7 @@ Chúng tôi hoan nghênh mọi đóng góp để cải thiện trò chơi! Để
 Vui lòng đọc [CONTRIBUTING.md](CONTRIBUTING.md) để biết thêm chi tiết.
 
 ## Giấy phép
-Dự án được phân phối theo [GNU General Public License v3.0](LICENSE).
+Dự án được phân phối theo [MIT LICENSE](LICENSE).
 
 ## Liên hệ
 Nếu bạn có câu hỏi hoặc cần hỗ trợ, hãy mở một issue trên GitHub hoặc liên hệ qua email: [truongvan.minh1504@gmail.com](mailto:truongvan.minh1504@gmail.com).
